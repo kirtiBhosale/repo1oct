@@ -1,0 +1,182 @@
+#!/usr/bin/env node
+const request = require('request');
+const nodemailer = require('nodemailer');
+const moment = require('moment');
+
+const API_URL = process.env.MYEEM_API_URL;
+const username = process.env.MYEEM_API_USERNAME;
+const password = process.env.MYEEM_API_PASSWORD;
+const auth = `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`;
+const options = {
+  headers: {
+    Authorization: auth,
+  },
+};
+
+function checkReviewWindowPrior(priorToDays, reviewData) {
+  const today = new Date(reviewData.enddate);
+  const priorDate = new Date(today.getTime() - (priorToDays * 24 * 60 * 60 * 1000));
+  console.log('days prior to review end date', priorToDays, priorDate);
+  return priorDate;
+}
+
+function mailCMJTPList(data, JPTsubject) {
+  console.log('req body', data);
+  let JTPLeaderEmails = '';
+  let JPTLeaders = '';
+  let tempLeader = [];
+  var leaderExist = false;
+  for (let i = 0; i < data.length; i++) {
+    var name = data[i].general_jptleaderemail.trim();
+    leaderExist = false;
+    for (j = 0; j < tempLeader.length; j++) {
+      if (name === tempLeader[j]) {
+        leaderExist = true;
+        break;
+      }
+    }
+    if (leaderExist === false) {
+      tempLeader.push(name);
+    }
+  }
+  for (let i = 0; i < data.length; i++) {
+    JPTLeaders += `<tr><td>${i + 1}</td>
+                    <td>${data[i].vendorname}</td>
+                    <td>${data[i].general_jptleader}</td>
+                    <td>${data[i].reviewstatus}</td></tr>`;
+  }
+  for (let i = 0; i < tempLeader.length; i++) {
+    if ((tempLeader.length - 1) === i) {
+      JTPLeaderEmails += tempLeader[i];
+    } else {
+      JTPLeaderEmails += `${tempLeader[i]}, `;
+    }
+  }
+  console.log('JTPLeaderEmails', JTPLeaderEmails);
+  const { APPLICATION_URL } = process.env;
+  const nmusername = process.env.NODE_MAILER_USERNAME;
+  const nmpassword = process.env.NODE_MAILER_PASSWORD;
+  // const toemailsend = JTPLeaderEmails;
+  const transporter = nodemailer.createTransport({
+    host: process.env.emailhost, // Office 365 server
+    port: process.env.emailport, // secure SMTP
+    secure: false,
+    auth: {
+      user: nmusername,
+      pass: nmpassword,
+    },
+  });
+  console.log('transporter ::', transporter);
+  const emailhtml = `<html>
+  <body>
+      Hi All,
+      <br />
+      <br /> Service Review for all Contract Manufactures are open 
+      <br />
+      <br />
+      <br />
+      <table border="1" style="border-collapse:collapse" cellpadding="5">
+      <tr>
+      <th>Sr No</th>
+      <th>Vendor Name</th>
+      <th>JPT Leader Name</th>
+      <th>Review Status</th>
+      </tr>
+      ${JPTLeaders}
+      </table>
+      <br />
+      <br />
+      <br />
+      Thanks & Regards, <br />
+      Elanco myEEM Team <br /><br />
+    <img alt="myEEM Logo" style="float:right;" src="${APPLICATION_URL}/img/Myeem-logo.png" />
+  </body>
+  </html>`;
+  const mailoption = {
+    from: process.env.sg_from_email, // As seen in email screenshot
+    to: JTPLeaderEmails, // toemailsend,
+    subject: JPTsubject, // 'Service Review Open for CMs',
+    html: emailhtml,
+  };
+  console.log('mail option ::', mailoption);
+  transporter.sendMail(mailoption, (error, info) => {
+    if (error) {
+      console.log('error in mail ::', error);
+    } else {
+      console.log(`Email sent: ${info.response}`);
+    }
+  });
+}
+
+function sendCMJPTList(priorDays, JPTsubject) {
+  try {
+    request.get(`${API_URL}/api/fetchcmjptlist?priorDays=${priorDays}`, options, (error, response, body) => {
+      if (!error && response.statusCode === 200) {
+        const result = JSON.parse(body);
+        const { data } = result;
+        console.log('CM JTP List :', data);
+        if (data !== null && data !== undefined && data !== '' && data.length > 0) {
+          mailCMJTPList(data, JPTsubject);
+        }
+      } else {
+        console.log('error ocuured with CM JPT List api', error);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+try {
+  const currentyear = new Date().getFullYear();
+  request({
+    url: `${API_URL}/api/fetchreviewwindow`,
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: auth,
+    },
+    json: {
+      currentyear,
+    },
+  }, (error, response, data) => {
+    if (!error && response.statusCode === 200) {
+      if (data.data !== undefined && data.data !== null && data.data !== '') {
+        const reviewData = data.data;
+        console.log('review window data', reviewData);
+        const daysFifteen = 15;
+        const daysTen = 10;
+        const windowData = checkReviewWindowPrior(daysFifteen, reviewData);
+        const windowDataForTenDay = checkReviewWindowPrior(daysTen, reviewData);
+        const windowDataForClose = reviewData.enddate;
+        const TodayDate = moment(new Date()).format('DD-MMM-YYYY');
+        const priorDate = moment(windowData).format('DD-MMM-YYYY');
+        const priorDateForTenDay = moment(windowDataForTenDay).format('DD-MMM-YYYY');
+        const priorDateForClose = moment(windowDataForClose).format('DD-MMM-YYYY');
+        console.log('window data :', TodayDate, priorDate);
+        if (TodayDate === priorDate) {
+          console.log('Date Matched for 15 Days', windowData);
+          const subjectFor15Day = process.env.mailsubject_for_15_day;
+          sendCMJPTList(daysFifteen, subjectFor15Day);
+        } else if (TodayDate === priorDateForTenDay) {
+          console.log('Date Matched for 10 Days', windowData);
+          const subjectFor10Day = process.env.mailsubject_for_10_day;
+          sendCMJPTList(daysTen, subjectFor10Day);
+        } else if (TodayDate === priorDateForClose) {
+          console.log('Date Matched for review close', windowData);
+          const subjectClose = process.env.mailsubject_for_windowclose;
+          sendCMJPTList(daysFifteen, subjectClose);
+        } else {
+          console.log('Send mail for JPT Leader is not matched.');
+          return;
+        }
+      } else {
+        console.log('Fetch service window api data is not present');
+      }
+    } else {
+      console.log('error ocuured with review window api', error);
+    }
+  });
+} catch (e) {
+  console.log(e);
+}

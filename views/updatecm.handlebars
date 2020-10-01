@@ -1,0 +1,218 @@
+<div class="container-fluid mybreadcrumb">
+    <div class="row">
+        <div class="btn-group btn-breadcrumb">
+            <a href="/search" class="btn btn-default">
+                <i class="fa fa-home"></i>
+            </a>
+            <a href="#" class="btn btn-default">
+                <i>Update CM Details</i>
+            </a>
+        </div>
+    </div>
+</div>
+</header>
+<div class="container-fluid create-cm">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="">SAP Vendor Code:<span class="mandatory-star">*</span></label>
+            <div class="col-sm-9">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-btn" data-toggle="tooltip" title="Using SAP MP code, find and replace myEEM system generated partner codes, with SAP vendor information. If partner does not have an MP code in SAP; search using the SAP VN code. ">
+                        <button class="btn btn-secondary" type="button">
+                            <i class="fa fa-info"></i>
+                        </button>
+                    </span>
+                    <input maxlength="10" id="sapvendorcode" type="text" class="form-control input-lg">
+                    <span class="input-group-btn">
+                        <button class="btn btn-secondary" id="searchcm" type="button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="">System Generated Code:</label>
+            <div class="col-sm-9">
+                <input maxlength="10" id="sysvendorcode" value="{{{partnercode}}}" type="text" class="form-control input-lg">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="">SAP Vendor Name:<span class="mandatory-star">*</span></label>
+            <div class="col-sm-9">
+                <input maxlength="50" id="sapvendorname" value="{{{vendorname}}}" type="text" class="form-control input-lg">
+            </div>
+        </div>
+        <input id="vendorsearchterm" maxlength="50" type="hidden" class="form-control input-lg">
+        <input id="cityname" maxlength="50" type="hidden" class="form-control input-lg">
+        <input id="countryname" maxlength="50" type="hidden" class="form-control input-lg">
+        <input id="vendorpostalcode" maxlength="50" type="hidden" class="form-control input-lg">
+        <input id="vendorregion" maxlength="50" type="hidden" class="form-control input-lg">
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="">SAP Vendor Address:</label>
+            <div class="col-sm-9">
+                <textarea maxlength="2000" id="sapvendoraddress" rows="3" class="form-control input-lg">{{{vendoraddress}}}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="">Hub Oversight:<span class="mandatory-star">*</span></label>
+            <div class="col-sm-9">
+                <select class="form-control input-lg" id="huboversight">
+                    <option value="0" >--Select--</option>
+                    {{#each data}}
+                    <option {{#selected}}selected="selected" {{/selected}} value="{{this.Id}}">{{this.Value}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+                <button type="button" id="updatecm" class="btn btn-lg btn-default">Update</button>
+                <button type="reset" id="cancelcm" class="btn btn-lg btn-default">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    var productData;
+    var isfoundcm = false;
+    $("#cancelcm").click(function () {
+        document.location.href = '/search'
+    });
+
+    function populatedata(response) {
+        $("#sapvendorname").val(response.data[0].vendorname);
+        $("#vendorsearchterm").val(response.data[0].vendorsearchterm);
+        $("#cityname").val(response.data[0].cityname);
+        $("#countryname").val(response.data[0].countryname);
+        $("#vendorpostalcode").val(response.data[0].vendorpostalcode);
+        $("#vendorregion").val(response.data[0].vendorregion);
+        $("#sapvendoraddress").val(response.data[0].vendoraddress);
+
+        $('#sapvendorname').prop('readonly', true);
+        $('#sapvendoraddress').prop('readonly', true);
+
+        isfoundcm = true;
+    }
+
+    $("#searchcm").click(function () {
+        const vendorcode = $.trim($("#sapvendorcode").val());
+        $("#sapvendorcode").removeClass("error");
+        if (vendorcode === "") {
+            $("#sapvendorcode").addClass("error");
+        }
+        if (vendorcode != "") {
+            $.ajax({
+                url: "/pullcmdetails/" + vendorcode,
+                type: "GET",
+                cache:false,
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.data.length > 0) {
+                        if (response.data[0].vendorsearchterm.split("/")[1] === "VN") {
+                            if (confirm('This is a VN Code, not an MP Code. Are you sure you want to update CM with a VN Code?')) {
+                                if (response.productData.length > 0) {
+                                    productData = response.productData;
+                                    populatedata(response);
+                                } else {
+                                    if (confirm('There is no product data associated with this VN Code. Do you still want to proceed and update CM?')) {
+                                        populatedata(response);
+                                    }
+                                }
+                            }
+                        } else {
+                            if (response.productData.length > 0) {
+                                productData = response.productData;
+                                populatedata(response);
+                            } else {
+                                if (confirm('There is no product data associated with this MP Code. Do you still want to proceed and update CM?')) {
+                                    populatedata(response);
+                                }
+                            }
+                        }
+                    } else {
+                        alert('No MP Code or VN Code exist');
+                    }
+                },
+                error: function (e) {
+                    console.log('Error fetching CM data');
+                    console.log(e);
+                }
+            });
+        }
+    });
+    $("#updatecm").click(function () {
+        var sapvendorcode = $.trim($("#sapvendorcode").val());
+        var sysvendorcode = $.trim($("#sysvendorcode").val());
+        var sapvendorname = $.trim($("#sapvendorname").val());
+        var sapvendoraddress = $.trim($("#sapvendoraddress").val());
+        var vendorhuboversight = $.trim($("#huboversight").val());
+        var cityname = $.trim($("#cityname").val());
+        var countryname = $.trim($("#countryname").val());
+        var vendorpostalcode = $.trim($("#vendorpostalcode").val());
+        var vendorregion = $.trim($("#vendorregion").val());
+        var vendorsearchterm = $.trim($("#vendorsearchterm").val());
+
+        $("#sapvendorcode").removeClass("error");
+        $("#sysvendorcode").removeClass("error");
+        $("#sapvendorname").removeClass("error");
+        $("#huboversight").removeClass("error");
+        $("#sapvendoraddress").removeClass("error");
+
+        if (sapvendorcode === "") {
+            $("#sapvendorcode").addClass("error");
+        }
+        if (sysvendorcode === "") {
+            $("#sysvendorcode").addClass("error");
+        }
+        if (sapvendorname === "") {
+            $("#sapvendorname").addClass("error");
+        }
+        if (vendorhuboversight=== "0")
+        {
+            $("#huboversight").addClass("error");
+        }   
+        if (isfoundcm === false) {
+            alert('Please enter correct Partner Code and click on search button to fetch the CM details');
+        }
+        if (sapvendorcode != "" && sysvendorcode != "" && sapvendorname != "" && isfoundcm && vendorhuboversight !== "0") {
+            $.ajax({
+                url: "/updatenewcm",
+                type: "POST",
+                data: { sapvendorcode: sapvendorcode, sysvendorcode: sysvendorcode, sapvendorname: sapvendorname, 
+                sapvendoraddress: sapvendoraddress, vendorhub: vendorhuboversight, 
+                cityname: cityname, countryname: countryname, vendorpostalcode: vendorpostalcode, 
+                vendorregion: vendorregion, vendorsearchterm: vendorsearchterm, productData: productData },
+                success: function (response) {
+                    console.log(response);
+                    // if (response === 'updated') {
+                    if(response.status === 'updated') {
+                        alert('CM updated successfully');
+                        // window.location.href = '/search';
+                        if (response.data[0] !=="" && response.data[0] !== undefined && response.data[0] != null) {
+                            window.location.href = '/cmoverview?vendorid='+ response.data[0].vendorid;
+                        } else {
+                            window.location.href = '/search';
+                        }
+                    // } else if (response === 'exist') {
+                       } else if (response.status === 'exist') {
+                        alert('CM is already existed in the system with this Partner Code');
+                        window.location.href = window.location.href.split('#')[0];
+                    } else {
+                        alert('Error in updating CM');
+                        window.location.href = '/search';
+                    }
+                },
+                error: function (e) {
+                    console.log('Error while updating CM');
+                    console.log(e);
+                }
+            });
+        }
+    });
+    $(document).ready(function () {
+        $('#sysvendorcode').prop('readonly', true);
+    });
+    $('[data-toggle="tooltip"]').tooltip();
+</script>

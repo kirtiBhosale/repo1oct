@@ -1,0 +1,732 @@
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"
+    rel="stylesheet" type="text/css" media="all" />
+<div class="container-fluid mybreadcrumb">
+    <div class="row">
+        <div class="btn-group btn-breadcrumb">
+            <a href="/search" class="btn btn-default">
+                <i class="fa fa-home"></i>
+            </a>
+            <a href="#" class="btn btn-default">Service Review</a>
+        </div>
+    </div>
+</div>
+</header>
+<div class="wrapper metrics-wrapper">
+
+    <nav id="sidebar">
+        <!-- Sidebar Links -->
+        <ul class="list-unstyled components">
+            <li class="dropdown">
+                <a>Review Year</a>
+                <div class="datetimepicker-div">
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' class="cmdate form-control input-lg" onkeydown= "event.preventDefault()" required />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a>Hub Region</a>
+                <select class="form-control input-lg" id="huboversight">
+                    {{#each data}}
+                    <option value="{{this.Id}}">{{this.Value}}</option>
+                    {{/each}}
+                </select>
+            </li>
+            <li class="dropdown">
+                <a>Contract Mfg.</a>
+                <select class="form-control input-lg" id="cmdetails">
+                    <option value="0">--Select--</option>
+                </select>
+            </li>
+            <li class="dropdown" id="city-container" style="display: none">
+                <a>City Name</a>
+                <p id="cityname"></p>
+            </li>
+            <li class="dropdown" id="partnercode-container">
+                <a>Partner Code</a>
+                <p id="partnercode"></p>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container" id="content">
+        <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+            <i class="glyphicon glyphicon-align-left"></i>
+        </button>
+        <div style="margin-right: 15px">
+            <h4 class="text-right">Overall Score: <span id="overallscore"></span></h4>
+            <div id="review-rate" class="rate-div rate-click rate-div-center cursorpointer" 
+                data-rate-value="0" title="0" style="float:right;">
+            </div>
+        </div>
+        <div>
+            <h3 style="color: #0073cc;font-weight: bolder;">Review Window: <span id="reviewstatus"></span></h3>
+        </div>
+        <div class="row servicereview-container">
+            <div class="col-sm-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#procurement">Procurement</a></li>
+                    <li><a data-toggle="tab" href="#supplychain">Supply Chain</a></li>
+                    <li><a data-toggle="tab" href="#quality">Quality</a></li>
+                    <li><a data-toggle="tab" href="#tsms">TS/MS</a></li>
+                    <li><a data-toggle="tab" href="#hse">HSE</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="procurement" class="tab-pane panel-body fade in active">
+                        <h3 class="text-center" style="padding: 15% 0%;">No details available for selected Contract Mfg.
+                        </h3>
+                    </div>
+                    <div id="supplychain" class="tab-pane panel-body fade">
+                        <h3 class="text-center" style="padding: 15% 0%;">No details available for selected Contract Mfg.
+                        </h3>
+                    </div>
+                    <div id="quality" class="tab-pane panel-body fade">
+                        <h3 class="text-center" style="padding: 15% 0%;">No details available for selected Contract Mfg.
+                        </h3>
+                    </div>
+                    <div id="tsms" class="tab-pane panel-body fade">
+                        <h3 class="text-center" style="padding: 15% 0%;">No details available for selected Contract Mfg.
+                        </h3>
+                    </div>
+                    <div id="hse" class="tab-pane panel-body fade">
+                        <h3 class="text-center" style="padding: 15% 0%;">No details available for selected Contract Mfg.
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center col-sm-12 servicereview-btns">
+                <button type="button" id="saveservicereview" class="btn btn-lg btn-default"
+                    style="margin: 2% 0.5% 0%;">SAVE</button>
+                <button type="button" id="submitservicereview" class="btn btn-lg btn-default"
+                    style="margin: 2% 0.5% 0%;">SUBMIT</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var noDataHTML = '<h3 class="text-center" style="padding: 15% 0%;">No details available for selected Contract Mfg.</h3>';
+    var receivedData;
+    var serviceReviewMstJSON;
+    var serviceReviewDtlInsertArr = [];
+    var serviceReviewDtlUpdateArr = [];
+    var vendorInfo = [];
+    var serviceReviewFunctionCount = 0;
+    function saveservicereview(reviewstatus) {
+        var qualitycomment = $.trim($("#qualitycomment").val());
+        var procurementcomment = $.trim($("#procurementcomment").val());
+        var supplychaincomment = $.trim($("#supplychaincomment").val());
+        var tsmscomment = $.trim($("#tsmscomment").val());
+        var hsecomment = $.trim($("#hsecomment").val());
+        if (qualitycomment !== undefined && qualitycomment !== "") {
+            serviceReviewMstJSON.qualitycomment = qualitycomment;
+        }
+        if (procurementcomment !== undefined && procurementcomment !== "") {
+            serviceReviewMstJSON.procurementcomment = procurementcomment;
+        }
+        if (supplychaincomment !== undefined && supplychaincomment !== "") {
+            serviceReviewMstJSON.supplychaincomment = supplychaincomment;
+        }
+        if (tsmscomment !== undefined && tsmscomment !== "") {
+            serviceReviewMstJSON.tsmscomment = tsmscomment;
+        }
+        if (hsecomment !== undefined && hsecomment !== "") {
+            serviceReviewMstJSON.hsecomment = hsecomment;
+        }
+        serviceReviewDtlInsertArr = [];
+        serviceReviewDtlUpdateArr = [];
+        var quality
+        var procurementWeight = (20 / (receivedData.filter(function (obj) { return obj.servicefunction.toLowerCase() === 'procurement' })).length);
+        var supplychainWeight = (20 / (receivedData.filter(function (obj) { return obj.servicefunction.toLowerCase() === 'supply chain' })).length);
+        var qualityWeight = (20 / (receivedData.filter(function (obj) { return obj.servicefunction.toLowerCase() === 'quality' })).length);
+        var tsmsWeight = (20 / (receivedData.filter(function (obj) { return obj.servicefunction.toLowerCase() === 'tsms' })).length);
+        var hseWeight = (20 / (receivedData.filter(function (obj) { return obj.servicefunction.toLowerCase() === 'hse' })).length);
+        var procurementScore = 0;
+        var supplychainScore = 0;
+        var qualityScore = 0;
+        var tsmsScore = 0;
+        var hseScore = 0;
+        var qualityRating = [];
+        var TSRating = [];
+        receivedData.forEach(function (item) {
+            var row = {
+                servicereviewdtlid: null,
+                servicereviewmstid: null,
+                manageservicereviewid: null,
+                servicereviewrating: null,
+                additionalcomment: null,
+                createddate: new Date(),
+                modifieddate: new Date(),
+                createdby: '{{{fullname}}}',
+                modifiedby: '{{{fullname}}}'
+            };
+            row.servicereviewdtlid = item.servicereviewdtlid;
+            row.servicereviewmstid = item.servicereviewmstid;
+            row.manageservicereviewid = item.manageservicereviewid;
+            var servicereviewrating = $("input[name='smiley-" + item.manageservicereviewid + "']:checked").val();
+            if (servicereviewrating !== undefined && servicereviewrating !== "") {
+                row.servicereviewrating = parseInt(servicereviewrating, 10);
+                if (item.servicefunction.toLowerCase() === 'quality') {
+                    qualityRating.push(row.servicereviewrating);
+                    qualityScore += (row.servicereviewrating / 2) * qualityWeight;
+                } else if (item.servicefunction.toLowerCase() === 'procurement') {
+                    procurementScore += (row.servicereviewrating / 2) * procurementWeight;
+                } else if (item.servicefunction.toLowerCase() === 'supply chain') {
+                    supplychainScore += (row.servicereviewrating / 2) * supplychainWeight;
+                } else if (item.servicefunction.toLowerCase() === 'tsms') {
+                    TSRating.push(row.servicereviewrating);
+                    tsmsScore += (row.servicereviewrating / 2) * tsmsWeight;
+                } else if (item.servicefunction.toLowerCase() === 'hse') {
+                    hseScore += (row.servicereviewrating / 2) * hseWeight;
+                }
+            }
+            var additionalcomment = $.trim($("textarea[manageservicereviewid=" + item.manageservicereviewid + "]")[0].value);
+            if (additionalcomment !== undefined && additionalcomment !== "") {
+                row.additionalcomment = additionalcomment;
+            }
+            if (item.servicereviewdtlid !== null) {
+                serviceReviewDtlUpdateArr.push(row);
+            } else {
+                serviceReviewDtlInsertArr.push(row);
+            }
+        });
+        serviceReviewMstJSON.qualityreviewscore = Math.round(qualityScore * 10) / 10;
+        serviceReviewMstJSON.procurementreviewscore = Math.round(procurementScore * 10) / 10;
+        serviceReviewMstJSON.supplychainreviewscore = Math.round(supplychainScore * 10) / 10;
+        serviceReviewMstJSON.tsmsreviewscore = Math.round(tsmsScore * 10) / 10;
+        serviceReviewMstJSON.hsereviewscore = Math.round(hseScore * 10) / 10;
+        serviceReviewMstJSON.reviewscore = Math.round((qualityScore + procurementScore + supplychainScore + tsmsScore + hseScore) * 10) / 10;
+        serviceReviewMstJSON.reviewstatus = reviewstatus;
+        console.log('TSRating .. ', TSRating);
+        $.ajax({
+            url: "/saveservicereview",
+            type: "POST",
+            data: {
+                serviceReviewMstJSON: JSON.stringify(serviceReviewMstJSON),
+                serviceReviewDtlUpdateArr: JSON.stringify(serviceReviewDtlUpdateArr),
+                serviceReviewDtlInsertArr: JSON.stringify(serviceReviewDtlInsertArr),
+                vendorid: $('#cmdetails').val(),
+                vendorInfo: JSON.stringify(vendorInfo),
+                qualityRating: qualityRating,
+                TSRating: TSRating
+            },
+            success: function (response) {
+                window.location.href = '/servicereview?vendorid=' + $('#cmdetails').val() + '&reviewdate=' + $('.cmdate').val() + '&hubid=' + $('#huboversight').val();
+                if (reviewstatus == 'Closed'){
+                    alert('Service Review submitted successfully.');
+                } else {
+                alert('Service Review saved successfully.');
+                }
+            },
+            error: function (e) {
+                console.log('Error while saving Service Review.');
+                console.log(e);
+            }
+        });
+    }
+    function isValidServiceForm() {
+        var isValid = {
+            comments: true,
+            radio: true,
+        };
+        $(".tab-content textarea").each(function () {
+            if ($.trim($(this).val()) == '') {
+                isValid.comments = false;
+                $(this).addClass('error');
+            } else {
+                $(this).removeClass('error');
+            }
+        });
+        $(".tab-content div.smileys").each(function () {
+            if (!($(this).find("input[type=radio]").is(':checked'))) {
+                isValid.radio = false;
+            }
+        });
+        return isValid;
+    }
+    $("#saveservicereview").click(function (e) {
+        e.preventDefault();
+         $(this).prop("disabled",true);
+        saveservicereview('Open');
+    })
+
+        $("#submitservicereview").click(function (ev) {
+            ev.preventDefault();
+          $(this).prop("disabled",true);
+        var isValid = isValidServiceForm();
+        if (isValid.comments && isValid.radio) {
+            saveservicereview('Closed');
+        } else {
+             $(this).prop("disabled",false);
+            if (!isValid.comments) {
+                var tabid = $(".tab-content textarea.error:first").closest('.tab-pane').attr('id');
+                $('.nav-tabs a[href="#' + tabid + '"]').tab('show');
+            }
+            if (!isValid.radio) {
+                alert('Please select rating for all the tabs.');
+            }
+        }
+    });
+    $(function () {
+        $(".navbar-nav li").removeClass('active');
+        $(".navbar-nav li:eq(3)").addClass('active');
+        $(".navbar-nav li:eq(3) a").css("background-color", "#0073cc");
+        
+        var e = document.getElementById("cmdetails");
+        var value = e.options[e.selectedIndex].value;
+        var cmid = value;
+        var minDate = new Date();
+        fetchservicereviewdata(cmid);
+        var currentMonth = (new Date).getMonth();
+        $('#datetimepicker1').datetimepicker({
+            format: 'YYYY',
+            //maxDate: moment()
+            maxDate: new Date(new Date().setYear(new Date().getFullYear()))
+        }).on('dp.change', function (event) {
+            // var hubid = $("#huboversight").val();
+            // var items = [];
+            //$("input[name='cmdetails']:checked").each(function(){items.push($(this).val());});
+            
+            var e = document.getElementById("cmdetails");
+            var value = e.options[e.selectedIndex].value;
+            var cmid = value;
+            fetchservicereviewdata(cmid);
+        });
+        $('#datetimepicker1').data("DateTimePicker").date(minDate);
+        $("#saveservicereview").hide();
+        $("#submitservicereview").hide();
+        //$('input[name="cmdetails"]:checkbox').change(function() {
+        //  alert('hii');               
+        //});       
+        //$("#huboversight").change(function(){
+        $('#cmdetails').on('change', function () {
+            var city = $('option:selected', this).attr('cityname');
+            var partnercode = $('option:selected', this).attr('partnercode');
+            if (city === 'hideall' && partnercode == 'hideall') {
+                $('#cityname').html("");
+                $('#city-container').hide();
+                $('#partnercode').html("");
+                $('#partnercode-container').hide();
+            } else {
+                if (city !== "null") {
+                    $('#cityname').html(city);
+                    $('#city-container').show();
+                }
+                $('#partnercode').html(partnercode);
+                $('#partnercode-container').show();
+            }
+        })
+        $("#huboversight").on("change", function () {
+            clearservicereview();
+            var id = this.value;
+            $("#cmdetails").html(" ");
+            if (id == 0) {
+                $("#cmdetails").append("<option value='0'>--Select--</option>");
+            } else {
+                $.ajax({
+                    url: "/fetchcmdataforservicereview",
+                    type: "POST",
+                    data: {
+                        hubid: id
+                    },
+                    success: function (response) {
+                        var data = response.data;
+                        vendorInfo = data;
+                        var string =
+                            "<option value='0' partnercode='hideall' cityname='hideall'>--Select--</option>"
+                        if (data.length > 0) {
+                            for (var i = 0; i < data.length; i++) {
+                                //string += "<a><input onchange='checkcm(this)' name='cmdetails' type='radio' class='form-check-input' value='" +data[i].vendorid +"' />"   + data[i].vendorname + "</a>";
+                                string += "<option class='vendordata' partnercode='" +
+                                    data[i].partnercode + "' cityname='" + data[i]
+                                        .cityname + "'  value='" + data[i].vendorid + "'>" +
+                                    data[i].vendorname + "</option>";
+                            }
+                            $("#cmdetails").append(string);
+                        } else {
+                            $("#cmdetails").append(
+                                "<option value='0'>--Select--</option>");
+                        }
+                        var vendorid = '{{{vendorid}}}';
+                        if (vendorid !== null && vendorid !== undefined && vendorid !== '') {
+                            $("#cmdetails").val(vendorid).change();
+                        }
+                    },
+                    error: function (e) {
+                        console.log('Error in call updateactivestatus');
+                        console.log(e);
+                    }
+                });
+            }
+        });
+        var reviewdate = '{{{reviewdate}}}';
+        var hubid = '{{{hubid}}}';
+        if (reviewdate !== null && reviewdate !== undefined && reviewdate !== '' &&
+            hubid !== null && hubid !== undefined && hubid !== '') {
+            $(".cmdate").val(reviewdate);
+            $("#huboversight").val(hubid).change();
+        }
+    });
+    $("#sidebar").mCustomScrollbar({
+        theme: "minimal"
+    });
+    $('#sidebarCollapse').on('click', function () {
+        // open or close navbar
+        $('#sidebar').toggleClass('active');
+        // close dropdowns
+        $('.collapse.in').toggleClass('in');
+        // and also adjust aria-expanded attributes we use for the open/closed arrows
+        // in our CSS
+        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+    });
+    function clearservicereview() {
+        $("#procurement").html(noDataHTML);
+        $("#supplychain").html(noDataHTML);
+        $("#quality").html(noDataHTML);
+        $("#tsms").html(noDataHTML);
+        $("#hse").html(noDataHTML);
+    }
+    function generateServiceReviewHTML(item) {
+        return "<div class=\"form-group rb-group\">" +
+            "<label class=\"control-label col-md-5 col-sm-12 col-xs-12\" for=\"\">" +
+            "<span class=\"\" data-toggle=\"tooltip\" title=\"" + item.servicedescription + "\">" +
+            "<i class=\"fa fa-info-circle\" style=\"font-size: 18px;padding-right:10px;\"></i>" +
+            "</span>" +
+            "<span>" + item.serviceitem + ":</span>" +
+            "</label>" +
+            "<div class=\"col-md-3 col-sm-12 text-center smileys col-xs-12\" style=\"margin:0\">" +
+            "<label class=\"container\" style=\"padding-right:20px;\"><input type=\"radio\" name=\"smiley-" + item.manageservicereviewid + "\" value=\"0\" class=\"sad\"><span class=\"checkmark rbsad\"></span></label>" +
+            "<label class=\"container\" style=\"padding-right:20px;\"><input type=\"radio\" name=\"smiley-" + item.manageservicereviewid + "\" value=\"1\" class=\"neutral\"><span class=\"checkmark rbneatural\"></span></label>" +
+            "<label class=\"container\" style=\"padding-right:20px;\"><input type=\"radio\" name=\"smiley-" + item.manageservicereviewid + "\" value=\"2\" class=\"happy\"><span class=\"checkmark rbhappy\"></span></label>" +
+            "</div>" +
+            "<div class=\"col-md-4 col-sm-12 col-xs-12\">" +
+            "<textarea rows=\"2\" class=\"form-control\" maxlength=\"150\"" +
+            "placeholder=\"Additional Comments\" manageservicereviewid=\"" + item.manageservicereviewid + "\">" + item.additionalcomment + "</textarea>" +
+            "</div>" +
+            "</div>";
+    }
+    function generateOverallCommentsHTML(comment, type) {
+        return "<div class=\"form-group\" style=\"margin-top: 4%;\">" +
+            "<label class=\"control-label col-sm-2\" for=\"\">Overall Comments:</label>" +
+            "<div class=\"col-sm-10\">" +
+            "<textarea rows=\"3\" maxlength=\"150\" class=\"form-control\" id=\"" + type + "\">" + comment + "</textarea>" +
+            "</div>" +
+            "</div>";
+    }
+    function generateFunctionalScoreHTML(score) {
+        return "<div>" +
+            "<p class=\"text-right\"><b>Functional Score: " + (score == null ? 0 : score) + "/20</b></p>" +
+            "</div>" +
+            "<form class=\"form-horizontal\">";
+    }
+    function fetchservicereviewdata(cmid) {
+        clearservicereview();
+        if($('.cmdate').val() !== ''){
+            if (new Date().getFullYear().toString() !== $('.cmdate').val()){
+                    $('.servicereview-btns').hide();
+            }
+            else{
+                    $('.servicereview-btns').show();
+            }
+        }
+        var date = $(".cmdate").val();
+        date = date + "-01-01";
+        var cmdetails = cmid;
+        $.ajax({
+            url: "/fetchservicereviewdata",
+            type: "POST",
+            data: {
+                cmdata: cmdetails,
+                reviewdate: date
+            },
+            success: function (response) {
+                var data = response.data;
+                console.log("data*******",data);
+                console.log("data.length*******",data.length);
+                var isWindowOpen = response.isWindowOpen;
+                if (isWindowOpen) {
+                    $("#reviewstatus").text('Open');
+                } else {
+                    $("#reviewstatus").text('Closed');
+                }
+                $("#overallscore").text(0);
+                $("#review-rate").attr("data-rate-value",'');
+                $('#review-rate')[0].title = '';
+                $(".rate-div").rate("update");
+                var newscore;
+                
+                if (data.length > 0) {
+                    if (data[0].starratingscore == 'NaN' || data[0].starratingscore == null || data[0].starratingscore == undefined){
+                    newscore = 0
+                    } else {
+                        newscore = data[0].starratingscore
+                    }
+                    $("#review-rate").attr("data-rate-value",newscore);
+                    $('#review-rate')[0].title = newscore;
+                    $(".rate-div").rate("update");
+                    // $("#star-rate").rate(parseInt(data[0].starrating));
+                    console.log(data);
+                    receivedData = data;
+                    $("#saveservicereview").show();
+                    $("#submitservicereview").show();
+                    serviceReviewMstJSON = {
+                        servicereviewmstid: null,
+                        vendorid: null,
+                        qualitycomment: null,
+                        procurementcomment: null,
+                        supplychaincomment: null,
+                        tsmscomment: null,
+                        hsecomment: null,
+                        reviewyear: null,
+                        reviewstatus: 'Open',
+                        reviewscore: 0,
+                        qualityreviewscore: 0,
+                        procurementreviewscore: 0,
+                        supplychainreviewscore: 0,
+                        tsmsreviewscore: 0,
+                        hsereviewscore: 0
+                    };
+                    serviceReviewMstJSON.vendorid = parseInt(cmid, 10);
+                    serviceReviewMstJSON.reviewyear = date;
+                    serviceReviewMstJSON.servicereviewmstid = data[0].servicereviewmstid;
+                    serviceReviewMstJSON.reviewstatus = data[0].reviewstatus;
+                    var procurementHTML = '';
+                    var supplychainHTML = '';
+                    var qualityHTML = '';
+                    var tsmsHTML = '';
+                    var hseHTML = '';
+                    var isProcurementData = false;
+                    var isSupplychainData = false;
+                    var isQualityData = false;
+                    var isTsmsData = false;
+                    var isHseData = false;
+                    var serviceReviewFunctionScore = 0;
+                    var formendHTML = "</form>";
+                    procurementHTML += generateFunctionalScoreHTML(data[0].procurementreviewscore);
+                    supplychainHTML += generateFunctionalScoreHTML(data[0].supplychainreviewscore);
+                    qualityHTML += generateFunctionalScoreHTML(data[0].qualityreviewscore);
+                    tsmsHTML += generateFunctionalScoreHTML(data[0].tsmsreviewscore);
+                    hseHTML += generateFunctionalScoreHTML(data[0].hsereviewscore);                   
+                    
+                    var smileyCheckedStr = '';
+                    data.forEach(function (item) {
+                        if (item.additionalcomment == null) {
+                            item.additionalcomment = "";
+                        }
+                        if (item.servicefunction.toLowerCase() === 'quality') {
+                            isQualityData = true;
+                            qualityHTML += generateServiceReviewHTML(item);
+                        } else if (item.servicefunction.toLowerCase() === 'procurement') {
+                            isProcurementData = true;
+                            procurementHTML += generateServiceReviewHTML(item);
+                        } else if (item.servicefunction.toLowerCase() === 'supply chain') {
+                            isSupplychainData = true;
+                            supplychainHTML += generateServiceReviewHTML(item);
+                        } else if (item.servicefunction.toLowerCase() === 'tsms') {
+                            isTsmsData = true;
+                            tsmsHTML += generateServiceReviewHTML(item);
+                        } else if (item.servicefunction.toLowerCase() === 'hse') {
+                            isHseData = true;
+                            hseHTML += generateServiceReviewHTML(item);
+                        }
+                        smileyCheckedStr += "input[name='smiley-" + item.manageservicereviewid + "'][value=" + item.servicereviewrating + "],"
+                    });
+                    smileyCheckedStr = smileyCheckedStr.substring(0, smileyCheckedStr.length - 1);
+                    if (data[0].procurementcomment == null) {
+                        data[0].procurementcomment = "";
+                    }
+                    if (data[0].supplychaincomment == null) {
+                        data[0].supplychaincomment = "";
+                    }
+                    if (data[0].qualitycomment == null) {
+                        data[0].qualitycomment = "";
+                    }
+                    if (data[0].tsmscomment == null) {
+                        data[0].tsmscomment = "";
+                    }
+                    if (data[0].hsecomment == null) {
+                        data[0].hsecomment = "";
+                    }
+                    procurementHTML += generateOverallCommentsHTML(data[0].procurementcomment, 'procurementcomment');
+                    supplychainHTML += generateOverallCommentsHTML(data[0].supplychaincomment, 'supplychaincomment');
+                    qualityHTML += generateOverallCommentsHTML(data[0].qualitycomment, 'qualitycomment');
+                    tsmsHTML += generateOverallCommentsHTML(data[0].tsmscomment, 'tsmscomment');
+                    hseHTML += generateOverallCommentsHTML(data[0].hsecomment, 'hsecomment');
+                    procurementHTML += formendHTML;
+                    supplychainHTML += formendHTML;
+                    qualityHTML += formendHTML;
+                    tsmsHTML += formendHTML;
+                    hseHTML += formendHTML;
+                    isProcurementData ? $("#procurement").html(procurementHTML) : $("#procurement").html(noDataHTML);
+                    isSupplychainData ? $("#supplychain").html(supplychainHTML) : $("#supplychain").html(noDataHTML);
+                    isQualityData ? $("#quality").html(qualityHTML) : $("#quality").html(noDataHTML);
+                    isTsmsData ? $("#tsms").html(tsmsHTML) : $("#tsms").html(noDataHTML);
+                    isHseData ? $("#hse").html(hseHTML) : $("#hse").html(noDataHTML);
+                    console.log("isProcurementData*****",isProcurementData);
+                    console.log("isSupplychainData*****",isSupplychainData);
+                    console.log("isQualityData*****",isQualityData);
+                    console.log("isTsmsData*****",isTsmsData);
+                    console.log("isHseData*****",isHseData);
+                    if(isProcurementData){
+                        serviceReviewFunctionScore = serviceReviewFunctionScore + 20;
+                    }
+                    if(isSupplychainData){
+                        serviceReviewFunctionScore = serviceReviewFunctionScore + 20;
+                    }
+                    if(isQualityData){
+                        serviceReviewFunctionScore = serviceReviewFunctionScore + 20;
+                    }
+                    if(isTsmsData){
+                        serviceReviewFunctionScore = serviceReviewFunctionScore + 20;
+                    }
+                    if(isHseData){
+                        serviceReviewFunctionScore = serviceReviewFunctionScore + 20;
+                    }
+                    if(serviceReviewFunctionScore){
+                        $("#overallscore").text((data[0].reviewscore == null ? 0 : data[0].reviewscore)+'/'+serviceReviewFunctionScore); 
+                    }else{
+                        $("#overallscore").text((data[0].reviewscore == null ? 0 : data[0].reviewscore));
+                    }
+                    $(smileyCheckedStr).prop('checked', true);
+                    if (!(isWindowOpen)) {
+                        $("#submitservicereview").attr("disabled", true);
+                        $("#saveservicereview").attr("disabled", true);
+                        $(".tab-content .smileys input").attr("disabled", true);
+                        $(".tab-content textarea").attr("disabled", true);
+                    } else {
+                        if (data[0].reviewstatus !== null && (data[0].reviewstatus).toLowerCase() === 'closed') {
+                            $("#submitservicereview").attr("disabled", true);
+                            $("#saveservicereview").attr("disabled", true);
+                            $(".tab-content .smileys input").attr("disabled", true);
+                            $(".tab-content textarea").attr("disabled", true);
+                        } else {
+                            $("#submitservicereview").attr("disabled", false);
+                            $("#saveservicereview").attr("disabled", false);
+                        }
+                    }
+                    $('[data-toggle="tooltip"]').tooltip();
+                }
+            },
+            error: function (e) {
+                console.log('Error in fetching data');
+                console.log(e);
+            }
+        });
+    }
+    $("#cmdetails").on("change", function () {
+        console.log(this.value);
+        var cmid = this.value;
+        fetchservicereviewdata(cmid);
+    });
+</script>
+<style>
+    #sidebar .dropdown .dropdown-menu {
+        width: 100% !important;
+    }
+    /* The container */
+.rb-group .container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+      display: inline-block;
+	  width:25px;
+}
+/* Hide the browser's default radio button */
+.rb-group .container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+/* Create a custom radio button */
+.rb-group .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 50px;
+  width: 50px;
+  background-color: #eee;
+  border-radius: 50%;
+  }
+.rb-group .checkmark.rbhappy{
+  background:url('img/happy_gray.png');
+	background-size:100%;
+}
+.rb-group .checkmark.rbneatural{
+  background:url('img/neutral_gray.png');
+  background-size:100%;
+ }
+.rb-group .checkmark.rbsad{
+  background:url('img/sad_gray.png');
+  background-size:100%;
+}
+/* On mouse-over, add a grey background color */
+.rb-group .container:hover input ~ .checkmark.rbhappy {
+background:url('img/happy.png');
+	background-size:100%;
+ }
+ .rb-group .container:hover input ~ .checkmark.rbneatural {
+ background:url('img/neutral.png');
+  background-size:100%;
+ }
+ .rb-group .container:hover input ~ .checkmark.rbsad {
+background:url('img/sad.png');
+  background-size:100%;
+ }
+/* When the radio button is checked, add a blue background */
+.rb-group .container input:checked ~ .checkmark {
+   position: absolute;
+  top: 0;
+  left: 0;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  }
+.rb-group .container input:checked ~ .checkmark.rbhappy {
+background:url('img/happy.png');
+	background-size:100%;
+}
+.rb-group .container input:checked ~ .checkmark.rbneatural {
+background:url('img/neutral.png');
+  background-size:100%;
+}
+.rb-group .container input:checked ~ .checkmark.rbsad {
+background:url('img/sad.png');
+  background-size:100%;
+}
+@media all and (max-width:992px){
+    .servicereview-container .form-group {
+        display: block;
+    }
+    .col-sm-3.text-center.smileys.col-xs-12 {
+        height: 70px;
+        padding-top: 10px;
+    }
+    .col-md-3.col-sm-12.text-center.smileys.col-xs-12 {
+         height: 70px;
+        padding-top: 10px;
+    }
+}
+</style>
+<script type="text/javascript">
+  $(document).ready(function () {   
+    var options = {
+      max_value: 5,
+      step_size: 0.1,
+      selected_symbol_type: 'fontawesome_star',
+    }
+    $(".rate-div").rate(options);
+  });
+  </script>
+</div>

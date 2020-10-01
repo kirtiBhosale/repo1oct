@@ -1,0 +1,168 @@
+.main-container {
+    background-color: rgb(229, 240, 251)!important;
+    height:100%;
+}
+body {
+    background-color: rgb(229, 240, 251)!important;
+}
+.panel {
+    display: flex;
+}
+.panel-body {
+/*     margin-top: 100px; */
+    padding: 20px;
+    margin-left: 27%;
+    border: 2px solid lightgray;
+    border-radius: 10px;
+    box-shadow: 0px 4px 1px rgba(0,0,0,.05);
+    background: #fff !important;
+}
+input[type="email"], input[type="password"], input[type="text"], label, textarea, select {
+    padding: 10px !important;
+    margin: 5px !important;
+}
+.other-links, .loginBtns {
+    text-align:center;
+}
+.register-content {
+    padding: 20px !important;
+    border: 2px solid lightgray;
+    border-radius: 10px;
+    box-shadow: 0px 4px 1px rgba(0,0,0,.05);
+    background: #fff !important;
+}
+.editprofile-content {
+    margin-top: 20px!important;
+    padding: 20px !important;
+    border: 2px solid lightgray;
+    border-radius: 10px;
+    box-shadow: 0px 4px 1px rgba(0,0,0,.05);
+    width:50% !important;
+    background: #fff !important;
+}
+.editprofile-footer {
+    padding-top: 30px !important;
+    text-align: center;
+}
+.register-footer {
+    padding: 30px !important;
+}
+.capture_tip {
+    padding: 10px !important;
+}
+.capture_checkbox label {
+    padding: 10px !important;
+    margin: 10px !important;
+}
+.role-heading {
+    text-align: center;
+}
+.role-heading h1 {
+    font-size: 40px;
+    color: #666;
+    font-family: helvetica,sans-serif;
+}
+.role-content {
+    /* text-align: center; */
+    background: #fff;
+    margin: 33%;
+    margin-top: 20px;
+    padding: 20px;
+    width:30% !important;
+    border: 2px solid lightgray;
+    border-radius: 10px;
+    box-shadow: 0px 4px 1px rgba(0,0,0,.05);
+}
+
+.role-content input[type="text"], textarea, select {
+    box-sizing: border-box;
+    color: #333 !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    webkit-box-sizing: border-box;
+    width: 100% !important;
+    background-color: #f6f6f6;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 3px rgba(0,0,0,0.2) inset;
+    color: #b3b3b3;
+    font-family: helvetica,sans-serif;
+    font-size: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    outline: none;
+}
+.role-content input[type="button"] ,.rolebtn {
+    background: -webkit-linear-gradient(top, #34c5ff,#0092cd);
+    box-shadow: 0 1px 0px 0px rgba(255,255,255,0.35) inset, 0 -26px 13px -13px rgba(0,0,0,0.2) inset;
+    font-family: helvetica,sans-serif;
+    background-color: #009ddc;
+    text-decoration: none;
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.45);
+    border-radius: 5px;
+    font-size: 14px;
+    line-height: 15px;
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    width: auto;
+    display: -moz-inline-box;
+    -moz-box-orient: vertical;
+    display: inline-block;
+    vertical-align: middle;
+}
+.user-role-dtls {
+    float: right;
+    width: 30%;
+    text-align: left;
+}
+.main-header {
+    height: 90px;
+    background: #0072CE;
+    color: #fff;
+    margin: 0px;
+    padding: 20px;
+    box-sizing: initial !important;
+}
+#contain {
+  padding: 10px;
+}
+thead {
+    background: #0072ce;
+    color: #fff;
+}
+span {
+/*     display: block; */
+    font-size: 1.17em;
+    font-weight: 700;
+}
+.nav {
+  float: left;
+  padding: 9px;
+  width: 64%;
+}
+.nav>ul {
+  width: 100%;
+}
+.nav>ul>li {
+  float: left;
+  list-style: none;
+  width: 16%;
+}
+.nav>ul>li>a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 20px;
+  padding: 10px;
+}
+.nav>ul>li>a:hover, .nav>ul>li>a:focus, .active {
+  text-decoration: none;
+    background-color: #eee !important;
+    color: #000 !important;
+}
+.btn-div {
+  text-align: right;
+  margin-right: 50px;
+}

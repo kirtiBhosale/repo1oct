@@ -1,0 +1,61 @@
+
+<html>
+{{>adminopheader}}
+	<body>
+		<section class="header">
+		<div class="head">
+			<p>Hello, welcome to the web ops dashboard!</p>
+		</div>
+		</section>
+
+		<section class="content container-fluid">
+	        {{>adminopmenu}}
+	{{#if data}}	
+				<table class="table" id="data">
+			
+				<thead> 
+				<tr>
+				  
+        			<th>Number</th>
+        			<th>Description</th>
+        			<th>Opened at</th>				    
+        			<th>Status  </th>
+        			<th>Time Worked</th>
+					<th>Class Filter</th>
+					<th>Application Name</th>
+      				</tr>
+				</thead> 
+
+				<tbody>
+			
+            {{#each data}}
+            	<tr>
+          
+        
+             {{#each this}}
+
+			{{#if isOpenCloseSame}}
+ 				<td>{{this}}</td>
+				{{else}}
+				<td>{{this}}</td>
+			{{/if}}
+
+
+	
+		 {{/each}}
+     	</tr>
+    {{/each}}
+    
+				</tbody>	
+				</table>
+    {{/if}}
+			</div>
+		</div>
+		</section>
+  
+	
+	</body>
+{{>adminopfooter}}
+<script src="/vendor/v2custom.js"></script>
+
+</html>

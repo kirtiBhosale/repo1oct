@@ -1,0 +1,196 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Select CM</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+
+<body class="loginpage">
+    <div class="container-fluid janrain-container">
+        <div style="float:right">
+            <a href="/externallogin" id="captureSignOutLink" class="capture_end_session" style="">
+                <span style="">
+                    Sign Out</span>
+            </a>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <h1>Welcome {{userdetail.firstname}} {{userdetail.lastname}}</h1>
+            </div>
+            <div class="logo pull-left">
+                <img alt="Elanco Logo" src="img/elanco-login-logo.png" />
+            </div>
+            <div class="logo pull-right">
+                <img alt="myEEM Logo" src="img/myEEM-login-logo.png" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="text-center welcome-title">
+                <br />
+                <br />
+                <form class="form-horizontal select-cm">
+                    <div class="form-group ui-widget col-xs-12">
+                        <label for="" class="control-label col-xs-3">Search your Company Name:
+                        </label>
+                        <div class="col-xs-7">
+                            <input id="SelectCM" type="text" class="form-control cmname">
+                            <br />
+                            <p class="text-left">
+                                <br />
+                                <b>Cannot find your Company Name? Contact your Elanco Engagement Partner.
+
+                                </b>
+                            </p>
+                        </div>
+                        <div class="col-xs-1">
+                            <button type="button" class="btn btn-primary cm-submit">GO</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        var CMList = [];
+        $(function () {
+            // {{#each data.data}}
+
+            // alert('{{this.vendorname}}'+'{{this.vendorid}}'+'{{this.general_operationalleader}}'+'{{this.general_operationalleaderemail}}'+'{{this.general_jptleader}}'+'{{this.general_jptleaderemail}}');
+
+            // {{/each}}
+
+           {{#each data.data}}
+                CMList.push({
+                vendorname: '{{this.vendorname}}',
+                vendorid: '{{this.vendorid}}',
+                operationalleader: '{{this.general_operationalleader}}',
+                operationalleaderemail: '{{this.general_operationalleaderemail}}',
+                jptleader: '{{this.general_jptleader}}',
+                jptleaderemail: '{{this.general_jptleaderemail}}',
+                huboversight: '{{this.huboversight}}',
+                partnercode: '{{this.partnercode}}',
+                label: '{{this.vendorname}}'
+                });
+            {{/each}}
+
+                    $("#SelectCM").autocomplete({
+                        source: CMList
+                    }).data("ui-autocomplete")._renderItem = function (ul, item) {
+                        return $("<li>").data("ui-autocomplete-item", item).append("<a>" + item.vendorname + "</a>").appendTo(ul);
+                    };
+
+                });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".cm-submit").click(function () {
+                var cm = $('.cmname').val();
+
+                for (i = 0; i < CMList.length; i++) {
+                    if (CMList[i].vendorname == cm) {
+                        var metafield1 = CMList[i].vendorid;
+                        var metafield2 = CMList[i].vendorname;
+                        var metafield3 = CMList[i].operationalleader;
+                        var metafield4 = CMList[i].operationalleaderemail;
+                        var metafield5 = CMList[i].jptleader;
+                        var metafield6 = CMList[i].jptleaderemail;
+                        var metafield7 = CMList[i].huboversight;
+                        var metafield8 = CMList[i].partnercode;
+                    }
+                }
+                if (metafield1 == '') {
+                    metafield1 = undefined;
+                }
+                if (metafield2 == '') {
+                    metafield2 = undefined;
+                }
+                if (metafield3 == '') {
+                    metafield3 = undefined;
+                }
+                if (metafield4 == '') {
+                    metafield4 = undefined;
+                }
+                if (metafield5 == '') {
+                    metafield5 = undefined;
+                }
+                if (metafield6 == '') {
+                    metafield6 = undefined;
+                }
+                if (metafield7 == '') {
+                    metafield7 = undefined;
+                }
+                if (metafield8 == '') {
+                    metafield8 = undefined;
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '/saveuserdata',
+                    data: { metafield1: metafield1, metafield2: metafield2, metafield3: metafield3, metafield4: metafield4, metafield5: metafield5, metafield6: metafield6, metafield7: metafield7, metafield8: metafield8 },
+                    success: function (response) {
+                        if (response.issuccess == true) {
+                            alert('Information Saved Successfully with Elanco engagement contact will provide confirmation of use.');
+                            $("#captureSignOutLink").trigger("click");
+                            //window.location = "/profile";
+                        } else {
+                            alert('Operation failed. Please, If the problem persists, contact with administrator.');
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response);
+                        alert('Operation failed. Please, If the problem persists, contact with administrator. The response is: ' + response.statusText);
+                    }
+                });
+
+            });
+        })
+        $('#captureSignOutLink').on('click', function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/signout',
+                // data: { data : 'use },
+                success: function (response) {
+                    window.location = "/externallogin";
+                },
+                error: function (response) {
+                    console.log(response)
+                    alert('Operation failed. Please, If the problem persists, contact with administrator. The response is: ' + response.statusText);
+                }
+            });
+        });
+    </script>
+</body>
+<footer class="janrain-footer">
+    <div class="pull-left">
+        <p>©
+            <span id="copyright">
+                <script>document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))</script>
+            </span> Elanco or its affiliates</p>
+        <p>Elanco and the diagonal bar logo are trademarks of Elanco or its affiliates</p>
+    </div>
+    <div class="pull-right">
+        <img alt="Elanco Logo" src="img/elanco-logo-footer.png">
+    </div>
+    <div class="pull-right privacy-statement" style="padding-right: 21px;padding-top: 16px;">
+       <p>
+			<a href="https://www.elancostatements.com/en/privacy/elanco-com" target="_blank">Privacy Policy</a> | <a href="https://www.elancostatements.com/en/terms-of-use/elanco-com" target="_blank">Terms of Use</a>
+		</p>
+    </div>
+</footer>
+
+</html>

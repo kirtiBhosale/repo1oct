@@ -1,0 +1,648 @@
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" media="all" />
+  <div class="container-fluid mybreadcrumb">
+            <div class="row">
+                <div class="btn-group btn-breadcrumb">
+                    <a href="/search" class="btn btn-default">
+                        <i class="fa fa-home"></i>
+                    </a>                   
+                    <a href="#" class="btn btn-default">Insert Metrics</a>
+                </div>
+                {{!-- <div class="pull-right">
+                    <a href="#" class="">CM Overview</a> |
+                    <a href="#" class="">CM Product Overview</a>
+                </div> --}}
+            </div>
+        </div>
+    </header>
+        <div class="wrapper metrics-wrapper">
+
+        <nav id="sidebar">
+            <!-- Sidebar Links -->
+            <ul class="list-unstyled components">
+                <li class="dropdown">
+                    <a>Metric Month</a>
+                    <div class="datetimepicker-div">
+                        <div class='input-group date' id='datetimepicker1'>
+                            <input type='text' class="cmdate form-control input-lg"  onkeydown= "event.preventDefault()" required />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a>Hub Region</a>
+                    <select class="form-control input-lg" id="huboversight">
+                         {{#each data}}
+                           <option value="{{this.Id}}">{{this.Value}}</option>
+                         {{/each}}                     
+                    </select>
+                </li>
+                <li class="dropdown">
+                    <a>Contract Mfg.</a>    
+                    <select class="form-control input-lg" id="cmdetails" onchange="checkcm(this)">
+                        <option value="0">--Select--</option>
+                    </select>
+                </li>
+                <li class="dropdown" id="city-container" style="display: none">
+                    <a>City Name</a>    
+                    <p id="cityname"></p>
+                </li>
+                <li class="dropdown" id="partnercode-container">
+                    <a>Partner Code</a>    
+                    <p id="partnercode"></p>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="container" id="content">
+            <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                <i class="glyphicon glyphicon-align-left"></i>
+            </button>
+            <div><p style="padding-top: 20px;font-size: 17px;">
+                To enter your Hub Quality or HSE Metrics  use this link to access the:
+                <a href="http://kpientry.am.lilly.com/" target="_blank"><b>Global KPI Data Entry Tool</b></a></p></div>
+            <div>
+                <div class="row metrics-container metrics-boxes">
+                    <div>
+                        <div class="panel-group col-md-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    Quality
+                                </div>
+                                <div class="panel-body">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-6" for="">CM (External) Critical Deviations:</label>
+                                            <div class="col-sm-6">
+                                            {{#if isreadonly}}
+                                                <input id="criticaldeviations" disabled type="text" class="allownumeric form-control">
+                                            {{else}}
+                                                <input id="criticaldeviations" type="text" class="allownumeric form-control">
+                                            {{/if}}                                                
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-6" for="">CM (External) Non-Critical Deviations:</label>
+                                            <div class="col-sm-6">
+                                            {{#if isreadonly}}
+                                                <input id="noncriticaldeviations" disabled type="text" class="allownumeric form-control">
+                                            {{else}}
+                                                <input id="noncriticaldeviations" type="text" class="allownumeric form-control">
+                                            {{/if}} 
+                                            </div>
+                                        </div>
+                                          <div class="form-group">
+                                            <label class="control-label col-sm-6" for="">CM (External) Overdue Deviation:</label>
+                                            <div class="col-sm-6">
+                                            {{#if isreadonly}}
+                                                <input id="overduedeviation" disabled type="text" class="allownumeric form-control">
+                                            {{else}}
+                                                <input id="overduedeviation" type="text" class="allownumeric form-control">
+                                            {{/if}}                                                 
+                                            </div>
+                                        </div>
+                                         <div class="form-group">
+                                            <label class="control-label col-sm-6" for="">Recurring Deviations:</label>
+                                            <div class="col-sm-6">
+                                                {{#if isreadonly}}
+                                                    <input id="recdeviations" disabled type="text" class="allownumeric form-control">
+                                                {{else}}
+                                                    <input id="recdeviations" type="text" class="allownumeric form-control">
+                                                {{/if}}   
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-6" for="">EGQCA Audit Open Items:</label>
+                                            <div class="col-sm-6">
+                                            {{#if isreadonly}}
+                                                <input id="auditopenitems" disabled type="text" class="allownumeric form-control">
+                                            {{else}}
+                                                <input id="auditopenitems" type="text" class="allownumeric form-control">
+                                            {{/if}}                                                   
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-6" for="">EGQCA Audit Open Items Overdue:</label>
+                                            <div class="col-sm-6">
+                                            {{#if isreadonly}}
+                                                <input id="auditopenitemsoverdue" disabled type="text" class="allownumeric form-control">
+                                            {{else}}
+                                                <input id="auditopenitemsoverdue" type="text" class="allownumeric form-control">
+                                            {{/if}}                                                 
+                                            </div>
+                                        </div>
+                                        <div class="form-group label-div hidden-xs hidden-sm">
+                                            <label class="control-label col-sm-6"></label>
+                                            <div class="col-sm-2 text-center">
+                                                <label class="control-label">
+                                                    <small>Numerator</small>
+                                                </label>
+                                            </div>
+                                            <div class="col-sm-2 text-center">
+                                                <label class="control-label">
+                                                    <small>Denominator</small>
+                                                </label>
+                                            </div>
+                                            <div class="col-sm-2 text-center">
+                                                <label class="control-label">
+                                                    <small>%</small>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-12 col-sm-6" for="">No. of batches rejected from CM:</label>
+                                            <div class="col-xs-4 col-sm-2 text-center">
+                                                <label class="control-label hidden-md hidden-lg">
+                                                    <small>Numerator</small>
+                                                </label>
+                                                {{#if isreadonly}}
+                                                    <input id="batchrejectednum" disabled type="text" class="allownumeric form-control">
+                                                {{else}}
+                                                    <input id="batchrejectednum" type="text" class="allownumeric form-control">
+                                                {{/if}}
+                                            </div>
+                                            <div class="col-xs-4 col-sm-2 text-center">
+                                                <label class="control-label hidden-md hidden-lg">
+                                                    <small>Denominator</small>
+                                                </label>
+                                                 {{#if isreadonly}}
+                                                    <input id="batchrejectedden" disabled type="text" class="allownumeric form-control">
+                                                {{else}}
+                                                    <input id="batchrejectedden" type="text" class="allownumeric form-control">
+                                                {{/if}}
+                                            </div>
+                                            <div class="col-xs-4 col-sm-2 text-center">
+                                                <label class="control-label hidden-md hidden-lg">
+                                                    <small>%</small>
+                                                </label>
+                                                <label class="rejectpercent"></label>                                          
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-12 col-sm-6" for="">No. of batches approved from CM:</label>
+                                            <div class="col-xs-4 col-sm-2 text-center">
+                                                <label class="control-label hidden-md hidden-lg">
+                                                    <small>Numerator</small>
+                                                </label>
+                                                 {{#if isreadonly}}
+                                                    <input id="batchapprovednum" disabled type="text" class="allownumeric form-control">
+                                                {{else}}
+                                                    <input id="batchapprovednum" type="text" class="allownumeric form-control">
+                                                {{/if}}
+                                            </div>
+                                            <div class="col-xs-4 col-sm-2 text-center">
+                                                <label class="control-label hidden-md hidden-lg">
+                                                    <small>Denominator</small>
+                                                </label>
+                                                {{#if isreadonly}}
+                                                    <input id="batchapprovedden" disabled type="text" class="allownumeric form-control">
+                                                {{else}}
+                                                    <input id="batchapprovedden" type="text" class="allownumeric form-control">
+                                                {{/if}}                                                
+                                            </div>
+                                            <div class="col-xs-4 col-sm-2 text-center">
+                                                <label class="control-label hidden-md hidden-lg">
+                                                    <small>%</small>
+                                                </label>
+                                                <label class="approvepercent"></label>
+                                                <div></div>
+                                            </div>
+                                        </div>                                       
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-group col-md-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <span>HSE</span>
+                                </div>
+                                <div class="panel-body">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-6" for="">HSE Critical Open Items:</label>
+                                            <div class="col-sm-6">
+                                                {{#if isreadonly}}
+                                                    <input id="hseopenitems" disabled type="text" class="allownumeric form-control">
+                                                {{else}}
+                                                    <input id="hseopenitems" type="text" class="allownumeric form-control">
+                                                {{/if}}   
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-6" for="">HSE Major Open Items:</label>
+                                            <div class="col-sm-6">
+                                                 {{#if isreadonly}}
+                                                    <input id="hseotheropenitems" disabled type="text" class="allownumeric form-control">
+                                                {{else}}
+                                                    <input id="hseotheropenitems" type="text" class="allownumeric form-control">
+                                                {{/if}}   
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        {{#if ismasterdatasteward}}
+                        <button type="button" id="savecmmetrics" class="btn btn-lg btn-default">SAVE</button>
+                        {{else if isdatasteward}}
+                          <button type="button" id="savecmmetrics" class="btn btn-lg btn-default">SAVE</button>
+                        {{/if}}
+                          <input type="hidden" id="cmmetricsflow" value="">
+                          <input type="hidden" id="metricsid" value="0">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <script type="text/javascript">
+        $("#savecmmetrics").click(function(){ 
+              var hubid=$("#huboversight").val();
+              var date = $(".cmdate").val();
+              date = date + "-01";
+              var cmmetricsflow=$("#cmmetricsflow").val();              
+              var metricsid=$("#metricsid").val();   
+              var items = [];
+              var e = document.getElementById("cmdetails");
+              var value = e.options[e.selectedIndex].value;
+              var cmid = value;
+              //$("input[name='cmdetails']:checked").each(function(){items.push($(this).val());});
+              //var cmid = items[0];
+              var criticaldeviations= $.trim($("#criticaldeviations").val());
+              var noncriticaldeviations= $.trim($("#noncriticaldeviations").val());
+              var overduedeviation= $.trim($("#overduedeviation").val());
+              var auditopenitems= $.trim($("#auditopenitems").val());
+              var auditopenitemsoverdue= $.trim($("#auditopenitemsoverdue").val());
+              var batchrejectednum= $.trim($("#batchrejectednum").val());
+              var batchrejectedden= $.trim($("#batchrejectedden").val());
+              var batchapprovednum= $.trim($("#batchapprovednum").val());
+              var batchapprovedden= $.trim($("#batchapprovedden").val());
+              var recdeviations= $.trim($("#recdeviations").val());
+              var hseopenitems= $.trim($("#hseopenitems").val());
+              var hseotheropenitems= $.trim($("#hseotheropenitems").val());
+              if($(".cmdate").val()==="")
+              {
+                  alert('Please select Metric Month.');
+              }
+              if(hubid === "0") 
+              {
+                  alert('Please select Hub Region.');
+              }
+              if(cmid==="" ||cmid == undefined || cmid === "0")
+              {
+                alert('Please select Contract Mfg.');
+              }
+              if($(".cmdate").val() !=="" && hubid > 0 && cmid !== undefined && cmid !== "0")
+              {
+                    $("#savecmmetrics").attr("disabled", true);
+                      $.ajax({
+                        url :"/savecmmetrics",
+                        type:"POST",
+                        data: {cmid: cmid,hubid: hubid,cmdate:date,cmmetricsflow:cmmetricsflow,
+                        criticaldeviations:criticaldeviations,noncriticaldeviations:noncriticaldeviations,overduedeviation:overduedeviation,
+                        auditopenitems:auditopenitems,auditopenitemsoverdue:auditopenitemsoverdue,batchrejectednum:batchrejectednum,
+                        batchrejectedden:batchrejectedden,batchapprovednum:batchapprovednum,batchapprovedden:batchapprovedden,
+                        recdeviations:recdeviations,hseopenitems:hseopenitems,hseotheropenitems:hseotheropenitems
+                        ,metricsid:metricsid},
+                        success:function(response)
+                        {
+                             //location.reload();
+                             alert('CM Metrics saved successfully.');
+                        },
+                        error: function(e) {
+                                console.log('Error in call updateactivestatus');
+                                console.log(e);							
+                        }
+                    });
+              }
+
+        });
+        $(function () {
+            $(".navbar-nav li").removeClass('active');
+            $(".navbar-nav li:eq(1)").addClass('active');
+            $(".navbar-nav li:eq(1) a").css("background-color","#0073cc");
+             var currentMonth = (new Date).getMonth();
+               $('#datetimepicker1').datetimepicker({
+                format: 'YYYY-MM',
+                //maxDate: moment()
+                maxDate:  new Date(new Date().setMonth(currentMonth -1))
+            }).on('dp.change',function(event){ 
+                $("#savecmmetrics").attr("disabled", false);
+                  clearmetrics();
+                  var hubid=$("#huboversight").val();
+                  //var items = [];
+                  //$("input[name='cmdetails']:checked").each(function(){items.push($(this).val());});
+                  var e = document.getElementById("cmdetails");
+                  var value = e.options[e.selectedIndex].value;
+                  var cmid = value;
+                  fetchmetricsdata(hubid,cmid);
+            });    
+            //$('input[name="cmdetails"]:checkbox').change(function() {
+              //  alert('hii');               
+            //});       
+            //$("#huboversight").change(function(){
+$('#cmdetails').on('change', function(){
+    $("#savecmmetrics").attr("disabled", false);
+    var city = $('option:selected', this).attr('cityname');
+    var partnercode = $('option:selected', this).attr('partnercode');
+    if (city === 'hideall' && partnercode =='hideall')
+    {
+        $('#cityname').html("");
+            $('#city-container').hide();
+            $('#partnercode-container').hide();
+    }
+    else{
+         if (city !== "null"){
+                $('#cityname').html(city);
+                $('#city-container').show();
+            }
+            $('#partnercode').html(partnercode);            
+            $('#partnercode-container').show();
+    }
+})
+
+                $("#huboversight").on("change", function(){
+                clearmetrics();
+                $("#savecmmetrics").attr("disabled", false);
+                var id = this.value;
+                $("#cmdetails").html(" ");
+                if(id==0)
+                {
+                         $("#cmdetails").append("<option value='0'>--Select--</option>");
+                }
+                else 
+                {
+                     $.ajax({
+                        url :"/fetchcmdata",
+                        type:"POST",
+                        data: {hubid: id},
+                        success:function(response)
+                        {
+                            var data=response.data;                            
+                            var string = "<option value='0' partnercode='hideall' cityname='hideall'>--Select--</option>"
+                            if(data.length >0 ){                                
+                                for(var i=0;i<data.length;i++) 
+                                {
+                                     //string += "<a><input onchange='checkcm(this)' name='cmdetails' type='radio' class='form-check-input' value='" +data[i].vendorid +"' />"   + data[i].vendorname + "</a>";
+                                     string += "<option class='vendordata' partnercode='"+ data[i].partnercode + "' cityname='"+ data[i].cityname +"'  value='" +data[i].vendorid +"'>"   + data[i].vendorname + "</option>";
+                                }                                
+                                $("#cmdetails").append(string);
+                            }
+                            else {
+                                $("#cmdetails").append("<option value='0'>--Select--</option>");
+                            }                            
+                            
+                        },
+                        error: function(e) {
+                                console.log('Error in call updateactivestatus');
+                                console.log(e);							
+                        }
+                    });
+                }
+                          
+            });
+         
+        });
+                
+
+        $('[data-toggle="tooltip"]').tooltip();
+        $("#sidebar").mCustomScrollbar({
+            theme: "minimal"
+        });
+
+        $('#sidebarCollapse').on('click', function () {
+            // open or close navbar
+            $('#sidebar').toggleClass('active');
+            // close dropdowns
+            $('.collapse.in').toggleClass('in');
+            // and also adjust aria-expanded attributes we use for the open/closed arrows
+            // in our CSS
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        });
+          $(".allownumeric").on("keypress keyup blur",function (event) {    
+           $(this).val($(this).val().replace(/[^\d].+/, ""));
+            if ((event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+        });
+        function clearmetrics(hubid,cmid)
+        {
+            $("#cmmetricsflow").val("");
+            $("#metricsid").val("");
+            $("#criticaldeviations").val("");
+            $("#noncriticaldeviations").val("");
+            $("#auditopenitems").val("");
+            $("#auditopenitemsoverdue").val("");
+            $("#batchrejectednum").val("");
+            $("#batchrejectedden").val("");
+            $("#batchapprovednum").val("");
+            $("#batchapprovedden").val("");
+            $("#recdeviations").val("");
+            $("#hseopenitems").val("");
+            $("#hseotheropenitems").val("");
+            var result= calculaterejected($("#batchrejectednum").val(),$("#batchrejectedden").val());
+            $(".rejectpercent").text(result);
+            var result= calculate( $("#batchapprovednum").val(),$("#batchapprovedden").val());
+            $(".approvepercent").text(result);
+
+        }
+        function fetchmetricsdata(hubid,cmid)
+        {
+             
+            var date = $(".cmdate").val();
+            date = date + "-01";
+            //var d = new Date(date);
+            //console.log(d)
+            var cmdetails=cmid;
+            var hubdetails=hubid; 
+              $.ajax({
+                        url :"/fetchcmmetrics",
+                        type:"POST",
+                        data: {cmdata: cmdetails,hubdata:hubdetails,metricdate:date},
+                        success:function(response)
+                        {
+                                 var data=response.data;
+                                 
+                                 if(data.length>0) 
+                                 { 
+                                     //Update flow
+                                     $("#cmmetricsflow").val(0);
+                                     for(var i=0;i<data.length;i++) 
+                                     {
+                                          $("#metricsid").val(data[0].metricsid);
+                                          $("#criticaldeviations").val(data[0].quality_criticaldeviation);
+                                          $("#noncriticaldeviations").val(data[0].quality_noncriticaldeviation);
+                                          $("#overduedeviation").val(data[0].quality_overduedeviation);
+                                          $("#auditopenitems").val(data[0].quality_auditopenitems);
+                                          $("#auditopenitemsoverdue").val(data[0].quality_auditopenitemsoverdue);
+                                          $("#batchrejectednum").val(data[0].quality_batchrejected_num);
+                                          $("#batchrejectedden").val(data[0].quality_batchrejected_den);
+                                          var result= calculaterejected($("#batchrejectednum").val(),$("#batchrejectedden").val());
+                                          $(".rejectpercent").text(result);
+                                          $("#batchapprovednum").val(data[0].quality_batchapproved_num);
+                                          $("#batchapprovedden").val(data[0].quality_batchapproved_den);
+                                          var result= calculate( $("#batchapprovednum").val(),$("#batchapprovedden").val());
+                                          $(".approvepercent").text(result);
+                                          $("#recdeviations").val(data[0].quality_recurringdeviation);
+                                          $("#hseopenitems").val(data[0].hse_majoropenitems);
+                                          $("#hseotheropenitems").val(data[0].hse_hseopenitems);
+                                     }
+                                    
+                                 }
+                                 else 
+                                 {
+                                    $("#cmmetricsflow").val(1);
+                                    $("#metricsid").val("");
+                                    $("#criticaldeviations").val("");
+                                    $("#noncriticaldeviations").val("");
+                                    $("#overduedeviation").val("");
+                                    $("#auditopenitems").val("");
+                                    $("#auditopenitemsoverdue").val("");
+                                    $("#batchrejectednum").val("");
+                                    $("#batchrejectedden").val("");
+                                    $("#batchapprovednum").val("");
+                                    $("#batchapprovedden").val("");
+                                    $("#recdeviations").val("");
+                                    $("#hseopenitems").val("");
+                                    $("#hseotheropenitems").val("");
+                                    var result= calculaterejected($("#batchrejectednum").val(),$("#batchrejectedden").val());
+                                    $(".rejectpercent").text(result);
+                                    var result= calculate( $("#batchapprovednum").val(),$("#batchapprovedden").val());
+                                    $(".approvepercent").text(result);
+                                     //Insert flow
+                                 }
+                            
+                        },
+                        error: function(e) {
+                                console.log('Error in call updateactivestatus');
+                                console.log(e);							
+                        }
+                    });
+        }
+        $("#batchrejectednum").on("keyup blur",function (event) {    
+            
+            var num = ($("#batchrejectednum").val());
+            var den = ($("#batchrejectedden").val());
+            var result= calculaterejected(num,den);
+            $(".rejectpercent").text(result);
+        });
+        $("#batchrejectedden").on("keyup blur",function (event) {  
+            
+            var num = ($("#batchrejectednum").val());
+            var den = ($("#batchrejectedden").val());            
+            var result= calculaterejected(num,den);
+            $(".rejectpercent").text(result);
+
+            // calculate again for approval
+            $("#batchapprovedden").val(den);
+            var num = ($("#batchapprovednum").val());
+            var den = ($("#batchapprovedden").val());            
+            var result= calculate(num,den);
+            $(".approvepercent").text(result);
+            
+        });
+        $("#batchapprovedden").on("keyup blur",function (event) {  
+            
+            var num = ($("#batchapprovednum").val());
+            var den = ($("#batchapprovedden").val());            
+            var result= calculate(num,den);
+            $(".approvepercent").text(result);
+            // calculate again for rejected
+            $("#batchrejectedden").val(den);
+            var num = ($("#batchrejectednum").val());
+            var den = ($("#batchrejectedden").val());            
+            var result= calculaterejected(num,den);
+            $(".rejectpercent").text(result);
+        });
+        $("#batchapprovednum").on("keyup blur",function (event) {    
+            
+            var num = ($("#batchapprovednum").val());
+            var den = ($("#batchapprovedden").val());
+            var result= calculate(num,den);
+            $(".approvepercent").text(result);
+        });
+  
+        function checkcm(obj)
+        {
+            console.log(obj);
+            var cmid=$(obj).val();
+            // v2::start
+            console.log(cmid);
+            var hubid=$("#huboversight").val();
+            // v2::end
+
+
+            fetchmetricsdata(hubid,cmid);
+            
+            
+        }
+        function calculate(num,den) 
+        {
+            if(num!="" && den!="")
+            {
+                if(parseInt(num)==0 && parseInt(den)==0)
+                {                    
+                    //return 100;
+                    return 0;
+                }
+                else 
+                {
+                    var result = (parseInt(num)/parseInt(den)*100);
+                    return round(result,2);
+                }
+            }
+            else 
+            {
+                return 0;
+            }
+        }
+        function calculaterejected(num,den) 
+        {
+            if(num!="" && den!="")
+            {
+                if(parseInt(num)==0 && parseInt(den)==0)
+                {                    
+                    //return 100;
+                    return 0;
+                }
+                else 
+                {
+                    var result = (parseInt(num)/parseInt(den)*100);
+                    return round(result,2);
+                }
+            }
+            else 
+            {
+                return 0;
+            }
+        }
+        function round(value, exp) {
+        if (typeof exp === 'undefined' || +exp === 0)
+            return Math.round(value);
+
+        value = +value;
+        exp = +exp;
+
+        if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0))
+            return NaN;
+
+        // Shift
+        value = value.toString().split('e');
+        value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
+
+        // Shift back
+        value = value.toString().split('e');
+        return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
+        }       
+     
+    </script>
+<style>
+    #sidebar .dropdown .dropdown-menu 
+    {
+        width: 100% !important;
+    }
+</style>

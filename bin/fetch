@@ -1,0 +1,308 @@
+#!/usr/bin/env node
+
+const moment = require('moment');
+const request = require('request');
+const nodemailer = require('nodemailer');
+const Promise = require('bluebird');
+
+const API_URL = process.env.MYEEM_API_URL;
+const apiusername = process.env.MYEEM_API_USERNAME;
+const apipassword = process.env.MYEEM_API_PASSWORD;
+const apiauth = `Basic ${Buffer.from(`${apiusername}:${apipassword}`).toString('base64')}`;
+const APPLICATION_URL = process.env.APPLICATION_URL;
+
+function emaildata(rawdata) {
+  return new Promise((resolve) => {
+    const jptleaderemail30 = [];
+    const jptleaderemail10 = [];
+    const jptleaderemail = [];
+    const qualityleaderemail = [];
+    const qualityleaderemail30 = [];
+    // const qualityleaderemail10 = [];
+    const qualityleaderemail6M = [];
+    const qualityleaderemail3M = [];
+    const username = process.env.NODE_MAILER_USERNAME;
+    const password = process.env.NODE_MAILER_PASSWORD;
+    const vendorurl = `${APPLICATION_URL}/cmoverview?vendorid=${rawdata.vendorid}`;
+    const transporter = nodemailer.createTransport({
+      host: process.env.emailhost, // Office 365 server
+      port: process.env.emailport,     // secure SMTP
+      secure: false,
+      auth: {
+        user: username,
+        pass: password,
+      },
+      // tls: {
+      //   ciphers: 'SSLv3',
+      // },
+    });
+    const currdate = moment(moment(), 'DD-MMM-YYYY');
+    // FOR JPT LEADER
+    if (rawdata.supply_contractexpiration !== null && rawdata.supply_contractexpiration !== '' && rawdata.supply_contractexpiration !== undefined) {
+      if (rawdata.general_jptleaderemail !== null && rawdata.general_jptleaderemail !== '' && rawdata.general_jptleaderemail !== undefined) {
+        const finalsupplycontractdate = moment(moment(new Date(rawdata.supply_contractexpiration)).format('DD-MMM-YYYY'));
+        console.log('date difference');
+        console.log(finalsupplycontractdate);
+        const difference = finalsupplycontractdate.diff(currdate, 'days');
+        console.log(difference);
+
+        console.log('vendorname...');
+        console.log(rawdata.vendorname);
+        console.log('currdate...');
+        console.log(currdate);
+        console.log('finalsupplycontractdate...');
+        console.log(finalsupplycontractdate);
+        console.log('difference...');
+        console.log(difference);
+
+        if (difference === 30) {
+          console.log('30 days.....');
+          jptleaderemail30.push({ jptleadername: rawdata.general_jptleader,
+            jptleaderemail: rawdata.general_jptleaderemail,
+            contractexpiration: rawdata.supply_contractexpiration,
+            vendorname: rawdata.vendorname });
+          console.log('Date difference is of 30 days for Supply Contract');
+          const emailhtml = `Hi ${rawdata.general_jptleader},<br /><br /> The contract date for ${rawdata.vendorname} will be expiring in <b>30days.</b><br /> Follow the <a href="${vendorurl}">link</a> to update the vendor contract expiration date field.<br /><br />*This is a system-generated email and is not monitored*<br /><br />Thanks & Regards, <br />Elanco myEEM Team <br/><img alt="myEEM Logo"  src="${APPLICATION_URL}/img/Myeem-logo.png" />`;
+          const mailoption = {
+            from: process.env.sg_from_email, // As seen in email screenshot
+            // to: process.env.sg_to_email,
+            to: rawdata.general_jptleaderemail,
+            subject: `Reminder: ${rawdata.vendorname} ${moment(rawdata.supply_contractexpiration).format('MM/DD/YYYY')} - myEEM Update Required`,
+            html: emailhtml,
+          };
+          console.log(mailoption);
+          transporter.sendMail(mailoption, (error, info) => {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log(`Email sent: ${info.response}`);
+            }
+          });
+        }
+        if (difference === 10) {
+          console.log('10 days.....');
+          jptleaderemail10.push({ jptleadername: rawdata.general_jptleader,
+            jptleaderemail: rawdata.general_jptleaderemail,
+            contractexpiration: rawdata.supply_contractexpiration,
+            vendorname: rawdata.vendorname });
+          console.log('Date difference is of 10 days for Supply Contract');
+          const emailhtml = `Hi ${rawdata.general_jptleader},<br /><br /> The contract date for ${rawdata.vendorname} will be expiring in <b>10days.</b><br /> Follow the <a href="${vendorurl}">link</a> to update the vendor contract expiration date field.<br /><br />*This is a system-generated email and is not monitored*<br /><br />Thanks & Regards, <br />Elanco myEEM Team<br/><img alt="myEEM Logo" src="${APPLICATION_URL}/img/Myeem-logo.png" />`;
+          const mailoption = {
+            from: process.env.sg_from_email, // As seen in email screenshot
+            // to: process.env.sg_to_email,
+            to: rawdata.general_jptleaderemail,
+            subject: `Reminder: ${rawdata.vendorname} ${moment(rawdata.supply_contractexpiration).format('MM/DD/YYYY')} - myEEM Update Required`,
+            html: emailhtml,
+          };
+          console.log(mailoption);
+          transporter.sendMail(mailoption, (error, info) => {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log(`Email sent: ${info.response}`);
+            }
+          });
+        }
+
+        if (finalsupplycontractdate < currdate) {
+          console.log('expired.....');
+          jptleaderemail.push({ jptleadername: rawdata.general_jptleader,
+            jptleaderemail: rawdata.general_jptleaderemail,
+            contractexpiration: rawdata.supply_contractexpiration,
+            vendorname: rawdata.vendorname });
+          console.log('Date greate than today for Supply contract');
+          console.log(moment(rawdata.supply_contractexpiration).format('MM/DD/YYYY'));
+          const emailhtml = `Hi ${rawdata.general_jptleader},<br /><br /> The contract date for ${rawdata.vendorname} has expired and needs your attention.<br /> Follow the <a href="${vendorurl}">link</a> to update the vendor contract expiration date field.<br /><br />*This is a system-generated email and is not monitored*<br /><br />Thanks & Regards, <br />Elanco myEEM Team<br/><img alt="myEEM Logo" src="${APPLICATION_URL}/img/Myeem-logo.png" />`;
+          const mailoption = {
+            from: process.env.sg_from_email, // As seen in email screenshot
+            // to: process.env.sg_to_email,
+            to: rawdata.general_jptleaderemail,
+            subject: `Reminder: Contract Date Expired for ${rawdata.vendorname} ${moment(rawdata.supply_contractexpiration).format('MM/DD/YYYY')} - myEEM Update Required`,
+            html: emailhtml,
+          };
+          console.log(mailoption);
+          transporter.sendMail(mailoption, (error, info) => {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log(`Email sent: ${info.response}`);
+            }
+          });
+        }
+      }
+    }
+    // FOR QUALITY LEADER
+    if (rawdata.quality_reviewdate !== null && rawdata.quality_reviewdate !== '' && rawdata.quality_reviewdate !== undefined) {
+      if (rawdata.quality_leaderemail !== null && rawdata.quality_leaderemail !== '' && rawdata.quality_leaderemail !== undefined) {
+        // const qualityreviewdate = moment(data[i].quality_reviewdate).format('DD-MMM-YYYY');
+        const qualityreviewdate = moment(moment(new Date(rawdata.quality_reviewdate)).format('DD-MMM-YYYY'));
+        console.log('date difference');
+        console.log(qualityreviewdate);
+        const difference = qualityreviewdate.diff(currdate, 'days');
+        const differenceduration = moment.duration(qualityreviewdate.diff(currdate));
+        console.log('difference', difference);
+        console.log('differencemonth', differenceduration.months());
+        console.log('differencemonth', differenceduration.days());
+
+        console.log('vendorname...');
+        console.log(rawdata.vendorname);
+        console.log('currdate...');
+        console.log(currdate);
+        console.log('qualityreviewdate...');
+        console.log(qualityreviewdate);
+        console.log('difference...');
+        console.log(difference);
+
+        if (differenceduration.months() === 6 && differenceduration.days() === 0 && differenceduration.years() === 0) {
+          console.log('6 months.....');
+          qualityleaderemail6M.push({ qualityleadername: rawdata.quality_leader,
+            qualityleaderemail: rawdata.quality_leaderemail,
+            qualityreviewdate: rawdata.quality_reviewdate,
+            vendorname: rawdata.vendorname });
+          console.log('Date difference is of 6 months for Quality');
+          const emailhtml = `Hi ${rawdata.quality_leader},<br /><br /> The contract date for ${rawdata.vendorname} will be expiring in <b>6months.</b><br /> Follow the <a href="${vendorurl}">link</a> to update the vendor contract expiration date field.<br /><br />*This is a system-generated email and is not monitored*<br /><br />Thanks & Regards, <br />Elanco myEEM Team<br/><img alt="myEEM Logo" src="${APPLICATION_URL}/img/Myeem-logo.png" />`;
+          const mailoption = {
+            from: process.env.sg_from_email, // As seen in email screenshot
+            // to: process.env.sg_to_email,
+            to: rawdata.quality_leaderemail,
+            subject: `Reminder: ${rawdata.vendorname} ${moment(rawdata.quality_reviewdate).format('MM/DD/YYYY')} - myEEM Update Required`,
+            html: emailhtml,
+          };
+          console.log(mailoption);
+          transporter.sendMail(mailoption, (error, info) => {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log(`Email sent: ${info.response}`);
+            }
+          });
+        }
+
+        if (differenceduration.months() === 3 && differenceduration.days() === 0 && differenceduration.years() === 0) {
+          console.log('3 months.....');
+          qualityleaderemail3M.push({ qualityleadername: rawdata.quality_leader,
+            qualityleaderemail: rawdata.quality_leaderemail,
+            qualityreviewdate: rawdata.quality_reviewdate,
+            vendorname: rawdata.vendorname });
+          console.log('Date difference is of 3 months for Quality');
+          const emailhtml = `Hi ${rawdata.quality_leader},<br /><br /> The contract date for ${rawdata.vendorname} will be expiring in <b>3months.</b><br /> Follow the <a href="${vendorurl}">link</a> to update the vendor contract expiration date field.<br /><br />*This is a system-generated email and is not monitored*<br /><br />Thanks & Regards, <br />Elanco myEEM Team<br/><img alt="myEEM Logo" src="${APPLICATION_URL}/img/Myeem-logo.png" />`;
+          const mailoption = {
+            from: process.env.sg_from_email, // As seen in email screenshot
+            // to: process.env.sg_to_email,
+            to: rawdata.quality_leaderemail,
+            subject: `Reminder: ${rawdata.vendorname} ${moment(rawdata.quality_reviewdate).format('MM/DD/YYYY')} - myEEM Update Required`,
+            html: emailhtml,
+          };
+          console.log(mailoption);
+          transporter.sendMail(mailoption, (error, info) => {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log(`Email sent: ${info.response}`);
+            }
+          });
+        }
+
+        if (difference === 30) {
+          console.log('30 days.....');
+          qualityleaderemail30.push({ qualityleadername: rawdata.quality_leader,
+            qualityleaderemail: rawdata.quality_leaderemail,
+            qualityreviewdate: rawdata.quality_reviewdate,
+            vendorname: rawdata.vendorname });
+          console.log('Date difference is of 30 days for Quality');
+          const emailhtml = `Hi ${rawdata.quality_leader},<br /><br /> The contract date for ${rawdata.vendorname} will be expiring in <b>30days.</b><br /> Follow the <a href="${vendorurl}">link</a> to update the vendor contract expiration date field.<br /><br />*This is a system-generated email and is not monitored*<br /><br />Thanks & Regards, <br />Elanco myEEM Team<br/><img alt="myEEM Logo" src="${APPLICATION_URL}/img/Myeem-logo.png" />`;
+          const mailoption = {
+            from: process.env.sg_from_email, // As seen in email screenshot
+            // to: process.env.sg_to_email,
+            to: rawdata.quality_leaderemail,
+            subject: `Reminder: ${rawdata.vendorname} ${moment(rawdata.quality_reviewdate).format('MM/DD/YYYY')} - myEEM Update Required`,
+            html: emailhtml,
+          };
+          console.log(mailoption);
+          transporter.sendMail(mailoption, (error, info) => {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log(`Email sent: ${info.response}`);
+            }
+          });
+        }
+        // if (difference === 10) {
+        //   console.log('10 days.....');
+        //   qualityleaderemail10.push({ qualityleadername: rawdata.quality_leader,
+        //     qualityleaderemail: rawdata.quality_leaderemail,
+        //     qualityreviewdate: rawdata.quality_reviewdate,
+        //     vendorname: rawdata.vendorname });
+        //   console.log('Date difference is of 10 days for Quality');
+        //   const emailhtml = `Hi ${rawdata.quality_leader},<br /><br /> The contract date for ${rawdata.vendorname} will be expiring in <b>10days.</b><br /> Follow the <a href="${vendorurl}">link</a> to update the vendor contract expiration date field.<br /><br />*This is a system-generated email and is not monitored*<br /><br />Thanks & Regards, <br />Elanco myEEM Team<br/><img alt="myEEM Logo" src="${APPLICATION_URL}/img/Myeem-logo.png" />`;
+        //   const mailoption = {
+        //     from: process.env.sg_from_email, // As seen in email screenshot
+        //     // to: process.env.sg_to_email,
+        //     to: rawdata.quality_leaderemail,
+        //     subject: `Reminder: ${rawdata.vendorname} ${moment(rawdata.quality_reviewdate).format('MM/DD/YYYY')} - myEEM Update Required`,
+        //     html: emailhtml,
+        //   };
+        //   console.log(mailoption);
+        //   transporter.sendMail(mailoption, (error, info) => {
+        //     if (error) {
+        //       console.log(error);
+        //     } else {
+        //       console.log(`Email sent: ${info.response}`);
+        //     }
+        //   });
+        // }
+        if (qualityreviewdate < currdate && (difference % 7 === 0)) {
+          console.log('expired weekly.....');
+          qualityleaderemail.push({ qualityleadername: rawdata.quality_leader,
+            qualityleaderemail: rawdata.quality_leaderemail,
+            qualityreviewdate: rawdata.quality_reviewdate,
+            vendorname: rawdata.vendorname });
+          console.log('Date greater than today and difference is 7 days for Quality');
+          const emailhtml = `Hi ${rawdata.quality_leader},<br /><br /> The contract date for ${rawdata.vendorname} has expired and needs your attention.<br /> Follow the <a href="${vendorurl}">link</a> to update the vendor contract expiration date field.<br /><br />*This is a system-generated email and is not monitored*<br /><br />Thanks & Regards, <br />Elanco myEEM Team<br/><img alt="myEEM Logo" src="${APPLICATION_URL}/img/Myeem-logo.png" />`;
+          const mailoption = {
+            from: process.env.sg_from_email, // As seen in email screenshot
+            // to: process.env.sg_to_email,
+            to: rawdata.quality_leaderemail,
+            subject: `Reminder: Quality Review Date Expired for ${rawdata.vendorname} ${moment(rawdata.quality_reviewdate).format('MM/DD/YYYY')} - myEEM Update Required`,
+            html: emailhtml,
+          };
+          console.log(mailoption);
+          transporter.sendMail(mailoption, (error, info) => {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log(`Email sent: ${info.response}`);
+            }
+          });
+        }
+      }
+    }
+    resolve();
+  });
+}
+try {
+  const promiseArray = [];
+  console.log('Inside Email Method.....');
+  request.get({
+    url: `${API_URL}/api/emaildetails`,
+    headers: {
+      'content-type': 'application/json',
+      Authorization: apiauth,
+    },
+    json: true,
+  }, (error, response, body) => {
+    if (!error && response.statusCode === 200) {
+      // console.log('coming her 456');
+      // console.log((body.data));
+      const result = (body);
+      const data = result.data;
+      if (data.length > 0) {
+        for (let i = 0; i < data.length; i++) {
+          promiseArray.push(emaildata(data[i]));
+        }
+      }
+    }
+  });
+} catch (e) {
+  console.log(e);
+}

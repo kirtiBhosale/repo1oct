@@ -1,0 +1,42 @@
+<html>
+<head>    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="pragma" content="no-cache" />
+    <title>Login Page</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>    
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+<body class="loginpage">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="logo pull-left">
+                <img alt="Elanco Logo" src="img/elanco-login-logo.png" />
+            </div>
+            <div class="logo pull-right">
+               <img alt="myEEM Logo" src="img/myEEM-login-logo.png" />
+            </div>
+        </div>
+        <div class="row">         
+               {{#if pageaccess}}
+            <div class="text-center welcome-title">
+                <h1>You are not authorized to view this page.</h1>
+                <p>Elanco Users [ONLY]: Request myEEM access via the <a target="_blank" href="https://lilly.service-now.com/ess/view_content_search.do?v=1&uri=com.glideapp.servicecatalog_cat_item_view.do%3Fv%3D1%26sysparm_id%3Dc505dbd10f2162005200a218b1050ead%26sysparm_link_parent%3D6313147a3553f00014379b119de0702d%26sysparm_catalog%3De0d08b13c3330100c8b837659bba8fb4&sysparm_document_key=sc_cat_item,c505dbd10f2162005200a218b1050ead"> Elanco IT Security Request</a> process. Search for “myEEM” as the application.</p>
+            </div>
+              {{else}}
+            <div class="text-center welcome-title">
+                <h1>You are not authorized to use this system.</h1>
+                <p>Elanco Users [ONLY]: Request myEEM access via the <a target="_blank" href="https://lilly.service-now.com/ess/view_content_search.do?v=1&uri=com.glideapp.servicecatalog_cat_item_view.do%3Fv%3D1%26sysparm_id%3Dc505dbd10f2162005200a218b1050ead%26sysparm_link_parent%3D6313147a3553f00014379b119de0702d%26sysparm_catalog%3De0d08b13c3330100c8b837659bba8fb4&sysparm_document_key=sc_cat_item,c505dbd10f2162005200a218b1050ead"> Elanco IT Security Request</a> process. Search for “myEEM” as the application.</p>
+            </div>
+            {{/if}}                   
+        </div>
+       
+    </div>
+</body>
+</html>

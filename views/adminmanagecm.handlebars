@@ -1,0 +1,130 @@
+{{!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"/> --}}
+{{!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css"/> --}}
+{{!-- <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script> --}}
+{{!-- <script src=" https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.colVis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script> --}}
+
+<div class="container admin-manage-cm">
+    <table id="example" class="display">
+        <thead>
+            <tr>
+                <th>Sr No.</th>
+                <th>CM ID</th>
+                <th>CM Name</th>
+                <th>Logo</th>
+                <th>Hide in Search</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            {{#each data}}
+            <tr>
+                <td>{{ increment @index}}</td>
+                <td>{{this.partnercode}}</td>
+                <td>{{this.vendorname}}</td>
+                <td>
+                    {{#if this.logourl}}
+                    <img alt="{{this.vendorname}}" src="{{{this.logourl}}}" width="82" height="52">
+                    {{else}}
+                    <img alt="{{this.vendorname}}" src="/img/noimage.jpg" width="82">
+                    {{/if}}
+                </td>
+                <td class="status text-center" text-align="center">
+                    {{#if isactive}}
+                    <input type="checkbox" data-vendorname="{{{this.vendorname}}}"
+                        data-vendorstatusid="{{this.vendorstatusid}}" class="classactive" data-id="{{this.vendorid}}"
+                        value="true">
+                    {{else}}
+                    <input type="checkbox" data-vendorname="{{{this.vendorname}}}"
+                        data-vendorstatusid="{{this.vendorstatusid}}" class="classactive" data-id="{{this.vendorid}}"
+                        value="false" checked>
+                    {{/if}}
+                </td>
+            </tr>
+            {{/each}}
+
+        </tbody>
+    </table>
+    <div class="text-center">
+        <button type="submit" id="save" class="btn btn-lg btn-default">SAVE</button>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        $(".navbar-nav li").removeClass('active');
+        $(".navbar-nav li:eq(1)").addClass('active');
+        $(".navbar-nav li:eq(1) a").css("background-color", "#0073cc");
+        $('#example').DataTable({
+            "columnDefs": [{
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            }],
+            "scrollX": true,
+            "order": [[1, 'asc']]
+        });
+    });
+    var arr = [];
+    var str = '';
+
+    $('#example').on('change', '.classactive', function () {
+        var vendorid = $(this).attr("data-id");
+        var vendorname = $(this).attr("data-vendorname");
+        var vendorstatusid = parseInt($(this).attr("data-vendorstatusid"), 10);
+        if (vendorstatusid === 21) {
+            // Means vendor status is Currently Not in use
+            //alert(vendorid);
+            var value = this.checked;
+            //alert(value);
+            if (this.checked) {
+                value = false;
+            }
+            else {
+                value = true;
+            }
+            str += vendorid + ":" + value + ",";
+        } else {
+            alert('Please change Vendor Status to Currently Not in Use for Vendor :  ' + vendorname);
+            this.checked = !this.checked;
+        }
+
+    });
+
+    $("#save").click(function () {
+        // alert('test123');
+        // console.log(arr);
+        // console.log(str);
+        var n = str.lastIndexOf(",");
+        var finalstr = str.substring(0, n)
+        console.log(finalstr);
+        // var jsonstringifty=JSON.stringify(arr);
+        // console.log("value of stringify array is");
+        // console.log(jsonstringifty);
+
+
+        $.ajax({
+            url: "/updateactivestatus",
+            type: "GET",
+            data: { array: finalstr },
+            success: function (response) {
+                console.log(response);
+                if (response === 'success') {
+                    alert('Your record is successfully submitted');
+                    location.reload();
+                }
+
+            },
+            error: function (e) {
+                console.log('Error in call updateactivestatus');
+                console.log(e);
+            }
+        });
+    });
+
+
+</script>

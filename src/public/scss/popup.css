@@ -1,0 +1,78 @@
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.servicereviewpopup .close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  opacity:1;
+  text-align: center;
+}
+
+.servicereviewpopup .close:hover,
+.servicereviewpopup .close:focus {
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+.servicereviewpopup  .modal-dialog{
+  margin-top: 120px;
+  
+}
+
+.servicereviewpopup  .modal-content{
+width: 500px;
+}
+.servicereviewpopup  .modal-header {
+  padding: 2px 16px;
+  background-color: #0073cc;
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.servicereviewpopup  .modal-body {padding: 2px 16px;}
+.mp-row{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.servicereviewpopup .label{
+    font-size: 12px;
+   color:#696969;
+}
+.servicereviewpopup .val{
+    font-size: 12px;
+}
+.servicereviewpopup  .tb-header{
+    background-color: #D3D3D3	;
+    
+}
+.servicereviewpopup  .tb-body{
+    background-color: #fff;
+}
+.servicereviewpopup table.table-bordered{
+    border:1px solid #808080;
+    margin-top:0px;
+    margin-bottom: 0px;
+  }
+.servicereviewpopup  table.table-bordered > thead > tr > th{
+    border:1px solid #808080;
+    height:15px;
+}
+.servicereviewpopup table.table-bordered > tbody > tr > td{
+    border:1px solid#808080;
+    height:15px;
+}
+.servicereviewpopup  .btn .btn-primary{
+  background-color: #0073cc;
+}

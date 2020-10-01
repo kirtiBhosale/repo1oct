@@ -1,0 +1,1 @@
+Repository Name: ELANCO_ELANCO_MFG Application Short Name: ELANCO_ELANCO_MFG Repository Owner (Lilly Email Address): DARSHAN DOSHI (C233814) Repository Owner (GitHub Username): darshan-doshi Responsible IT Organization: Elanco IT Development Languages: Node.js

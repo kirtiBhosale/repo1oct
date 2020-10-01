@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+// const express = require('express');
+const request = require('request');
+const moment = require('moment');
+
+const API_URL = process.env.MYEEM_API_URL;
+const apiusername = process.env.MYEEM_API_USERNAME;
+const apipassword = process.env.MYEEM_API_PASSWORD;
+const apiauth = `Basic ${Buffer.from(`${apiusername}:${apipassword}`).toString('base64')}`;
+const currdate = moment().format('dddd').toString();
+console.log('print current day');
+const currentdateset = process.env.SYNC_STG_PRIMARY;
+
+if (currdate.toLowerCase() === currentdateset) {
+  console.log('current day is friday...');
+  request.get({
+    url: `${API_URL}/api/refreshproductdata`,
+    headers: {
+      'content-type': 'application/json',
+      Authorization: apiauth,
+    },
+  }, (error, response) => {
+    if (!error && response.statusCode === 200) {
+      console.log('Response from Products Data Details API');
+    } else {
+      console.log(error);
+    }
+  });
+}

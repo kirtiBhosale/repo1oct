@@ -1,0 +1,489 @@
+<div class="container manage-service-review">
+    <form class="form-horizontal col-sm-6 col-sm-push-3">
+        <div class="form-group">
+            <label class="control-label col-sm-5" for="dropdowncategory">Select Function:</label>
+            <div class="col-sm-7">
+                <select class="form-control" id="servicereviewfunction">
+
+                    {{#each ServiceReviewFunction}}
+                    <option value="{{this}}" data-id="">
+                        {{this}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+        <br />
+        <div class="form-group year-container">
+            <label class="control-label col-sm-5" for="dropdowncategory">Select Year:</label>
+            <div class="col-sm-7">
+                <div class="datetimepicker-div">
+                        <div class='input-group date' id='yearpicker'>
+                            <input type='text' class="cmdate form-control input-md"  onkeydown= "event.preventDefault()" required />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-5" for="dropdowncategory">Select Vendor Type:</label>
+            <div class="col-sm-7" style="padding-top: 7px;">
+                {{#each vendortype}}
+                    <input type="checkbox" name="cbvendortype" value="{{this.Id}}" /> {{this.Value}}<br/>
+                {{/each}}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-5" for="dropdowncategory">Select CM Segmentation:</label>
+            <div class="col-sm-7">
+                <select class="form-control" id="cmsegmentation">
+                    <option value="0">--Select--</option>
+                    {{#each cmseg}}
+                    <option value="{{this.Id}}" data-id="">
+                        {{this.Value}}</option>
+                    {{/each}}
+
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-5" for="pwd">Add New Service Item:</label>
+            <div class="col-xs-10 col-sm-7">
+                <input type="text" class="form-control" maxlength="50" id="serviceitemvalue">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-5" for="dropdowncategory">Service Description:</label>
+            <div class="col-sm-7">
+                <textarea class="form-control" id="servicedescription" maxlength="150" rows="4" cols="50"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-12 custom-btn-add">
+                <button class="btn" type="button" id="addserviceitem">
+                    <b>Add</b>
+                </button>
+            </div>
+        </div>
+        <br />
+    </form>
+    <br />
+    <br />
+    <table id="example" class="display table table-bordered table-condensed" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th >Sr No.</th>
+                <th hidden="hidden">ID</th>
+                <th>Select Function</th>
+                <th>Service Year</th>
+                <th>Vendor Type</th>
+                <th>CM Segmentation</th>
+                <th>Service Item</th>
+                <th>Service Description</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".navbar-nav li").removeClass('active');
+        $(".navbar-nav li:eq(3)").addClass('active');
+        $(".navbar-nav li:eq(3) a").css("background-color", "#0073cc");
+        var year = new Date().getFullYear();
+        var minYear = year+'-01-01';
+        var getDateFromDateTimePicker = minYear;
+        var data = {};        
+        var table;
+        // fetch service review window status(whether it is opend or closed)
+        var months = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May',
+        'Jun', 'Jul', 'Aug', 'Sep',
+        'Oct', 'Nov', 'Dec'
+        ];
+        function monthNumToName(monthnum) {
+            return months[monthnum - 1] || '';
+        }
+        window.onload = function () {
+            $.ajax({
+                url: "/fetchreviewwindow",
+                type: "POST",
+                data: {
+                    year: year
+                },
+                success: function (data) {
+                    var currentDate = new Date(new Date().setMonth((new Date).getMonth()))
+                    var monthNum = (currentDate.getMonth() + 1);
+                    var monthName = monthNumToName(monthNum);
+                    var newCurrentDate = new Date((currentDate.getFullYear() + '/' + monthName + '/01')).getTime();
+                    console.log("newCurrentDate", newCurrentDate);
+                    if (data.message == 'data fetched') {
+                        var review_date_start = new Date(data.data.startdate);
+                        var review_date_end = new Date(data.data.enddate);
+                        var reviewStartDate = new Date((review_date_start.getMonth() + 1) + '/' + review_date_start.getDate() + '/' + review_date_start.getFullYear()).getTime();
+                        var reviewEndDate = new Date((review_date_end.getMonth() + 1) + '/' + review_date_end.getDate() + '/' + review_date_end.getFullYear()).getTime();
+                        //review window started and current date is in between review window
+                        if (reviewStartDate <= newCurrentDate && reviewEndDate >= newCurrentDate) {
+                            console.log('Service Review Window has been opened.');
+                             $("#addserviceitem").attr('disabled','disabled');
+                        }
+                        //review window is not started and current date is smaller than review window start date
+                        else if (reviewStartDate > newCurrentDate && reviewEndDate > newCurrentDate) { 
+                            console.log('Service Review Window has been opened for these dates.');                           
+                        }
+                        //review window closed  
+                        else if (newCurrentDate > reviewStartDate && newCurrentDate > reviewEndDate) {
+                            console.log('Service Review Window has been closed.'); 
+                            $("#addserviceitem").attr('disabled','disabled');                         
+                        }
+                    } else if (data.message == 'empty' || data.message == 'No record found') {                       
+                        console.log('Service Review Window has not started.');
+                    }
+                },
+                error: function (textStatus, errorThrown) {
+                    response = JSON.parse(textStatus.responseText)
+                    if (response.error == 'password') {
+                        console.log('WRONG USERNAME OR PASSWORD !')
+                    } else if (response.error == 'database') {
+                        console.log('Looks like we are having some issues with our database. please TRY AGAIN!')
+                    }
+                    else {
+                        console.log('ERROR')
+                    }
+                }
+            });
+        }
+        var url = '/fetchservicereviewfunction?currentYear=' + getDateFromDateTimePicker;
+            table = $('#example').DataTable({
+            ajax: {
+                url: url,
+                type: 'GET',
+            },
+            "drawCallback": function( settings ) {                
+                $('#example .ctrl-status-vendortype').attr('disabled', 'disabled');
+                $('#example .ctrl-status-cmseg').attr('disabled', 'disabled');
+                $('#example .ctrl-status').attr('disabled', 'disabled');
+            },
+            "order": [[0, 'desc']],
+            columns: [{
+                data: 'manageservicereviewid',
+                searchable: false,
+                'createdCell': function (td, cellData, rowData, row, col) {
+                    $(td).attr('hidden', 'hidden');
+                }
+            },
+            {
+                data: null,
+                searchable: false,
+                orderable: false,
+                className: 'text-center'
+            },
+            {
+                data: 'servicefunction',
+                render: $.fn.dataTable.render.text()
+
+            },
+             {
+                data: 'serviceyear',
+                render: $.fn.dataTable.render.text()
+            },  
+            {
+                data: 'vendortype',
+                "render": function (data, type, full, meta) {
+                    var $select = $('<select/>', { 'class': 'ctrl-status-vendortype' });
+                    $('#example .ctrl-status-vendortype').attr('disabled', 'disabled');
+                    var vendorType = {{{VendorType}}};
+                    vendorType.forEach(function (vendor) {
+                    var $opt = $('<option/>', { 'value': vendor.Id, 'text': vendor.Value });
+                    if (vendor.Value === data) {
+                        $opt.attr("selected", "selected");
+                    }
+                    $select.append($opt);
+                });
+                return $select.prop("outerHTML");
+                }
+            },
+            {
+                data: 'cmsegmentation',
+                "render": function (data, type, full, meta) {
+                    var $select = $('<select/>', { 'class': 'ctrl-status-cmseg' });
+                    $('#example .ctrl-status-cmseg').attr('disabled', 'disabled');
+                    var cmseg = {{{CmSeg}}};
+                    cmseg.forEach(function (cm) {
+                    var $opt = $('<option/>', { 'value': cm.Id, 'text': cm.Value });
+                    if (cm.Value === data) {
+                        $opt.attr("selected", "selected");
+                    }
+                    $select.append($opt);
+                    });
+                    return $select.prop("outerHTML");
+                    }
+            },
+    {
+        data: 'serviceitem',
+            render: $.fn.dataTable.render.text()
+    },
+    {
+        data: 'servicedescription',
+            render: $.fn.dataTable.render.text()
+    },
+    {
+        data: 'status',
+            "render": function (data, type, full, meta) {
+                var status = '';
+                var $select = $('<select/>', { 'class': 'ctrl-status' });
+                $('#example .ctrl-status').attr('disabled', 'disabled');
+
+                var statusList = [
+                    {
+                        'Value': 'Active',
+                        'Text': 'Active'
+                    },
+                    {
+                        'Value': 'Inactive',
+                        'Text': 'Inactive'
+                    }
+                ];
+
+                $.each(statusList, function (Value, Text) {
+                    if (data === false) {
+                        status = 'Inactive';
+                    } else {
+                        status = 'Active';
+                    }
+                    var $opt = $('<option/>', { 'value': Text.Value, 'text': Text.Text });
+                    if (Text.Text === status) {
+                        $opt.attr("selected", "selected");
+                    }
+                    $select.append($opt);
+                });
+                return $select.prop("outerHTML");
+            }
+    },
+    {
+        data: 'action'
+    }],     
+        });
+           table.on('search.dt', function () {
+                table.column(1, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();   
+
+        $("#yearpicker").datetimepicker({
+                format: "YYYY",
+            }).on('dp.change',function(e){ 
+                 getDateFromDateTimePicker = e.date._d.getFullYear()+'-01'+'-01';
+            });
+            $('#yearpicker').data("DateTimePicker").minDate(getDateFromDateTimePicker);
+            $('#yearpicker').data("DateTimePicker").date(getDateFromDateTimePicker);
+        
+    $('#example').css('border-bottom', 'none');
+    // INSERT 
+    $("#servicereviewfunction").change(function () {
+        $('#example .ctrl-status-vendortype').attr('disabled', 'disabled');
+        $('#example .ctrl-status-cmseg').attr('disabled', 'disabled');
+        $('#example .ctrl-status').attr('disabled', 'disabled');
+    });
+    /*
+    $("#vendortype").change(function () {
+        if( $("#vendortype").val() !== "0"){
+            $("#vendortype").removeClass("error");
+        }
+    });
+    */
+    $("#cmsegmentation").change(function () {
+        if( $("#cmsegmentation").val() !== "0"){
+            $("#cmsegmentation").removeClass("error");
+        }
+    });
+    $("#serviceitemvalue").change(function () {
+        if( $("#serviceitemvalue").val() !== "0"){
+            $("#serviceitemvalue").removeClass("error");
+        }
+    });
+    $("#servicedescription").change(function () {
+        if( $("#servicedescription").val() !== "0"){
+            $("#servicedescription").removeClass("error");
+        }
+    });
+    $("#addserviceitem").click(function () {
+        if( $("input[name='cbvendortype']:checked").length === 0){
+            alert('Please select at least 1 vendor type.');
+            // $("#vendortype").addClass("error");
+        }
+        if( $("#cmsegmentation").val() === "0"){
+            $("#cmsegmentation").addClass("error");
+        }
+        if( $("#serviceitemvalue").val() === ""){
+            $("#serviceitemvalue").addClass("error");
+        }
+        if( $("#servicedescription").val() === ""){
+            $("#servicedescription").addClass("error");
+        }
+        if (isValid($("#servicedescription").val()) 
+            && isValid($("#serviceitemvalue").val())
+            && $("input[name='cbvendortype']:checked").length !== 0
+            && $("#cmsegmentation").val() !== "0") {
+            $("#addserviceitem").attr('disabled', 'disabled');
+            var vendortypearr = [];
+            $.each($("input[name='cbvendortype']:checked"), function () {
+                vendortypearr.push($(this).val());
+            });
+            console.log(vendortypearr);
+                $.ajax({
+                    type: 'POST',
+                    url: '/addnewserviceitem',
+                    data: {
+                        "serviceReviewFunction": $("#servicereviewfunction").val(),
+                        "vendorType": vendortypearr,
+                        "cmSegmentation": $("#cmsegmentation").val(),
+                        "serviceItemValue": $("#serviceitemvalue").val().trim(),
+                        "serviceDescription": $("#servicedescription").val().trim(),
+                        "yearPicker": $('#yearpicker input').val().trim() === "" ? '2019-01-01' : $('#yearpicker input').val().trim()+'-01-01'
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        if (data.status == "added") {
+                            alert("Service Review added successfully");
+                            /*$("#serviceitemvalue").val('');
+                            $("#servicedescription").val('');
+                            $("#cmsegmentation").val(0);
+                            $("input[name='cbvendortype']").removeAttr('checked');
+                            $('#example').DataTable().ajax.url('/fetchservicereviewfunction?currentYear=' + getDateFromDateTimePicker).load();}*/
+                            location.reload();
+                        }
+                    },
+                    error: function (e) {
+                        alert("Error while adding an item");
+                        $("#serviceitemvalue").val('');
+                        $("#servicedescription").val('');
+                        $("#cmsegmentation").val(0);
+                        $("input[name='cbvendortype']").removeAttr('checked');
+                        $('#example').DataTable().ajax.url('/fetchservicereviewfunction?currentYear=' + getDateFromDateTimePicker).load();                }
+                });
+            } 
+            else {
+                //alert("Please enter valid value");
+                }
+    });
+    // EDIT
+    $("#example").on('mousedown.edit', "i.fa.fa-pencil-square-o", function (e) {
+        var $tbody = $(this).closest("tbody");
+        var $trs = $tbody.find("tr").off("mousedown");
+        var $td = $trs.find("input");
+        $(this).removeClass().addClass("fa fa-floppy-o cursorpointer");
+        $(this).attr('title', 'Save Service Review Function');
+        var $row = $(this).closest("tr").off("mousedown");
+        var $tds = $row.find("td")
+            .not(':nth-child(1)')
+            .not(':nth-child(2)')
+            .not(':nth-child(3)')
+            .not(':nth-child(4)')
+            .not(':nth-child(5)')
+            .not(':nth-child(6)')
+            .not(':nth-child(9)')
+            .not(':nth-child(10)');
+
+        $.each($tds, function (i, el) {
+            var txt = $(this).text();
+            console.log("txt", txt);
+            $(this).html("").append("<input type='text' class=\"form-control\" value=\"" + txt + "\">");
+        });
+
+        var status = '';
+
+        // to enable dropdown - start
+        $.each($row, function (i, el) {
+        var enableVendorType = $(this).find("td").eq('4')
+            .find("select")
+            .removeAttr("disabled");
+        var enableCmSegmentation = $(this).find("td").eq('5')
+            .find("select")
+            .removeAttr("disabled");
+        var enableStatus = $(this).find("td").eq('8')
+            .find("select")
+            .removeAttr("disabled");
+        });
+        // to enable dropdown - end
+    });
+
+    $("#example").on('mousedown', "input", function (e) {
+        e.stopPropagation();
+    });
+    var dropdownStatus = "";
+    var dropdownVendorType = "";
+    var dropdownCmSeg = "";
+
+    $("#example").on('mousedown.save', "i.fa.fa-floppy-o", function (e) {
+         var dropdownStatus = $(this).closest("tr").off("mousedown").find("td").eq('8')
+        .find("select option:selected").text();
+        
+        var dropdownVendorType = $(this).closest("tr").off("mousedown").find("td").eq('4')
+        .find("select option:selected").val();
+
+        var dropdownCmSeg = $(this).closest("tr").off("mousedown").find("td").eq('5')
+        .find("select option:selected").val();
+
+        var $row = $(this).closest("tr").off("mousedown");
+        var $tds = $row.find("td")
+            .not(':nth-child(1)')
+            .not(':nth-child(2)')
+            .not(':nth-child(3)')
+            .not(':nth-child(4)')
+            .not(':nth-child(5)')
+            .not(':nth-child(6)')
+            .not(':nth-child(9)')
+            .not(':nth-child(10)');
+        if (isValid($(this).closest("tr").find("td").eq('7').find("input").val())) {
+            $(this).removeClass().addClass("fa fa-pencil-square-o cursorpointer");
+            $(this).attr('title', 'Edit Service Review Function');
+            var dataObj = {};
+            var dataArr = [];
+            // var vendorType = $("#vendortype").val();
+            var cmsegmentation = $("#cmsegmentation").val();
+            console.log("dataObj", dataObj);
+            $.each($tds, function (i, el) {
+                var txt = $(this).find("input:eq(0)").val().trim();
+                dataArr.push(txt);
+                dataObj["newdata"] = dataArr;
+                dataObj["dropdownStatus"] = dropdownStatus;
+                dataObj["dropdownVendorType"] = dropdownVendorType;
+                dataObj["dropdownCmSeg"] = dropdownCmSeg;
+                var myurl = '/editserviceitem/' + $(this).closest("tr").find("td:eq(0)").text();
+                $.ajax({
+                    type: 'PUT',
+                    url: myurl,
+                    data: dataObj,
+                    success: function (data) {
+                        if (data == "updated") {
+                            alert("Service Review updated successfully");
+                            $('#example').DataTable().ajax.url('/fetchservicereviewfunction?currentYear=' + getDateFromDateTimePicker).load();
+                        }
+                    },
+                    error: function (e) {
+                        alert("Error while updating Service Review");
+                        var $select = $('<select/>', { 'class': 'ctrl-status' });
+                        $('#example .ctrl-status').attr('disabled', 'disabled');
+                        $('#example').DataTable().ajax.url('/fetchservicereviewfunction?currentYear=' + getDateFromDateTimePicker).load();
+                    }
+                });
+            });
+        }
+        else {
+            alert("Please enter valid value");
+        }
+    });
+    });
+    function isValid(val) {
+        if (val.trim() != '') {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+</script>

@@ -1,0 +1,709 @@
+
+<div class="container-fluid mybreadcrumb">
+	<div class="row">
+		<div class="btn-group btn-breadcrumb">
+			<a href="/search" class="btn btn-default">
+				<i class="fa fa-home"></i>
+			</a>
+			<a href="#" class="btn btn-default">
+				<i>Search results for {{keywords}}</i>
+			</a>
+		</div>
+		<div class="pull-right">
+
+		</div>
+	</div>
+</div>
+</header>
+<div class="wrapper">
+
+	<nav id="sidebar">
+		<!-- Sidebar Header -->
+		<div class="sidebar-header">
+			<h3>Search By</h3>
+		</div>
+
+		<!-- Sidebar Links -->
+		<ul class="list-unstyled components">
+			<li class="dropdown">
+				<input type="checkbox" class="form-check-input mainhubregion" />
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<span>Hub Region</span>
+					<span class="fa fa-plus-square-o pull-right"></span>
+				</a>
+				<ul class="dropdown-menu">
+					{{#each uniquehubregion}}
+					<li>
+						<a>
+							<input type="checkbox" value="{{this}}" class="form-check-input hubregion" /> {{this}}</a>
+					</li>
+					{{/each}}
+				</ul>
+			</li>
+			<li class="dropdown">
+				<input type="checkbox" class="form-check-input maincmsegmentation" />
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<span>CM Segmentation</span>
+					<span class="fa fa-plus-square-o pull-right"></span>
+				</a>
+				<ul class="dropdown-menu">
+					{{#each uniquecmsegmentation}}
+					<li>
+						<a>
+							<input type="checkbox" value="{{this}}" class="form-check-input cmsegmentation" /> {{this}}</a>
+					</li>
+					{{/each}}
+				</ul>
+			</li>
+			<li class="dropdown">
+				<input type="checkbox" class="form-check-input mainvendorstatus" />
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<span>Vendor Status</span>
+					<span class="fa fa-plus-square-o pull-right"></span>
+				</a>
+				<ul class="dropdown-menu">
+					{{#each uniquevendorstatus}}
+					<li>
+						<a>
+							<input type="checkbox" value="{{this}}" class="form-check-input vendorstatus" /> {{this}}</a>
+					</li>
+					{{/each}}
+				</ul>
+			</li>
+			<li class="dropdown">
+				<input type="checkbox" class="form-check-input mainvendortype" />
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<span>Vendor Type</span>
+					<span class="fa fa-plus-square-o pull-right"></span>
+				</a>
+				<ul class="dropdown-menu">
+					{{#each uniquevendortype}}
+					<li>
+						<a>
+							<input type="checkbox" value="{{this}}" class="form-check-input vendortype" /> {{this}}</a>
+					</li>
+					{{/each}}
+				</ul>
+			</li>
+			<li class="dropdown">
+				<input type="checkbox" class="form-check-input mainservicecategory" />
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<span>Service Type</span>
+					<span class="fa fa-plus-square-o pull-right"></span>
+				</a>
+				<ul class="dropdown-menu">
+					{{#each uniqueservicecategory}}
+					<li>
+						<a>
+							<input type="checkbox" value="{{this}}" class="form-check-input servicecategory" /> {{this}}</a>
+					</li>
+					{{/each}}
+				</ul>
+			</li>
+			<li class="dropdown">
+				<input type="checkbox" class="form-check-input maintechnologyservices" />
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<span style="width:220px;">Manufacturing Technology</span>
+					<span class="fa fa-plus-square-o pull-right"></span>
+				</a>
+				<ul class="dropdown-menu">
+					{{#each uniquemfgtech}}
+					<li>
+						<a>
+							<input type="checkbox" value="{{this}}" class="form-check-input technologyservices" /> {{this}}</a>
+					</li>
+					{{/each}}
+				</ul>
+			</li>
+			<li class="dropdown">
+				<input type="checkbox" class="form-check-input mainbrandname" />
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<span>Brand Name</span>
+					<span class="fa fa-plus-square-o pull-right"></span>
+				</a>
+				<ul class="dropdown-menu">
+					{{#each uniquebrandname}}
+					<li>
+						<a>
+							<input type="checkbox" value="{{this}}" class="form-check-input brandname" /> {{this}}</a>
+					</li>
+					{{/each}}
+				</ul>
+			</li>
+			{{!-- v2:: hse risk filter search added - start --}}
+			{{!-- <li class="dropdown">
+				<input type="checkbox" class="form-check-input mainhserisk" />
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<span>HSE Risk</span>
+					<span class="fa fa-plus-square-o pull-right"></span>
+				</a>
+				<ul class="dropdown-menu">
+					{{#each uniquehserisk}}
+					<li>
+						<a>
+							<input type="checkbox" value="{{this}}" class="form-check-input hserisk" /> {{this}}</a>
+					</li>
+					{{/each}}
+				</ul>
+			</li>	 --}}
+			{{!-- v2:: hse risk filter search added - end--}}
+		</ul>
+	</nav>
+
+	<div class="container search-results" id="content">
+		<button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+			<i class="glyphicon glyphicon-align-left"></i>
+		</button>
+		<div class="text-center welcome-div" hidden="hidden">
+            <h1>Welcome to myEEM Portal</h1>
+        </div>
+		 <div class="search-div" hidden="hidden">
+		<table id="example" class="display" width="100%" cellspacing="0">
+			<thead>
+				<tr>
+					<th class="hidden">Vendor ID</th>
+					<th>Vendor Name (MP)</th>
+					<th>Country</th>
+					<th>City</th>
+					<th>CM Segmentation</th>
+					<th>Manufacturing Technology</th>
+					<th class="hidden">Hub Region</th>
+					<th class="hidden">Vendor Status</th>
+					<th class="hidden">Vendor Type</th>
+					<th class="hidden">Service Type</th>
+					<th class="hidden">Additional Services</th>
+					<th class="hidden">Brand Name</th>
+					<th class="text-center">Compare</th>
+					<th class="hidden">Partner Code</th>
+					<th class="hidden">Vendor SearchTerm</th>
+					<th class="hidden">Vendor Address</th>
+					<th class="hidden">Vendor Postal Code</th>
+					<th class="hidden">Vendor Region</th>
+					<th class="hidden">Operational Leader Name</th>
+					<th class="hidden">Operational Leader Email</th>
+					<th class="hidden">JPT Leader Name</th>
+					<th class="hidden">JPT Leader Email</th>
+					<th class="hidden">General Comments</th>
+					<th class="hidden">Supply Scope</th>
+					<th class="hidden">Contact Not in Place</th>
+					<th class="hidden">Contract Expiration</th>
+					<th class="hidden">Volume Commitment</th>
+					<th class="hidden">Supply Comments</th>
+					<th class="hidden">Quality Risk</th>
+					<th class="hidden">QTA Not in Place</th>
+					<th class="hidden">Initial QTA Signature Date</th>
+					<th class="hidden">Agreement Approval Date</th>
+					<th class="hidden">Agreement Review Date</th>
+					<th class="hidden">GQA Audit Date</th>
+					<th class="hidden">Available Certifications</th>
+					<th class="hidden">Quality Leader Name</th>
+					<th class="hidden">Quality Leader Email</th>
+					<th class="hidden">Quality Comments</th>
+					<th class="hidden">Technical Risk</th>
+					<th class="hidden">Dosage Forms</th>
+					<th class="hidden">Production Scope</th>
+					<th class="hidden">TS/MS Leader Name</th>
+					<th class="hidden">TS/MS Leader Email</th>
+					<th class="hidden">Additional Comments</th>
+					<th class="hidden">HSE Risk</th>
+					<th class="hidden">HSE Category</th>
+					<th class="hidden">Most Recent HSE Survey</th>
+					<th class="hidden">Most Recent HSE Assessment</th>
+					<th class="hidden">Next Scheduled Assessment</th>
+					<th class="hidden">HSE Certification</th>
+					<th class="hidden">HSE Leader Name</th>
+					<th class="hidden">HSE Leader Email</th>
+					<th class="hidden">Service Review Score</th>
+					<th class="hidden">Procurement Score</th>
+					<th class="hidden">Supply Chain Score</th>
+					<th class="hidden">Quality Score</th>
+					<th class="hidden">TSMS Score</th>
+					<th class="hidden">HSE Score</th>
+					<th class="hidden">Review Year</th>
+					<th class="hidden">Vendor Name</th>
+					<th class="hidden">Hub Id</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each data}}
+				<tr>
+					<td class="hidden vendorid">{{this.vendorid}}</td>
+					<td class="vendorname">
+						<a href="/cmoverview?vendorid={{this.vendorid}}">{{this.vendorname}}</a>
+						{{#if this.reviewstatus}}
+						  	<div class="rate-div rate-click cursorpointer" data-rate-value="{{this.reviewscore}}" title="{{this.reviewscore}}"></div>
+						{{/if}}
+					</td>
+					<td>{{this.countryname}}</td>
+					<td>{{this.cityname}}</td>
+					<td>{{this.general_cmsegmentation}}</td>
+					<td>{{this.ts_mfgtech}}</td>
+					<td class="hidden">{{this.general_huboversight}}</td>
+					<td class="hidden">{{this.supply_vendorstatus}}</td>
+					<td class="hidden">{{this.general_vendortype}}</td>
+					<td class="hidden">{{this.general_servicetype}}</td>
+					<td class="hidden">{{this.ts_additionalservices}}</td>
+					<td class="hidden">{{this.brandname}}</td>
+					<td class="text-center">
+						<input vendorid="{{this.vendorid}}" type="checkbox" class="compare-checkbox" />
+					</td>
+					<td class="hidden partnercode">{{this.partnercode}}</td>
+					<td class="hidden vendorsearchterm">{{this.vendorsearchterm}}</td>
+					<td class="hidden">{{this.vendoraddress}}</td>
+					<td class="hidden">{{this.vendorpostalcode}}</td>
+					<td class="hidden">{{this.vendorregion}}</td>
+					<td class="hidden">{{this.general_operationalleader}}</td>
+					<td class="hidden">{{this.general_operationalleaderemail}}</td>
+					<td class="hidden">{{this.general_jptleader}}</td>
+					<td class="hidden">{{this.general_jptleaderemail}}</td>
+					<td class="hidden">{{this.general_comments}}</td>
+					<td class="hidden">{{this.supply_supplyscope}}</td>
+					<td class="hidden">{{this.supply_contractnotinplace}}</td>
+					<td class="hidden">{{this.supply_contractexpiration}}</td>
+					<td class="hidden">{{this.supply_volumecommitment}}</td>
+					<td class="hidden">{{this.supply_volumecommitmentcomments}}</td>
+					<td class="hidden">{{this.quality_risk}}</td>
+					<td class="hidden">{{this.quality_qtanotinplace}}</td>
+					<td class="hidden">{{this.quality_qtasigneddate}}</td>
+					<td class="hidden">{{this.quality_approvaldate}}</td>
+					<td class="hidden">{{this.quality_reviewdate}}</td>
+					<td class="hidden">{{this.quality_gqaauditdate}}</td>
+					<td class="hidden">{{this.quality_availablecertifications}}</td>
+					<td class="hidden">{{this.quality_leader}}</td>
+					<td class="hidden">{{this.quality_leaderemail}}</td>
+					<td class="hidden">{{this.quality_comments}}</td>
+					<td class="hidden">{{this.ts_technicalrisk}}</td>
+					<td class="hidden">{{this.ts_dosageforms}}</td>
+					<td class="hidden">{{this.ts_productionscope}}</td>
+					<td class="hidden">{{this.tsms_leader}}</td>
+					<td class="hidden">{{this.tsms_leaderemail}}</td>
+					<td class="hidden">{{this.ts_additionalcomments}}</td>
+					<td class="hidden">{{this.hse_risk}}</td>
+					<td class="hidden">{{this.hse_category}}</td>
+					<td class="hidden">{{this.hse_mostrecentsurvey}}</td>
+					<td class="hidden">{{this.hse_mostrecentassessment}}</td>
+					<td class="hidden">{{this.hse_nextscheudleassessment}}</td>
+					<td class="hidden">{{this.hse_certifications}}</td>
+					<td class="hidden">{{this.hse_leader}}</td>
+					<td class="hidden">{{this.hse_leaderemail}}</td>
+					<td class="hidden reviewscore">
+						{{#if this.reviewstatus}}
+						  	{{this.reviewscore}}
+						{{/if}}
+					</td>
+					<td class="hidden procurementreviewscore">
+						{{#if this.procurementreviewscore}}
+						  	{{this.procurementreviewscore}}
+						{{/if}}
+					</td>
+					<td class="hidden supplychainreviewscore">
+						{{#if this.supplychainreviewscore}}
+						  	{{this.supplychainreviewscore}}
+						{{/if}}
+					</td>
+					<td class="hidden qualityreviewscore">
+						{{#if this.qualityreviewscore}}
+						  	{{this.qualityreviewscore}}
+						{{/if}}
+					</td>
+					<td class="hidden tsmsreviewscore">
+						{{#if this.tsmsreviewscore}}
+						  	{{this.tsmsreviewscore}}
+						{{/if}}
+					</td>
+					<td class="hidden hsereviewscore">
+						{{#if this.hsereviewscore}}
+						  	{{this.hsereviewscore}}
+						{{/if}}
+					</td>
+					<td class="hidden reviewyear">
+						{{#if this.reviewyear}}
+						  	{{this.reviewyear}}
+						{{/if}}
+					</td>
+					<td class="hidden vendorhubname">{{this.vendorname}}</td>
+					<td class="hidden hubid">{{this.hubid}}</td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+	</div>
+</div>
+<!-- The Modal -->
+<!-- Modal -->
+<div class="modal fade servicereviewpopup" id="servicereviewpopup" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 id="vendorname" class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <div class="row mp-row">
+          <div class="col-sm-6">
+            <p><span id="vendortype"></span> : <b id="partnercode"> </b></p>
+          </div>
+          <div class="col-sm-6 pull-right">
+            <div class="pull-right">
+              <p>Last Review Year : <b id="reviewyear"></b></p>
+            </div>
+
+          </div>
+        </div>
+        <table class="table table-bordered">
+          <thead>
+            <tr class="tb-header">
+              <th>EEM Function</th>
+              <th>Rating</th>
+            </tr>
+          </thead>
+          <tbody class="tb-body">
+            <tr>
+              <td>Procurement</td>
+              <td>
+                <div id="procurement_rate" class="rate-div" data-rate-value="0" title="0"></div>
+
+              </td>
+            </tr>
+            <tr>
+              <td>Supply Chain</td>
+              <td>
+                <div id="supplychain_rate" class="rate-div" data-rate-value="0" title="0"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>Quality</td>
+              <td>
+                <div id="quality_rate" class="rate-div" data-rate-value="0" title="0"></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>TSMS</td>
+              <td>
+                <div id="tsms_rate" class="rate-div" data-rate-value="0" title="0"></div>
+
+              </td>
+            </tr>
+            <tr>
+              <td>HSE</td>
+              <td>
+                <div id="hse_rate" class="rate-div" data-rate-value="0" title="0"></div>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="row text-center">
+          <form>
+            <div class="form-group form-inline text-center">
+              <label class="col-sm-2"></label>
+              <div class="col-sm-4">
+                <label class="pull-right">Overall Rating:</label>
+              </div>
+              <div class="col-sm-2 pull-left">
+                <div id="overall_rating" class="rate-div"  data-rate-value="0" title="0"></div>
+              </div>
+
+              <label class="col-sm-2"></label>
+            </div>
+          </form>
+
+        </div>
+        <div class="row">
+          <div class="form-group pull-right" style="margin-right: 20px;">
+            <a id="moredetail" href="#"><button type="button" class="btn btn-primary">More Details</button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- END Modal -->
+<script>
+	var table;
+	$(document).ready(function () {
+		if ({{islandingpage}}) {
+        $('.search-div').hide();
+        $('.welcome-div').hide();
+        $('.mybreadcrumb').hide();
+        $('.welcome-div').show();
+    } else {
+        $('.search-div').hide();
+        $('.welcome-div').hide();
+        $('.mybreadcrumb').hide();
+        $('.search-div').show();
+        $('.mybreadcrumb').show();
+    }
+		table = $('#example').DataTable({
+			dom: 'lBrtp<"compare-button pull-right">',
+			"scrollX": true,
+			columnDefs: [{
+				searchable: false,
+				orderable: false,
+				targets: [0, 12]
+			}],
+			order: [[1, 'asc']],
+			oLanguage: {
+				sLengthMenu: "CMS | Show _MENU_ entries",
+			},
+			buttons: [{
+				extend: 'colvis',
+				columns: [1, 2, 3, 4, 5],
+				text: '<i class="fa fa-cog" style="font-size:24px;"></i>'
+			},
+			{
+					extend: 'excelHtml5',
+					//v2::excel border - start
+					customize: function (xlsx) {
+						var sheet = xlsx.xl.worksheets['sheet1.xml'];
+						$('row c', sheet).attr('s', '25');
+					},
+					"createEmptyCells" : true,
+					//v2::excel border - end
+					exportOptions: { orthogonal: 'export',
+					columns: [ 13, 1, 14, 15, 17, 16, 2, 3, 6, 4, 9, 8, 7, 23, 20, 21, 18, 19, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 5, 10, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 11, 52],
+					rows: { selected: true, filter: 'applied' }  }
+			},
+			{
+				extend: 'pdfHtml5',
+				exportOptions: { orthogonal: 'export',
+					columns: [ 13, 1, 14, 15, 17, 16, 2, 3, 6, 4, 9, 8, 7, 23, 20, 21, 18, 19, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 5, 10, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 11, 52],
+					rows: { selected: true, filter: 'applied' } }
+			}
+			],
+			"lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+		});
+		table.on('draw',function (){
+			console.log( 'Redraw occurred at: '+new Date().getTime());
+			$(".rate-div").rate("update");
+
+		});
+		$("div.compare-button").html('<button onclick="compare();" type="submit" class="btn btn-lg btn-default compare-btn" >Compare</button>');
+	});
+	$("#sidebar").mCustomScrollbar({
+		theme: "minimal"
+	});
+	$('#sidebarCollapse').on('click', function () {
+		// open or close navbar
+		$('#sidebar').toggleClass('active');
+		// close dropdowns
+		$('.collapse.in').toggleClass('in');
+		// and also adjust aria-expanded attributes we use for the open/closed arrows
+		// in our CSS
+		$('a[aria-expanded=true]').attr('aria-expanded', 'false');
+	});
+	$(".mainbrandname").on('change', function () {
+		$('input:checkbox.brandname').not(this).prop('checked', this.checked);
+	});
+	$(".mainhubregion").on('change', function () {
+		$('input:checkbox.hubregion').not(this).prop('checked', this.checked);
+	});
+	$(".mainvendortype").on('change', function () {
+		$('input:checkbox.vendortype').not(this).prop('checked', this.checked);
+	});
+	$(".mainservicecategory").on('change', function () {
+		$('input:checkbox.servicecategory').not(this).prop('checked', this.checked);
+	});
+	$(".maintechnologyservices").on('change', function () {
+		$('input:checkbox.technologyservices').not(this).prop('checked', this.checked);
+	});
+	$(".mainvendorstatus").on('change', function () {
+		$('input:checkbox.vendorstatus').not(this).prop('checked', this.checked);
+	});
+	$(".maincmsegmentation").on('change', function () {
+		$('input:checkbox.cmsegmentation').not(this).prop('checked', this.checked);
+	});
+	//v2::start mainhserisk
+	$(".mainhserisk").on('change', function () {
+		$('input:checkbox.hserisk').not(this).prop('checked', this.checked);
+	});
+
+	var $filterCheckboxes = $('.brandname,.hubregion,.vendortype,.servicecategory,.technologyservices,.vendorstatus,.cmsegmentation,.hserisk,.mainbrandname,.mainhubregion,.mainvendortype,.mainservicecategory,.maintechnologyservices,.mainvendorstatus,.maincmsegmentation,.mainhserisk');
+	//v2::end
+	$filterCheckboxes.on('change', function () {
+
+		$('.search-div').hide();
+        $('.welcome-div').hide();
+        $('.search-div').show();
+        $('.wrapper').removeClass('landing-wrapper');
+        $('.mybreadcrumb').show();
+		var selectedFilters = {};
+		var filterBrandName = [];
+		var filterHubRegion = [];
+		var filterVendorType = [];
+		var filterServiceCategory = [];
+		var filterTechnologyServices = [];
+		var filterVendorStatus = [];
+		var filterCMSegmentation = [];
+		//v2::start filterHseRisk
+		var filterHseRisk = [];
+		//v2::end filterHseRisk
+		$filterCheckboxes.filter(':checked').each(function () {
+			if (!selectedFilters.hasOwnProperty(this.value)) {
+				if (($(this).hasClass('brandname'))) {
+					filterBrandName.push($.fn.dataTable.util.escapeRegex(this.value));
+				} else if (($(this).hasClass('hubregion'))) {
+					filterHubRegion.push($.fn.dataTable.util.escapeRegex(this.value));
+				} else if (($(this).hasClass('vendortype'))) {
+					filterVendorType.push($.fn.dataTable.util.escapeRegex(this.value));
+				} else if (($(this).hasClass('servicecategory'))) {
+					filterServiceCategory.push($.fn.dataTable.util.escapeRegex(this.value));
+				} else if (($(this).hasClass('technologyservices'))) {
+					filterTechnologyServices.push($.fn.dataTable.util.escapeRegex(this.value));
+				} else if (($(this).hasClass('vendorstatus'))) {
+					filterVendorStatus.push($.fn.dataTable.util.escapeRegex(this.value));
+				} else if (($(this).hasClass('cmsegmentation'))) {
+					filterCMSegmentation.push($.fn.dataTable.util.escapeRegex(this.value));
+				}
+				//v2::start
+				 else if (($(this).hasClass('hserisk'))) {
+					filterHseRisk.push($.fn.dataTable.util.escapeRegex(this.value));
+				}
+				//v2::end
+			}
+		});
+
+		table.column(6).search(filterHubRegion.join('|'), true, false).draw();
+		table.column(8).search(filterVendorType.join('|'), true, false).draw();
+		table.column(9).search(filterServiceCategory.join('|'), true, false).draw();
+		table.column(5).search(filterTechnologyServices.join('|'), true, false).draw();
+		table.column(11).search(filterBrandName.join('|'), true, false).draw();
+		table.column(7).search(filterVendorStatus.join('|'), true, false).draw();
+		table.column(4).search(filterCMSegmentation.join('|'), true, false).draw();
+		//v2::start
+		table.column(41).search(filterHseRisk.join('|'), true, false).draw();
+		//v2::end
+	});
+	$('.compare-checkbox').on('change', function () {
+		 // var cellsSelected = dataTable.rows({ selected: true }).data();
+		 // console.log(cellsSelected);
+		/*if ($('.compare-checkbox:checked').length > 5) {
+			this.checked = false;
+			alert("Maximum allowed only 5");
+		}*/
+		var rowcollection =  table.$(".compare-checkbox:checked", {"page": "all"});
+		if (rowcollection.length > 5)
+		{
+			this.checked = false;
+			alert("Maximum allowed only 5");
+		}
+	});
+	function compare() {
+		var selectedcompare = [];
+		table.$('.compare-checkbox:checked', {"page": "all"}).each(function() {
+			selectedcompare.push($(this).attr("vendorid"));
+			console.log($(this).attr("vendorid"));
+		});
+		if(selectedcompare!= "")
+		{
+			if (selectedcompare.length > 1)
+			{
+				console.log(selectedcompare);
+				location.href = "/comparecm?vendorid=" + selectedcompare.join(",");
+			}
+			else
+			{
+				alert("Please select more than 1 CMs to compare.");
+			}
+		}
+		else {
+				alert("Please select CMs to compare");
+		}
+
+	}
+	$(".exportinfo").click(function() {
+		$(".buttons-excel").click();
+	});
+	$(".pdfinfo").click(function() {
+		$(".buttons-pdf").click();
+	});
+</script>
+<style>
+.buttons-excel,.buttons-pdf
+{
+	display:none !important;
+}
+.search-results .dataTable td a
+{
+	color:#337ab7 !important;
+}
+.dt-button.buttons-columnVisibility.active
+{
+	background-image: none !important;
+	background-color: #0073cc !important;
+	color: white !important;
+	font-size:10px !important;
+}
+.dt-button.buttons-columnVisibility
+{
+	font-size:10px !important;
+}
+</style>
+<script type="text/javascript">
+  $(document).ready(function () {
+    var options = {
+      max_value: 5,
+      step_size: 0.1,
+      selected_symbol_type: 'fontawesome_star',
+    }
+    $(".rate-div").rate(options);
+  });
+  //WRITE THIS INSIDERATE-DIV EACH CLICK
+  $(".rate-click").each(function () {
+    $(this).on( "click", function() {
+      $('#servicereviewpopup').modal('show');
+		var closesttr = 	$(this).closest('tr');
+		var vendorname = closesttr.find('.vendorhubname').text();
+		var vendorid = closesttr.find('.vendorid').text();
+		var hubid = closesttr.find('.hubid').text();
+		var vendorsearchterm = closesttr.find('.vendorsearchterm').text();
+		var reviewyearfull = closesttr.find('.reviewyear').text();
+		var partnercode = closesttr.find('.partnercode').text();
+		var procurement_rate = closesttr.find('.procurementreviewscore').text();
+		var supplychain_rate = closesttr.find('.supplychainreviewscore').text();
+		var qualityreview_rate = closesttr.find('.qualityreviewscore').text();
+		var tsmsreview_rate = closesttr.find('.tsmsreviewscore').text();
+		var hsereview_rate = closesttr.find('.hsereviewscore').text();
+		var review_rate = closesttr.find('.reviewscore').text();
+
+		 $('#partnercode').text(partnercode);
+		 if(vendorsearchterm.split('/')[1] == 'MP'){
+ 			 $('#vendortype').text('MP');
+      } else {
+        $('#vendortype').text('VN');
+      }
+
+			var reviewyear = new Date($.trim(reviewyearfull)).getFullYear();
+  		$('#vendorname').text(vendorname);
+      $('#reviewyear').text(reviewyear);
+
+  		$('#procurement_rate').attr('data-rate-value',procurement_rate);
+      $('#procurement_rate')[0].title = procurement_rate;
+      $('#supplychain_rate').attr('data-rate-value', supplychain_rate);
+      $('#supplychain_rate')[0].title = supplychain_rate;
+      $('#quality_rate').attr('data-rate-value', qualityreview_rate);
+      $('#quality_rate')[0].title = qualityreview_rate;
+      $('#tsms_rate').attr('data-rate-value', tsmsreview_rate);
+      $('#tsms_rate')[0].title = tsmsreview_rate;
+      $('#hse_rate').attr('data-rate-value', hsereview_rate);
+      $('#hse_rate')[0].title = hsereview_rate;
+      $("#procurement_rate").rate("update");
+      $("#supplychain_rate").rate("update");
+      $("#quality_rate").rate("update");
+      $("#tsms_rate").rate("update");
+      $("#hse_rate").rate("update");
+      $('#overall_rating').attr('data-rate-value', review_rate);
+      $('#overall_rating')[0].title = review_rate;
+      $("#overall_rating").rate("update");
+      $('#moredetail').attr('href', 'servicereview?vendorid=' + vendorid + '&reviewdate=' + reviewyear + '&hubid=' + hubid);
+
+		})
+  });
+
+
+</script>

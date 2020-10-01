@@ -1,0 +1,361 @@
+/*Loader css start*/
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+  position: absolute;
+    top: 40%;
+    left: 45%;
+    z-index: 1;
+}
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+/*Loader css end*/
+/*.primary-navigation-inner>.menu>ul>li:hover>.dropdown {
+    display: none;
+}*/
+/*.primary-navigation-inner>.menu>ul>li:active>.dropdown {
+    display: block;
+}
+*/
+.branding .png-logo{
+  height:85px !important;
+  margin: 0 !important;
+}
+.capture_signin label, .capture_form capture_registrationForm label, .janrain-capture-ui .capture_checkbox label, .janrain-capture-ui .capture_radio label{
+  text-align: left !important;
+  float: left;
+  margin-top: 10%;
+  font-family: helvetica !important;
+}
+label.error{
+  color: red !important;
+}
+.padding-top {
+  padding-top: 20px; }
+
+.padding-bottom {
+  padding-bottom: 20px; }
+
+.padding-left {
+  padding-left: 20px; }
+
+.padding-right {
+  padding-right: 20px; }
+.country-select-nav ul{
+  margin: 0 !important;
+  float: right;
+}
+.country-select-li ul{
+  list-style: none;    
+  right: 0 !important;
+  left:auto !important;
+}
+.country-select-nav .select-box-nav{
+  width:auto !important;
+  min-width: 180px;
+}
+.country-select-li .dropdown li a{
+  padding: 0;
+}
+.country-select-li .dropdown li{
+  min-width: 200px !important;
+  padding: 5%;
+}
+.country-selection {
+    padding: 4% 0;
+    /*border: 1px solid #000 !important;*/
+    border: none !important;
+    background-color: transparent !important;
+    /*margin-top: 3% !important;*/
+    border-radius: 10px;
+    /*margin-bottom: 5% !important;*/
+    text-align: center;
+}
+.select-box, .select-box-nav{
+    width: 25%;
+    padding: 6px 5px;
+    margin: 2px 0;
+    outline: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2) inset;
+    /*color: #b3b3b3;*/
+    font-family: helvetica,sans-serif;
+    font-family: inherit;
+    font-size: 14px;
+    khtml-border-radius: 5px;
+    margin-left: 0;
+    margin-right: 0;
+    moz-border-radius: 5px;
+    moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.2) inset;
+    ms-border-radius: 5px;
+    o-border-radius: 5px;
+    o-box-shadow: 0 0 3px rgba(0, 0, 0, 0.2) inset;
+    webkit-border-radius: 5px;
+    webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.2) inset;
+}
+input[type="text"],input[type="email"] {
+    font-weight: normal;
+}
+#capture_signIn_traditionalSignIn_signInButton,#capture_traditionalRegistration_backButton,#capture_traditionalRegistration_createAccountButton,#capture_editProfile_saveButton{
+       background: #014268 !important; 
+       /* background: #0072CE !important;  */
+       color:#ffffff;
+}
+#capture_signIn_traditionalSignIn_signInButton:hover,#capture_traditionalRegistration_backButton:hover,#capture_traditionalRegistration_createAccountButton:hover,#capture_editProfile_saveButton:hover{
+       background: #014268 !important; 
+       background-color: #014268 !important; 
+       color:#ffffff;
+}
+
+.loginBtns{
+  text-align: center;
+}
+.loginBtns button, #capture_editProfile_saveButton{
+  min-width:20% !important;
+}
+.index-submit{
+  min-width:10%;
+}
+.row{
+  clear:both;
+}
+.bg-light-grey-blue {
+     background-color: #ffffff; 
+     border-radius: 0 0 5px 5px;
+    box-shadow: 0 9px 9px -5px rgba(0,0,0,0.1) inset;
+    khtml-border-radius: 0 0 5px 5px;
+    moz-border-radius: 0 0 5px 5px;
+    moz-box-shadow: 0 9px 9px -9px rgba(0,0,0,0.1) inset;
+    ms-border-radius: 0 0 5px 5px;
+    o-border-radius: 0 0 5px 5px;
+    o-box-shadow: 0 9px 9px -9px rgba(0,0,0,0.1) inset;
+    webkit-border-radius: 0 0 5px 5px;
+    webkit-box-shadow: 0 9px 9px -9px rgba(0,0,0,0.1) inset;
+}
+.panel-heading{
+  background-color: #F2F5FC;
+  padding: 5px 15px;
+}
+.panel-body{
+  font-family: helvetica;
+}
+.panel-body ul{
+  padding: 3%;
+}
+.loginRegisterBtn, .index-submit{
+  font-family: helvetica;
+  background-color: #0072CE !important;
+      border-radius: 5px;
+    font-size: 14px;
+    line-height: 15px;
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    width: auto;
+    display: -moz-inline-box;
+    -moz-box-orient: vertical;
+    display: inline-block;
+    vertical-align: middle;
+}
+.janrain-capture-ui .capture_form_error, .capture_photo_chooser_errors, .capture_tip_error{
+  color: #f58002 !important;
+}
+
+.primary-footer a, .primary-footer p{
+  font-family: helvetica !important;
+}
+.janrain-capture-ui.capture-ui-content{
+  margin: 0 auto !important;
+}
+.capture_footer{
+  margin: 0 auto;
+}
+.janrain-icon-back{
+  color: #ffffff !important;
+}
+.janrain-capture-ui#editProfile{
+  width:600px !important;
+}
+
+.janrain-capture-ui#editProfile .saveBtn{
+  text-align: center;
+}
+#editProfile .capture_editCol,#editProfile .account_info{
+  margin: 10px 0 0 10px;
+}
+#editProfile .janrain_traditional_account_only{
+   margin: 0;
+}
+#janrainModal .capture_footer {
+    height: 55px !important;
+}
+#janrainModal .capture_header {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+}
+#janrainModal .janrain-capture-ui.capture-ui-content{
+    padding-top: 10px;
+}
+#janrainModal .janrain-capture-ui.capture-ui-content h1{
+    padding: 5px !important;
+}
+#janrainModal .janrain-capture-ui.capture-ui-content p{
+    padding-top: 5%;
+}
+#janrainModal .janrain-capture-ui.capture-ui-content h1 {
+    /*padding: 14px !important;*/
+    color: white;
+    border-radius: 5px 5px 0 0;
+}
+#capture_editProfile_newPasswordFormProfile, #capture_forgotPassword_forgotPasswordForm, #forgotPassword h2 {
+    padding: 15px !important;
+}
+#janrainModal .janrain-capture-ui.capture-ui-content{
+  min-height: 410px !important;
+}
+.janrain-capture-ui .capture_save_success {
+    color: #64AE29 !important;
+}
+.janrain-capture-ui .capture_checkbox, .janrain-capture-ui .capture_radio {
+    background: transparent !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width: 1024px) {
+.janrainContent{
+  margin-top: 2%;
+}
+.primary-footer .page-center, .primary-navigation .page-center{
+  margin-bottom: 0%;
+}
+.page-center{
+  margin-bottom: 5%;
+}
+#traditionalRegistration .capture_footer [class*='col-']{
+  width:auto;
+}
+#traditionalRegistration.janrain-capture-ui.janrain-capture-ui-mobile{
+  margin-top: 3% !important;
+}.janrain-capture-ui#editProfile{
+  width:90% !important;
+  margin: 0 auto;
+}
+}
+@media screen and (max-width: 950px) {
+.primary-navigation-inner>.meta{
+  display: block;
+  height: auto;
+}
+.primary-navigation-inner>.menu>ul>li>a{
+     padding-left: 5px; 
+     padding-right: 5px
+}
+[class*='col-'] {
+     padding: 0 10px; 
+}
+
+.capture_signin label, .capture_form capture_registrationForm label, .janrain-capture-ui .capture_checkbox label, .janrain-capture-ui .capture_radio label{
+  margin-top: 2%;
+}
+.janrain-capture-ui.janrain-capture-ui-mobile{
+  padding: 0 !important;
+  margin-top: 0 !important;
+}
+.janrain-capture-ui.capture-ui-content{
+  width:100%;
+}
+.panel-heading {
+    background-color: #F2F5FC;
+    padding: 15px 15px;
+}
+.index-submit{
+    min-width:20%;
+    padding:2%;
+}
+.primary-footer {
+    bottom: 0;
+}
+.select-box, .select-box-nav{
+  width:30%;
+}
+.primary-footer-inner>.menu>ul>li {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 5px;
+}
+.primary-footer-inner>.meta{
+  margin-top: 10px;
+}
+#editProfile h3{
+  font-size: 13px;
+}
+.janrain_traditional_account_only .contentBoxWhiteShadow{
+  font-size: 12px;
+}
+.editPasswordRow{
+  margin-top: 3%;
+}
+.editPasswordRow [class*='col-']{
+  width:auto;
+  margin-left: 1%;
+}
+.editPasswordRow [class*='col-'] h4, .editPasswordRow [class*='col-'] div{
+  margin-top: 0 !important;
+  line-height: 18px;
+}
+#editProfile .contentBoxWhiteShadow{
+  margin-top: 3%;
+}
+}
+@media screen and (max-width: 767px) {
+#janrainModal .janrain-capture-ui.capture-ui-content {
+    width: 100% !important;
+}
+#janrainModal {
+    width: 100% !important;
+}
+
+
+
+/*#janrainModal .janrain-capture-ui.capture-ui-content{
+  width:90% !important;
+}
+#janrainModal{
+  width:90% !important;
+  margin: 0 auto !important;
+  left:0 !important;
+}
+#janrainModal .janrain-capture-ui.capture-ui-content{
+  width:90% !important;
+}*/
+}

@@ -1,0 +1,308 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	{{!-- <meta name="robots" content="noarchive, noodp">
+	<meta name="googlebot" content="noarchive">
+	<meta name="robots" content="nocache">
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW"> --}}
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="pragma" content="no-cache" />
+	<link rel='shortcut icon' type='image/x-icon' href='img/favicon.ico' />
+	<title>myEEM Login</title>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/janrain-style.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>	
+	<link rel="stylesheet" href="css/janrain.css" type="text/css">
+	<link rel="stylesheet" href="css/janrain-mobile.css">
+	<link rel="stylesheet" type="text/css" href="css/site.css">
+	<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+	<style>
+		.primary-footer-inner>.menu a {
+			font-size: 14px;
+		}
+
+		#janrainModal .janrain-capture-ui.capture-ui-content {
+			min-height: 300px !important;
+		}
+
+		#janrain-twitter,
+		#janrain-doccheck,
+		#janrain-medy {
+			display: none;
+		}
+
+		.janrainContent {
+			height: 40px !important;
+			width: 170px !important;
+		}
+
+		.janrain-capture-ui .login_widget {
+			min-height: auto !important;
+			height: auto !important;
+		}
+
+		.capture_signin {
+			text-align: left;
+		}
+
+		.janrain-provider-icon-bg.janrain-provider-icon-lilly {
+			width: 50% !important;
+			margin: 0 auto !important;
+			background-size: 100% !important;
+		}
+
+		#janrain-lilly {
+			height: 35px !important;
+			width: 80px !important;
+			margin-top: 0px;
+			margin-right: 5px;
+			margin-bottom: 5px;
+			position: relative;
+			border: 1px solid rgb(204, 204, 204);
+			border-radius: 5px;
+			cursor: pointer;
+			white-space: nowrap;
+			overflow: hidden;
+			background-color: rgb(227, 227, 227);
+			background-image: -webkit-linear-gradient(bottom, rgb(238, 238, 238), rgb(255, 255, 255));
+		}
+
+		.capture_signin h4,
+		.capture_form_item {
+			font-family: helvetica !important;
+		}
+
+		.janrainContent {
+			background-color: transparent !important;
+			border: none !important;
+		}
+
+		.panel-heading,
+		.loginRegisterBtn,
+		.index-submit {
+			background-color: #014268 !important;
+			border-radius: 0px;
+		}
+
+		.panel-heading strong {
+			color: #fff !important;
+		}
+
+		.panel-heading h3 {
+			margin-top: 15px;
+			margin-bottom: 15px;
+		}
+
+		.page-center {
+			padding-left: 0px;
+			padding-right: 0px;
+		}
+
+		.janrain-capture-ui .capture_primary,
+		.janrain-capture-ui a.capture_primary,
+		.janrain-capture-ui button.capture_primary,
+		.janrain-capture-ui input.capture_primary {
+			background: #014268 !important;
+		}
+
+		@media screen and (min-width: 992px) {
+			.row-eq-height {
+				min-height: 330px;
+			}
+			.loginBtns {
+				/*position: absolute;*/
+				/*bottom: 15px;*/
+				width: 100%;
+			}
+			.janrain-capture-ui.capture-ui-content {
+				width: 100%;
+			}
+		}
+
+		.boxdiv {
+			display: none;
+		}
+
+		.preload {
+			width: 100px;
+			height: 100px;
+			position: fixed;
+			top: 55%;
+			left: 45%;
+		}
+	</style>
+
+</head>
+{{#if data}}
+<script type="text/javascript" src="/vendor/janrain-prodinit.js"></script> {{else}}
+<script type="text/javascript" src="/vendor/janrain-init.js"></script> {{/if}}
+
+
+
+<script type="text/javascript">
+	$(function () {
+		$(".preload").fadeOut(5000, function () {
+			$(".boxdiv").fadeIn(1000);
+		});
+	});
+
+	janrain.settings.capture.flowName = 'elanco_register';
+	function janrainCaptureWidgetOnLoad() {
+		janrain.events.onCaptureLoginSuccess.addHandler(function (result) {
+			// console.log(result.userData.professionalContactData.emailAddress);
+			// console.log(result.userData.uuid);
+			$.ajax({
+				type: 'POST',
+				url: '/getuser',
+				data: { accesstoken: result.accessToken },
+				success: function (response) {
+					if (response.issuccess == true) {
+						console.log(response);
+						window.location = "/externaluserpage";
+					} else {
+						alert('Operation failed. Please, If the problem persists, contact with administrator.');
+					}
+				},
+				error: function (response) {
+					console.log(response)
+					alert('Operation failed. Please, If the problem persists, contact with administrator. The response is: ' + response.statusText);
+				}
+			});
+		});
+
+		// register custom client-side valididators
+		janrain.capture.ui.registerFunction('passwordValidation', janrainCustomPasswordValidation);
+		janrain.capture.ui.registerFunction('postalCodeValidation', janrainCustomPostalCodeValidation);
+		// should be the last line in janrainCaptureWidgetOnLoad()
+		janrain.capture.ui.start();
+	}
+</script>
+
+<body class="loginpage">
+	<!-- Login div..... -->
+	<div class="container-fluid janrain-container">
+		<div class="row">
+			<div class="logo pull-left">
+				<img alt="Elanco Logo" src="img/elanco-login-logo.png" />
+			</div>
+			<div class="logo pull-right">
+				<a href="/"><img alt="myEEM Logo" src="img/myEEM-login-logo.png"></a>
+			</div>
+		</div>
+		<div class="row janrain-header">
+			<div class="panel-heading col-xs-12 col-md-6 col-md-push-3" style="background-color: #014268 !important;
+    border-radius: 0px;">
+				<h3 class="color-dark-blue">
+					<span class="plain-link" style="color:white">
+						<strong>Sign In</strong>
+					</span>
+				</h3>
+			</div>
+		</div>
+		<div class="preload">
+			<img alt="Loading.." src="img/loading.gif">
+		</div>
+		<div class="row janrain-content">
+			<div class="col-xs-12 col-md-6 col-md-push-3 boxdiv" style="padding: 0px;">
+				<div class="panel outline-grey">
+					<div class="panel-body bg-light-grey-blue serif _pad20 row-eq-height">
+						<div style="display:block;" id="signIn">
+							<div class="capture_signin">
+								{* #userInformationForm *}
+								<div class="row">
+									<div class="col-xs-12 col-sm-12  col-md-3 col-lg-3">
+										<label for="capture_signIn_traditionalSignIn_emailAddress">Email address</label>
+									</div>
+									<div class="col-xs-12 col-sm-12  col-md-9 col-lg-9">
+										{* traditionalSignIn_emailAddress *}
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12 col-sm-12  col-md-3 col-lg-3">
+										<label for="capture_signIn_traditionalSignIn_password">Password</label>
+									</div>
+									<div class="col-xs-12 col-sm-12  col-md-9 col-lg-9">
+										{* traditionalSignIn_password *}
+									</div>
+								</div>
+								<div class="capture_form_item">
+									<a href="#myModal" data-capturescreen="forgotPassword">Did you forget your password?</a>
+								</div>
+								New user?
+								<a href="/externalregister">Register here</a>
+								<br />
+								<div class="loginBtns">
+									{* traditionalSignIn_signInButton *}
+								</div>
+								{* /userInformationForm *}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Login div end..... -->
+	<div style="display:none;" id="forgotPassword">
+		<div class="capture_header">
+			<h1>Create a new password</h1>
+		</div>
+		<h2>We'll send you a link to create a new password.</h2>
+		{* #forgotPasswordForm *} {* traditionalSignIn_emailAddress *}
+		<div class="capture_footer">
+			<div class="capture_left">
+				{* backButton *}
+			</div>
+			<div class="capture_right">
+				{* forgotPassword_sendButton *}
+			</div>
+		</div>
+		{* /forgotPasswordForm *}
+
+	</div>
+	<div style="display:none;" id="forgotPasswordSuccess">
+		<div class="capture_header">
+			<h1>Create a new password</h1>
+		</div>
+		<p>We've sent an email with instructions to create a new password. Your existing password has not been changed.</p>
+		<div class="capture_footer">
+			<a href="/externallogin" data-capturescreen="signIn" id="signInbtn" class="capture_btn capture_primary">Sign In</a>
+		</div>
+	</div>
+	<div style="display:none;" id="userStatusPostLogin">
+		<h3 style="text-align: center;"> Access denied. Your account has not been activated.</h3>
+	</div>
+	<div style="display:none;" id="countryPostLogin">
+		<h3 style="text-align: center;">Access denied. Wrong country.</h3>
+	</div>
+	<div style="display:none;" id="professionalGroupPostLogin">
+		<h3 style="text-align: center;"> Access denied. Wrong professional group.</h3>
+	</div>
+</body>
+<footer class="janrain-footer">
+	<div class="pull-left">
+        <p>©
+            <span id="copyright">
+                <script>document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))</script>
+            </span> Elanco or its affiliates</p>
+        <p>Elanco and the diagonal bar logo are trademarks of Elanco or its affiliates</p>
+    </div>
+	<div class="pull-right">
+		<img alt="Elanco Logo" src="img/elanco-logo-footer.png">
+	</div>
+	<div class="pull-right privacy-statement" style="padding-right: 21px;padding-top: 16px;">
+		<p>
+			<a href="https://www.elancostatements.com/en/privacy/elanco-com" target="_blank">Privacy Policy</a> | <a href="https://www.elancostatements.com/en/terms-of-use/elanco-com" target="_blank">Terms of Use</a>
+		</p>
+	</div>
+</footer>
+
+</html>

@@ -1,0 +1,38 @@
+<html>
+{{>adminopheader}}
+
+<body>
+	<section class="header">
+		<div class="head">
+			<p>Hello, welcome to the web ops dashboard!</p>
+		</div>
+	</section>
+
+	<section class="content container-fluid">
+		{{>adminopmenu}}
+		{{#if data}}
+		<table class="table" id="data">
+			<thead>
+				<tr>
+					<th>System Logon ID</th>
+					<th>First Name</th>
+					<th>Last Name </th>
+					<th>Email Address</th>					
+				</tr>
+			</thead>
+			<tbody>
+				
+
+			</tbody>
+		</table>
+		{{/if}}
+		</div>
+		</div>
+	</section>
+
+
+</body>
+{{>adminopfooter}}
+<script src="/vendor/v2custom.js"></script>
+
+</html>

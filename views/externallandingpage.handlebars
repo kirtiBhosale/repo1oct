@@ -1,0 +1,253 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="pragma" content="no-cache" />
+  <title>myEEM External User</title>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+  <script data-require="jquery@*" data-semver="3.1.1" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="css/jquery-ui.css" rel="stylesheet" type="text/css" media="all" />
+  <script src="vendor/autosize.min.js"></script>
+  <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+
+<body>
+  <header class="external-user-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12" style="float:right;text-align:  right;">
+          <a href="/externallogin" id="captureSignOutLink" class="capture_end_session" style="">
+            <span style="">
+              Sign Out</span>
+          </a>
+
+        </div>
+      </div>
+      <div class="row logorow">
+        <div class="col-sm-3 logo">
+          <img alt="myEEM Logo" src="img/myEEM-login-logo.png" />
+        </div>
+        <div class="col-sm-6 username">
+          <div class="row">
+            <div class="text-center">
+              <h1>Welcome {{userdetail.firstname}} {{userdetail.lastname}}!</h1>
+            </div>
+          </div>
+        </div>
+        {{!--
+        <div class="col-sm-push-1 col-sm-2 cm-logo">
+          <div class="text-center">
+            <img src={{vendordetail.0.logourl}} />
+          </div>
+        </div> --}}
+      </div>
+    </div>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav">
+            <li class="active">
+              <a>Welcome To Elanco CM Network</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div class="container-fluid external-user-container">
+    <div class="row external-user-boxes">
+      <div>
+        <div class="panel-group col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <span>General</span>
+              <span class="input-group-btn" data-toggle="tooltip" data-container=".panel-heading" title="This panel contains information about your company details">
+                <button class="btn btn-secondary" type="button">
+                  <i class="fa fa-info"></i>
+                </button>
+              </span>
+            </div>
+            <div class="panel-body">
+              <form class="form-horizontal">
+                <div class="form-group">
+                  <label class="control-label col-sm-5" for="">Your Address:</label>
+                  <label class="control-label col-sm-7" for="">
+                    <i>
+                      <p>{{{vendordetail.0.vendoraddress}}}</p>
+                      {{#if vendordetail.0.cityname}}
+                      <p>
+                        {{{vendordetail.0.cityname}}}
+                      </p>
+                      {{/if}} {{#if vendordetail.0.countryname}}
+                      <p>{{{vendordetail.0.countryname}}} </p>
+                      {{/if}}
+                    </i>
+                  </label>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-5" for="">Your Contact Details:</label>
+                  <label class="control-label col-sm-7" for="">
+                    <p>
+                      <a href="mailto:{{{externalemail}}}">{{{externalemail}}}</a>
+                    </p>
+                  </label>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-5" for="">Your Elanco Contact:</label>
+                  <label class="control-label col-sm-7" for="">
+                    <p>
+                      {{vendordetail.0.general_jptleader}}
+                    </p>
+                    <p>
+                      <a href="mailto:{{vendordetail.0.general_jptleaderemail}}">{{vendordetail.0.general_jptleaderemail}}</a>
+                    </p>
+                  </label>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-12" for="">
+                    <small>
+                      <i>Note: Contact your Elanco partner if your company details are inaccurate.</i>
+                    </small>
+                  </label>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="panel-group col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              Coming Soon...
+            </div>
+            <div class="panel-body">
+              <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <!-- Carousel items -->
+                <div class="carousel-inner">
+                  <div class="item active">
+                    <div class="row row-centered">
+                      {{#each externalcontent}} {{#if this.isComingSoon}}
+                      <div class="col-xs-6 col-centered">
+                        <a href="#x">
+                          <img alt="Coming Soon" src={{this.logo}} class="img-responsive">
+                        </a>
+                        <p class="text-center">
+                          <i>
+                            <b>{{this.description}}</b>
+                          </i>
+                        </p>
+                      </div>
+                      {{/if}} {{/each}}
+                    </div>
+                  </div>
+                  <!--/item-->
+                </div>
+                <!--/carousel-inner-->
+                <!-- Left and right controls -->
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                  <span class="fa fa-chevron-circle-left fa-2x"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                  <span class="fa fa-chevron-circle-right fa-2x"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
+              <!--/myCarousel-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="external-user-container external-links">
+      <div class="panel-group">
+        <div class="panel panel-default brand-slider">
+          <div class="panel-body">
+            <div class="row row-centered">
+              {{#each externalcontent}} {{#if this.displaysection}}
+              <div class="col-xs-6 col-sm-3 col-centered">
+                <a href="{{this.url}}" target="_blank">
+                  <img src="{{this.logo}}" alt="Image" class="img-responsive">
+                </a>
+                <p class="text-center">
+                  <b>{{this.description}}</b>
+                </p>
+              </div>
+              {{/if}} {{/each}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="pull-left">
+        <p>©
+            <span id="copyright">
+                <script>document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))</script>
+            </span> Elanco or its affiliates</p>
+        <p>Elanco and the diagonal bar logo are trademarks of Elanco or its affiliates</p>
+    </div>
+    <div class="pull-right">
+      <img alt="Elanco Logo" src="img/elanco-logo-footer.png" />
+    </div>
+  </footer>
+  <div class="container">
+    <script type="text/javascript">
+      $(function () {
+        $('#myCarousel').carousel({
+          interval: 10000
+        });
+
+        $('#myCarousel').on('slid.bs.carousel', function () {
+          //alert("slid");
+        });
+      });
+      $('[data-toggle="tooltip"]').tooltip();
+      $('#captureSignOutLink').on('click', function (event) {
+        event.preventDefault();
+        $.ajax({
+          type: 'POST',
+          url: '/signout',
+          // data: { data : 'use },
+          success: function (response) {
+            window.location = "/externallogin";
+          },
+          error: function (response) {
+            console.log(response)
+            alert('Operation failed. Please, If the problem persists, contact with administrator. The response is: ' + response.statusText);
+          }
+        });
+      });
+    </script>
+</body>
+<footer>
+  <div class="pull-left">
+    <p>©
+      <span id="copyright">
+        <script>document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))</script>
+      </span> Elanco or its affiliates</p>
+    <p>Elanco and the diagonal bar logo are trademarks of Elanco or its affiliates</p>
+  </div>
+  <div class="pull-right">
+    <img alt="Elanco Logo" src="img/elanco-logo-footer.png">
+  </div>
+  <div class="pull-right privacy-statement" style="padding-right: 21px;padding-top: 16px;">
+    <p>
+      <a href="https://www.elancostatements.com/en/privacy/elanco-com" target="_blank">Privacy Policy</a> |
+      <a href="https://www.elancostatements.com/en/terms-of-use/elanco-com" target="_blank">Terms of Use</a>
+    </p>
+  </div>
+</footer>
+
+</html>

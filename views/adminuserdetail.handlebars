@@ -1,0 +1,100 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  <div class="main-container">
+  <div class="role-heading main-header">
+  <div class="nav"> 
+      <ul>
+      <li>
+		      <a href="/adminuserdetail"  class="active">Home</a>
+        </li>
+    <li>
+    <a href="/createrole">Create Role</a>
+     </li>
+     <li>
+		<a href="/assignrole">Assign Role</a>
+          </li>
+          </ul>
+    </div>
+
+    <div class="user-role-dtls"> 
+      <span>Welcome, {{userdetail.firstname}} {{userdetail.lastname}}</span>
+      <span style="margin-left: 13%;font-size: 16px;">
+		     <a href="/externallogin" id="captureSignOutLink" class="capture_end_session" style="color:#fff !important;"> 
+		      <img alt="Log Out" src="//images.ctfassets.net/me3hbvrrlti0/58YFW9nkbeYkKIC22o2oe6/002b854d1b44935bcd4cc7decb2e7ae2/logout-icon.png"> <span style="color:#fff !important;margin-top: 3px;">Sign Out</span></a>
+		  </span><br>
+      <span>Role: {{userdetail.name}} </span>
+    </div>
+  </div>
+  <div id="contain">
+          <table id="report" class="display table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                {{!-- <th>User ID</th>
+                <th>Source</th> --}}
+                
+                <th>External User Name</th>
+                <th>External User Email Address</th>
+                <th>Vendor Id</th>
+                <th>Company Name</th>
+                <th>Operational Leader Name</th>
+                <th>Operational Leader Email</th>
+                <th>JPT Leader</th>
+                <th>JPT Leader Email</th>
+                <th>Hub Details</th>
+                <th>Partner Code</th>
+                <th>Current Role</th>
+                <th>First Login Date</th>
+                <th>Last Login Date</th>
+                </tr>
+            </thead>
+          <tbody>
+             {{#each userlist.result}}
+             <tr>
+                  {{!-- <td>{{this.userid}}</td>
+                  <td>{{this.source}}</td> --}}                 
+                  <td>{{this.name}}</td>
+                  <td>{{this.emailid}}</td>
+                  <td>{{this.metafield1}}</td>
+                  <td>{{this.metafield2}}</td>
+                  <td>{{this.metafield3}}</td>
+                  <td>{{this.metafield4}}</td>
+                  <td>{{this.metafield5}}</td>
+                  <td>{{this.metafield6}}</td>
+                  <td>{{this.metafield7}}</td>
+                  <td>{{this.metafield8}}</td>
+                  <td>{{this.accesslevel}}</td>
+                   <td>{{this.firstlogindate}}</td>
+                  <td>{{this.lastlogindate}}</td>
+              </tr>
+              {{/each}}
+          </tbody>
+      </table>
+    </div>
+ </div>
+ 
+ <!-- script for Data table start -->
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#report').DataTable( {
+                        "paging":   true,
+                        "ordering": false,
+                        "info":     false
+                    });
+    $('#captureSignOutLink').on('click', function (event) {
+      event.preventDefault();
+      $.ajax({
+               type: 'POST',
+				        url: '/signout',
+				        // data: { data : 'use },
+				        success: function (response) {
+						      window.location = "/externallogin";
+                },
+                error: function (response) {
+                  console.log(response)
+                  alert('Operation failed. Please, If the problem persists, contact with administrator. The response is: ' + response.statusText);
+                }
+             });
+    });
+  });
+    </script>

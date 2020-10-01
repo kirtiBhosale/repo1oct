@@ -1,0 +1,237 @@
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<style>
+.dataTables_length
+{
+  display:none !important;
+}
+</style>
+<div class="main-container">
+  <div class="role-heading main-header">
+    <div class="nav"> 
+      <ul>
+      <li >
+		      <a href="/adminuserdetail">Home</a>
+        </li>
+    <li>
+    <a href="/createrole">Create Role</a>
+     </li>
+     <li >
+		<a href="/assignrole" class="active">Assign Role</a>
+          </li>
+          </ul>
+    </div>
+
+    <div class="user-role-dtls"> 
+      <span>Welcome, {{userdetail.firstname}} {{userdetail.lastname}}</span>
+      <span style="margin-left: 13%;font-size: 16px;">
+		     <a href="/signout" id="captureSignOutLink" class="capture_end_session" style="color:#fff !important;"> 
+		      <img alt="Sign Out" src="//images.ctfassets.net/me3hbvrrlti0/58YFW9nkbeYkKIC22o2oe6/002b854d1b44935bcd4cc7decb2e7ae2/logout-icon.png"> <span style="color:#fff !important;margin-top: 3px;">Sign Out</span></a>
+		  </span><br>
+      <span>Role: {{userdetail.name}} </span>
+    </div>
+  </div>
+<div style="width: 14%;margin-left: 21px; display: block; padding-top: 10px;">
+    Select Role
+    <select id="ddlrole">
+        <option value=""> --select-- </option>
+        {{#each rolelist.result}}
+          <option value="{{this.id}}">
+                {{this.name}}
+          </option>
+        {{/each}}
+      </select>
+
+</div>
+
+<div id="contain">
+          <table id="report" class="display table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                <th><input type="checkbox" id="cbselectall"></th>
+                <th>External User Name</th>
+                <th>External User Email Address</th>               
+                <th>Company Name</th>
+                <th>Operational Leader Name</th>
+                <th>Operational Leader Email</th>
+                <th>JPT Leader</th>
+                <th>JPT Leader Email</th>
+                <th>Hub Details</th>
+                <th>Partner Code</th>
+                <th>Current Role</th>
+                </tr>
+            </thead>
+          <tbody>
+             {{#each userlist.result}}
+             <tr>
+                  <td><input type="checkbox" class="cbselect" value="{{this.userid}} : {{this.rolemappingid}}" name="chk{{this.userid}}"></td>
+                  <td>{{this.name}}</td>
+                  <td>{{this.emailid}}</td>                  
+                  <td>{{this.metafield2}}</td>
+                  <td>{{this.metafield3}}</td>
+                  <td>{{this.metafield4}}</td>
+                  <td>{{this.metafield5}}</td>
+                  <td>{{this.metafield6}}</td>
+                  <td>{{this.metafield7}}</td>
+                  <td>{{this.metafield8}}</td>
+                  <td>{{this.accesslevel}}</td>
+              </tr>
+              {{/each}}
+          </tbody>
+          
+      </table>
+    </div>
+    <div class="btn-div"><input id="btnsubmit" type="button" value="Update Role" class="rolebtn"/></div>
+ </div>
+ <!-- script for Data table start -->
+ <script type="text/javascript">
+     $(document).ready(function() {
+        $('#report').DataTable( {
+           "paging":   true,
+           "ordering": false,
+           "info":     false
+        });
+  var userid = '';
+$("#btnsubmit").click(function(){
+  
+  var getcheckedlength = '';
+  getcheckedlength =  $('tbody input:checked').length;
+  var roleid = $("#ddlrole").val();
+  if(getcheckedlength == 0 && roleid == '')
+  {
+    alert('Please select user and role');
+  }
+  else if(roleid == '')
+  {
+    alert('Please select role');
+  } else if(getcheckedlength == 0)
+  {
+    alert('Please select user');
+  }
+  else
+  {
+    $('tbody input:checked').each(function() {
+      userid += $(this).attr("value") + ',';
+    });
+    userid = userid.substring(0, userid.length - 1);
+
+    console.log(userid);  
+       $.ajax({	       
+        url :"/assignrole",	
+        method:"POST",	
+        data: {userid: userid,roleid: roleid},	
+        success:function(response)	
+        {	
+            alert("Role update successfully");
+            window.location = "assignrole";
+        }	
+        });
+    }
+ });
+});
+
+$('#captureSignOutLink').on('click', function (event) {
+      event.preventDefault();
+      $.ajax({
+               type: 'POST',
+				        url: '/signout',
+				        // data: { data : 'use },
+				        success: function (response) {
+						      window.location = "/externallogin";
+                },
+                error: function (response) {
+                  console.log(response)
+                  alert('Operation failed. Please, If the problem persists, contact with administrator. The response is: ' + response.statusText);
+                }
+             });
+ });
+ //select all checkboxes
+$("#cbselectall").change(function(){  //"select all" change 
+    var status = this.checked; // "select all" checked status
+    $('.cbselect').each(function(){ //iterate all listed checkbox items
+        this.checked = status; //change ".checkbox" checked status
+    });
+});
+
+$('.cbselect').change(function(){ //".checkbox" change 
+    //uncheck "select all", if one of the listed checkbox item is unchecked
+    if(this.checked == false){ //if this item is unchecked
+        $("#cbselectall")[0].checked = false; //change "select all" checked status to false
+    }
+    
+    //check "select all" if all checkbox items are checked
+    if ($('.cbselect:checked').length == $('.cbselect').length ){ 
+        $("#cbselectall")[0].checked = true; //change "select all" checked status to true
+    }
+});
+</script>
+<!--<script>
+function getrole()
+{
+	var userid = $("#ddluserlist").val();	
+	if(userid != ""){
+	 		$.ajax({
+				type: 'POST',
+				url: '/getselectedrolebyuserid',
+				data: { userid : userid},
+				success: function (response) {
+          $("#ddlrolelist").html('');
+					if(response.issuccess == true)
+					{
+						var options = '<option value=""> --select-- </option>';
+            var result =  response.data.body.result;
+						for(var i=0; i< result.length; i++)
+						{
+							var text = result[i].name;
+							var value = result[i].id;	
+              var getcase = result[i].case;	
+              if(getcase)
+              {
+                options += "<option selected value='"+value+"'> "+text+" </option>";
+              }
+              else
+              {
+							  options += "<option value='"+value+"'> "+text+" </option>";
+              }
+						}
+						$("#ddlrolelist").append(options);
+					} else {
+						alert('Operation failed. Please, If the problem persists, contact with administrator.');
+					}
+				},
+				error: function (response) {
+					console.log(response)
+					alert('Operation failed. Please, If the problem persists, contact with administrator. The response is: ' + response.statusText);
+				}
+			});	
+	}		
+}
+
+function assignrole()
+{
+  var userid = $("#ddluserlist").val();	
+  var roleid = $("#ddlrolelist").val();	
+  if(userid != "" && roleid != ""){
+	 		$.ajax({
+				type: 'POST',
+				url: '/assignrole',
+				data: { roleid : roleid, userid : userid},
+				success: function (response) {
+          
+					if(response.issuccess == true)
+					{
+					  alert("Role assigned successfully.");
+            
+					} else {
+						alert('Operation failed. Please, If the problem persists, contact with administrator.');
+					}
+				},
+				error: function (response) {
+					console.log(response)
+					alert('Operation failed. Please, If the problem persists, contact with administrator. The response is: ' + response.statusText);
+				}
+			});	
+	}		
+}
+</script>-->

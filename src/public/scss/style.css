@@ -1,0 +1,2094 @@
+@charset "UTF-8";
+@font-face {
+  font-family: 'Roboto';
+  src: url("../fonts/Roboto-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url("../fonts/Roboto-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url("../fonts/Roboto-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url("../fonts/Roboto-BoldItalic.ttf") format("truetype");
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url("../fonts/Roboto-Thin.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url("../fonts/Roboto-ThinItalic.ttf") format("truetype");
+  font-weight: 200;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url("../fonts/Roboto-Light.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url("../fonts/Roboto-LightItalic.ttf") format("truetype");
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url("../fonts/Roboto-Medium.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url("../fonts/Roboto-MediumItalic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  font-size: 14px;
+  font-family: 'Roboto';
+  margin-bottom: 60px;
+  /* padding-right :4px !important; */
+}
+
+body {
+  /* background: url('../img/14_Admin_screen3.jpg'); */
+  background-size: 100% auto;
+}
+
+/* HEADER CSS START */
+
+header .logo img {
+  /* margin: 13% 10%; */
+  vertical-align: middle;
+  margin: auto 0px;
+}
+
+header .logo {
+  display: inline-flex;
+  align-items: center;
+}
+
+header .logorow {
+  display: flex;
+}
+
+.username h1 {
+  margin: 30px 0px;
+  color: #0073cc;
+}
+
+.search-form {
+  margin-bottom: 2em;
+}
+
+.icon-bar {
+  display: inline-block;
+  width: 100%;
+  /* background-color: #555; */
+  /* overflow: auto; */
+}
+
+.username .pull-left {
+  padding-left: 15px;
+}
+
+header .input-group {
+  border-radius: 0px;
+}
+
+header .input-group-lg>.form-control, header .input-group-lg>.input-group-addon, header .input-group-lg>.input-group-btn>.btn {
+  border-radius: 0px;
+  border-color: #c6dae5;
+}
+
+header .search-form .btn-secondary {
+  background-color: #c6dae5;
+}
+
+.icon-bar a {
+  float: left;
+  width: 25%;
+  text-align: center;
+  padding: 25px 25px;
+  display: inline-block;
+  /* transition: all 0.3s ease; */
+  /* color: white; */
+  /* font-size: 36px; */
+}
+
+/* .icon-bar a:hover {
+    background-color: #000;
+}
+
+.active {
+    background-color: #4CAF50 !important;
+} */
+
+header .nav>li>a {
+  font-size: 22px;
+}
+
+header .navbar {
+  margin-bottom: 0px;
+}
+
+header .navbar-nav .active:after {
+  /*content: '\f0d7';*/
+  font-family: 'FontAwesome';
+  position: absolute;
+  top: -16px;
+  color: #fff;
+  font-size: 24px;
+}
+
+header .navbar-inverse {
+  background-color: #014268;
+}
+
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover {
+  background-color: #014268;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+  color: #fff;
+}
+
+.right-navbar a {
+  background: #c6dae5;
+  color: #014268;
+  padding: 10px 0px;
+  margin: 10px;
+  height: 55px;
+  width: 60px;
+}
+
+.right-navbar div {
+  height: 20px;
+  width: 20px;
+  margin: auto;
+}
+
+.right-navbar div img {
+  max-width: 100%;
+}
+
+/* v2:: start */
+
+.calendar {
+  height: 0px !important;
+}
+
+.modified-text-color {
+  color: #0073cc !important;
+}
+
+/* v2:: end */
+
+/** The Magic **/
+
+.btn-breadcrumb .btn:not(:first-child):after {
+  content: " ";
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 17px solid transparent;
+  border-bottom: 17px solid transparent;
+  border-left: 10px solid #c6dae5;
+  position: absolute;
+  top: 50%;
+  margin-top: -17px;
+  left: 100%;
+  z-index: 3;
+}
+.adgroup-select{
+  display: block;
+  width:300px;
+  float: left;
+  position: absolute;
+  margin-top: 200px;
+}
+.btn-breadcrumb .btn:not(:first-child):before {
+  content: " ";
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 17px solid transparent;
+  border-bottom: 17px solid transparent;
+  border-left: 10px solid #cccccc;
+  position: absolute;
+  top: 50%;
+  margin-top: -17px;
+  margin-left: 1px;
+  left: 100%;
+  z-index: 3;
+}
+
+/** The Spacing **/
+
+.btn-breadcrumb .btn {
+  padding: 6px 12px 6px 24px;
+  border-radius: 0px;
+  background-color: #e7f0f5;
+  color: #014268;
+}
+
+.btn-breadcrumb .btn:first-child {
+  padding: 9px 10px 9px 10px;
+  color: #fff;
+  background-color: #014268;
+}
+
+.btn-breadcrumb .btn:last-child {
+  padding: 6px 18px 6px 24px;
+  background-color: #c6dae5;
+}
+
+.btn-breadcrumb .btn:hover:last-child {
+  border-color: #c6dae5;
+}
+
+/** Default button **/
+
+.btn-breadcrumb .btn.btn-default:not(:last-child):after {
+  border-left: 10px solid #e7f0f5;
+}
+
+.btn-breadcrumb .btn.btn-default:not(:last-child):before {
+  border-left: 10px solid #cccccc;
+}
+
+.btn-breadcrumb .btn.btn-default:hover:not(:last-child):after {
+  border-left: 10px solid #e7f0f5;
+}
+
+.btn-breadcrumb .btn.btn-default:hover:not(:last-child):before {
+  border-left: 10px solid #cccccc;
+}
+
+.mybreadcrumb a {
+  font-size: 16px;
+}
+
+.mybreadcrumb .btn-breadcrumb a {
+  font-weight: bold;
+}
+
+.mybreadcrumb .pull-right a.active {
+  font-weight: bold;
+}
+
+.mybreadcrumb .pull-right a {
+  color: #014268;
+  display: inline-block;
+  padding: 6px 15px;
+}
+
+.mybreadcrumb .row {
+  background-color: #e7f0f5;
+}
+
+/* HEADER CSS END */
+
+/* FOOTER CSS START */
+
+footer {
+  background-color: #ddd;
+  font-weight: bold;
+  padding: 10px 20px;
+  display: inline-block;
+  width: 100%;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+}
+
+footer p {
+  margin: 0px;
+  color: black !important;
+}
+
+footer span {
+  color: black !important;
+}
+
+/* footer>div:last-child {
+    width: 120px;
+    text-align: right;
+} */
+
+/* footer img {
+    width: 100%;
+} */
+
+/* FOOTER CSS END */
+
+/* ADMIN HEADER CSS START */
+/*Sarika R.*/
+
+.window-container {
+  display: flex;
+  flex-direction: row;
+  height: 110px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  /* padding: 10px 20px; */
+  /* background: #efefef; */
+}
+
+.admin-header .logo img {
+  margin: 6% 10%;
+}
+
+.admin-header .pull-right {
+  margin-right: 7%;
+}
+
+/* ADMIN HEADER CSS END */
+
+/* EXTERNAL USER HEADER CSS START */
+
+.external-user-header .logorow {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.external-user-header .nav>li>a {
+  font-size: 38px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.external-user-header .cm-logo img {
+  max-width: 100%;
+}
+
+.external-user-header .cm-logo {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* EXTERNAL USER HEADER CSS END */
+
+/* CM OVERVIEW CSS START */
+
+.cm-overview-container {
+  margin: 2.5%;
+}
+
+.cm-details {
+  padding: 0.5% 1%;
+  border: 1px solid #ccc;
+  color: #0073cc;
+  font-weight: bold;
+}
+
+.cm-details h3 {
+  margin: 0px;
+  font-weight: bolder;
+}
+
+.cm-details p {
+  margin: 0px;
+  font-size: 16px;
+}
+
+.cm-details>div {
+  display: table;
+  width: 100%;
+}
+
+.cm-details>div>div {
+  display: table-cell;
+}
+
+.cm-details .right-block {
+  vertical-align: middle;
+  text-align: right;
+}
+
+.cm-details .left-block {
+  vertical-align: middle;
+}
+
+.cm-overview-boxes .panel-heading, .external-user-boxes .panel-heading {
+  font-weight: bold;
+  padding: 5px 10px;
+  display: inline-table;
+}
+
+.cm-overview-boxes .panel-heading span, .external-user-boxes .panel-heading span {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.cm-overview-boxes .panel-heading button, .cm-overview-boxes .panel-heading button:hover, .external-user-boxes .panel-heading button, .external-user-boxes .panel-heading button:hover {
+  background-color: #0073cc;
+  color: #fff;
+  border: 1px solid black;
+  border-radius: 0px;
+}
+
+.cm-overview-boxes form .col-xs-10, .cm-overview-boxes form .col-xs-2 {
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+/* .cm-overview-boxes .panel-heading span {
+    right: 35px;
+    top: 5px;
+    position: absolute;
+} */
+
+.hse-form-group {
+  display: inline-block;
+}
+
+.hse-form-group label {
+  margin-top: 7px;
+}
+
+.cm-overview-boxes .btn-lg, .admin-manage-cm .btn-lg, .create-cm .btn-lg, .search-results .btn-lg, .metrics-boxes .btn-lg, .servicereview-container .btn-lg {
+  padding: 15px 50px;
+  color: white;
+  background-color: #0073cc;
+  border-color: #0073cc;
+  border-radius: 4px;
+}
+
+.cm-overview-boxes .mandatory-star {
+  color: red;
+}
+
+.create-cm .mandatory-star {
+  color: red;
+  font-size: 14px !important;
+}
+
+.carousel-control {
+  padding-top: 10%;
+  width: 5%;
+}
+
+/* centered columns styles */
+
+.row-centered {
+  text-align: center;
+}
+
+.col-centered {
+  display: inline-block;
+  float: none;
+  /* reset the text-align */
+  text-align: left;
+  /* inline-block space fix */
+  margin-right: -4px;
+}
+
+.carousel-indicators {
+  position: relative;
+  margin: auto;
+  margin-top: 10px;
+  width: auto;
+  left: 0;
+  bottom: -20;
+  padding: 0px;
+}
+
+.carousel-indicators li {
+  width: 15px;
+  height: 15px;
+  margin: 10px;
+  background-color: #ddd;
+}
+
+.carousel-indicators .active {
+  width: 15px;
+  height: 15px;
+  margin: 10px;
+  background-color: #0073cc;
+}
+
+.cm-overview-container .panel-default, .cm-overview-container .panel-heading, .external-user-container .panel-default, .external-user-container .panel-heading {
+  border-radius: 0px;
+}
+
+.cm-overview-container .panel-heading, .external-user-container .panel-heading {
+  color: #fff;
+  background-color: #0073cc;
+}
+
+.cm-overview-container .panel-heading h3, .external-user-container .panel-heading h3 {
+  margin: 0px;
+}
+
+.multiselect>.container {
+  max-height: 150px;
+  overflow: auto;
+  width: 70%;
+  padding: 0px;
+  position: absolute;
+  z-index: 99;
+  background: #fff;
+  height: auto;
+  border: none;
+}
+
+.multiselect.active>.container {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.multiselect>.container>option {
+  display: none;
+  padding: 5px;
+  cursor: pointer;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+
+.multiselect>.container>option.selected {
+  background: #7aafe9;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  color: #fff;
+}
+
+.multiselect>.container>option:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #000;
+}
+
+.multiselect.active>.container>option {
+  display: block;
+}
+
+.cm-details .right-block p small {
+  /* color: red; */
+  font-size: 75%;
+  color: green;
+}
+
+.bootstrap-tagsinput {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  width: 100%;
+  line-height: 24px;
+}
+
+.bootstrap-tagsinput input {
+  width: 100%;
+}
+
+.bootstrap-tagsinput .label {
+  white-space: normal;
+  word-break: break-all;
+}
+
+.bootstrap-tagsinput .label-info {
+  background-color: #0073cc;
+}
+
+.error {
+  border: 1px solid red;
+}
+
+.loading {
+  background: url("/img/indicator.gif") no-repeat right center;
+  background-size: 15% 120%;
+  
+}
+
+/* CM OVERVIEW CSS END */
+
+/* ADMIN UPDATE FIELDS & MANAGE CM & MANAGE PRODUCT CSS START */
+
+.admin-update-fields, .admin-manage-cm {
+  /* margin-top: 5%;
+    margin-bottom: 10%; */
+  padding: 15px 0px;
+}
+
+.admin-update-fields form label {
+  font-size: 16px;
+}
+
+.admin-update-fields form button {
+  margin-top: 3px;
+}
+
+.admin-update-fields form .col-xs-1 {
+  padding: 0px;
+}
+
+.admin-update-fields form .col-xs-6 {
+  padding-right: 5px;
+}
+
+.admin-update-fields table.dataTable tr.odd {
+  background-color: white !important;
+}
+
+.admin-update-fields table.dataTable tr.even {
+  background-color: white !important;
+}
+
+.admin-update-fields table.dataTable thead tr {
+  background-color: #eee !important;
+}
+
+.admin-update-fields table.dataTable thead tr th {
+  border: 1px solid #ddd !important;
+  background-color: #0073cc;
+  color: #fff;
+}
+
+.admin-update-fields table.dataTable {
+  border: 1px solid #ddd !important;
+}
+
+.admin-update-fields table.dataTable thead tr th, .admin-update-fields table.dataTable tbody tr td {
+  vertical-align: middle;
+}
+
+.admin-manage-cm .btn-lg {
+  margin-top: 2em;
+}
+
+.admin-update-fields .form-group button {
+  border-color: transparent;
+  background-color: #0073cc;
+  color: #fff;
+}
+
+.admin-update-fields table.dataTable tbody tr .fa-pencil-square-o {
+  color: #0073cc;
+}
+
+.admin-update-fields table.dataTable tbody tr .fa-trash-o {
+  color: red;
+}
+
+.admin-update-fields table.dataTable tbody tr .fa-floppy-o {
+  color: #014268;
+}
+
+.admin-update-fields table.dataTable tbody tr i.fa {
+  font-size: 20px;
+  padding: 0px 5px;
+}
+
+.admin-update-fields table.dataTable tbody tr td:last-child {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  width: 70px !important;
+}
+
+.admin-update-fields table {
+  width: 50% !important;
+}
+
+/* service-review */
+
+.service-reivew, .admin-manage-cm {
+  /* margin-top: 5%;
+    margin-bottom: 10%; */
+  padding: 15px 0px;
+}
+
+.service-reivew form label {
+  font-size: 16px;
+}
+
+.service-reivew form button {
+  margin-top: 3px;
+}
+
+.service-reivew form .col-xs-1 {
+  padding: 0px;
+}
+
+.service-reivew form .col-xs-6 {
+  padding-right: 5px;
+}
+
+.service-reivew table.dataTable tr.odd {
+  background-color: white !important;
+}
+
+.service-reivew table.dataTable tr.even {
+  background-color: white !important;
+}
+
+.service-reivew table.dataTable thead tr {
+  background-color: #eee !important;
+}
+
+.service-reivew table.dataTable thead tr th {
+  border: 1px solid #ddd !important;
+  background-color: #0073cc;
+  color: #fff;
+}
+
+.service-reivew table.dataTable {
+  border: 1px solid #ddd !important;
+}
+
+.service-reivew table.dataTable thead tr th, .service-reivew table.dataTable tbody tr td {
+  vertical-align: middle;
+}
+
+.admin-manage-cm .btn-lg {
+  margin-top: 2em;
+}
+
+.service-reivew .form-group button {
+  border-color: transparent;
+  background-color: #0073cc;
+  color: #fff;
+}
+
+.service-reivew table.dataTable tbody tr .fa-pencil-square-o {
+  color: #0073cc;
+}
+
+.service-reivew table.dataTable tbody tr .fa-trash-o {
+  color: red;
+}
+
+.service-reivew table.dataTable tbody tr .fa-floppy-o {
+  color: #014268;
+}
+
+.service-reivew table.dataTable tbody tr i.fa {
+  font-size: 20px;
+  padding: 0px 5px;
+}
+
+.service-reivew table.dataTable tbody tr td:last-child {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  width: 70px !important;
+}
+
+/* .service-reivew table {
+  width: 90% !important;
+} */
+
+div.smileys input[type="radio"] {
+  -webkit-appearance: none;
+  width: 45px;
+  height: 45px;
+  border: none;
+  cursor: pointer;
+  transition: border 0.2s ease;
+  -webkit-filter: contrast(0);
+  filter: contrast(0);
+  margin: 0 2px;
+  transition: all 0.2s ease;
+}
+
+div.smileys input[type="radio"]:hover, div.smileys input[type="radio"]:checked {
+  -webkit-filter: none;
+  filter:none;
+}
+
+div.smileys input[type="radio"]:focus {
+  outline: 0;
+}
+
+div.smileys input[type="radio"].happy {
+  background: url("/img/happy.png") center;
+  background-size: cover;
+}
+
+div.smileys input[type="radio"].neutral {
+  background: url("/img/neutral.png") center;
+  background-size: cover;
+}
+
+div.smileys input[type="radio"].sad {
+  background: url("/img/sad.png") center;
+  background-size: cover;
+}
+
+.mtt {
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  color: #999;
+  text-decoration: none;
+}
+
+.mtt span {
+  color: #e74c3c;
+}
+
+.mtt:hover {
+  color: #666;
+}
+
+.mtt:hover span {
+  color: #c0392b;
+}
+
+/*end service review  */
+
+/* manage-service-review */
+
+.manage-service-review .year-container{
+  margin-top: -20px;
+}
+
+.manage-service-review, .admin-manage-cm {
+  /* margin-top: 5%;
+    margin-bottom: 10%; */
+  padding: 15px 0px;
+}
+
+.manage-service-review form label {
+  font-size: 16px;
+}
+
+.manage-service-review form button {
+  margin-top: 3px;
+}
+
+.manage-service-review form .col-xs-1 {
+  padding: 0px;
+}
+
+.manage-service-review form .col-xs-6 {
+  padding-right: 5px;
+}
+
+.manage-service-review table.dataTable tr.odd {
+  background-color: white !important;
+}
+
+.manage-service-review table.dataTable tr.even {
+  background-color: white !important;
+}
+
+.manage-service-review table.dataTable thead tr {
+  background-color: #eee !important;
+}
+
+.manage-service-review table.dataTable thead tr th {
+  border: 1px solid #ddd !important;
+  background-color: #0073cc;
+  color: #fff;
+}
+
+.manage-service-review table.dataTable {
+  border: 1px solid #ddd !important;
+}
+
+.manage-service-review table.dataTable thead tr th, .manage-service-review table.dataTable tbody tr td {
+  vertical-align: middle;
+}
+
+.admin-manage-cm .btn-lg {
+  margin-top: 2em;
+}
+/* v2:: start */
+.manage-service-review .custom-btn-add{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 35px;
+}
+.service-reivew > .window-container .custom-btn{
+  margin-top: 20px;
+}
+.manage-service-review .form-group button {
+  border-color: transparent;
+  background-color: #0073cc;
+  color: #fff;
+  width: 100px;
+  margin-left: -33px;
+}
+/* v2:: end */
+
+
+.manage-service-review table.dataTable tbody tr .fa-pencil-square-o {
+  color: #0073cc;
+}
+
+.manage-service-review table.dataTable tbody tr .fa-trash-o {
+  color: red;
+}
+
+.manage-service-review table.dataTable tbody tr .fa-floppy-o {
+  color: #014268;
+}
+
+.manage-service-review table.dataTable tbody tr i.fa {
+  font-size: 20px;
+  padding: 0px 5px;
+}
+
+.manage-service-review table.dataTable tbody tr td:last-child {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  width: 70px !important;
+  text-align:center;
+}
+
+/* .manage-service-review table {
+  width: 90% !important;
+} */
+
+/* manage-service-review */
+
+.admin-manage-cm table.dataTable .prod-td img {
+  max-width: 112px !important;
+  height: 45px;
+}
+
+.admin-manage-cm table.dataTable .prod-td img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.admin-manage-cm table.dataTable tbody .prod-td {
+  padding: 2px 0px;
+}
+
+.admin-manage-cm .cm-td div {
+  height: 20px;
+}
+
+.admin-manage-cm .cm-td img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* ADMIN UPDATE FIELDS & MANAGE CM & MANAGE PRODUCT CSS END */
+
+/* LOGIN PAGE CSS START */
+
+.loginpage {
+  background-color: #ddd;
+  padding: 3% 3.5%;
+  margin-bottom: 0px;
+}
+
+.loginpage>div {
+  background-color: white;
+  padding: 4%;
+  min-height: 100%;
+}
+
+.loginpage .welcome-title h1 {
+  font-size: 40px;
+  color: #0073cc;
+}
+
+.loginpage .welcome-title {
+  margin-top: 3%;
+  margin-bottom: 3%;
+}
+
+.login-boxes {
+  margin-top: 4%;
+}
+
+.login-boxes .col-sm-6 div {
+  border: 1px solid #014268;
+  padding-top: 11%;
+  padding-bottom: 16%;
+  padding-left: 5px;
+  padding-right: 5px;
+  height: 300px;
+  background-color: #014268;
+  color: #fff;
+}
+
+.login-boxes .col-sm-6 h1 {
+  margin-bottom: 25px;
+  margin-top: 25px;
+}
+
+.login-boxes .col-sm-6 p {
+  font-size: 16px;
+  margin: 0px;
+}
+
+.login-boxes a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.logo img {
+  max-width: 100%;
+}
+
+.loginpage .logo {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+/* LOGIN PAGE CSS END */
+
+/* COMPARE CM CSS START */
+
+.compare-cm {
+  margin-top: 3%;
+  margin-bottom: 8%;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.compare-cm tablble.dataTable {
+  margin: 0 auto;
+  width: 100%;
+  clear: both;
+  border-collapse: collapse;
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+
+.compare-cm table.dataTable th, .compare-cm table.dataTable td {
+  white-space: normal;
+  word-wrap: break-word;
+  /* width: 300px; */
+}
+
+.compare-cm table.dataTable a {
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.compare-cm table th {
+  font-size: 22px;
+  color: #0073cc;
+}
+
+.compare-cm table th u {
+  border-color: #c6dae5;
+}
+
+.compare-cm table.dataTable tr td {
+  background-color: white !important;
+}
+
+.compare-cm table.dataTable td {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-weight: bold;
+}
+
+.compare-cm .go-back-arrow {
+  display: inline-block;
+  background-color: #e7f0f5;
+  color: #014268;
+  font-size: 16px;
+  padding: 2px;
+}
+
+.arrow-left {
+  display: inline-block;
+  vertical-align: middle;
+  width: 0;
+  height: 0;
+  margin-right: -5px;
+  border-top: 18px solid transparent;
+  border-bottom: 18px solid transparent;
+  border-right: 18px solid #e7f0f5;
+}
+
+/* COMPARE CM CSS END */
+
+/* SEARCH RESULTS CSS START */
+
+#sidebar a, #sidebar a:hover, #sidebar a:focus {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+#sidebar {
+  /* don't forget to add all the previously mentioned styles here too */
+  background: #014268;
+  color: #fff;
+  transition: all 0.3s;
+}
+
+#sidebar .sidebar-header {
+  padding: 1px 20px 1px;
+  background: #0073cc;
+}
+
+#sidebar li input[type=checkbox] {
+  width: 20px;
+  height: 20px;
+}
+
+#sidebar li input[type=radio] {
+  width: 15px;
+  height: 15px;
+  margin-right: 4px;
+}
+
+#sidebar ul li a {
+  /* font-size: 22px; */
+  font-size: 20px;
+}
+
+#sidebar ul li a:hover {
+  background: #014268;
+}
+
+#sidebar ul ul a {
+  font-size: 14px !important;
+  padding-left: 10% !important;
+}
+
+.wrapper {
+  display: flex;
+}
+
+#sidebar {
+  min-width: 290px;
+  max-width: 290px;
+  height: auto;
+}
+
+/* .mCustomScrollBox {
+    height: auto;
+} */
+
+#sidebar.active {
+  margin-left: -290px;
+}
+
+#sidebar a[data-toggle="collapse"] {
+  position: relative;
+}
+
+#sidebar .open>.dropdown-menu {
+  position: relative;
+  width: 100%;
+  border: none;
+  border-radius: 0px;
+  background-color: #014268;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  transition: all 0.3s;
+}
+
+#sidebar .open>.dropdown-toggle>.fa-plus-square-o:before {
+  content: '\f147';
+}
+
+#sidebar li a.dropdown-toggle>span {
+  display: table-cell;
+}
+
+#sidebar .open>.dropdown-toggle {
+  display: inline;
+}
+
+.search-results div.dataTables_paginate {
+  float: left !important;
+}
+
+.search-results .dataTable td a {
+  color: #000;
+}
+
+#sidebar .components>li {
+  padding: 10px;
+  display: inline-table;
+  width: 100%;
+}
+
+#sidebar .dropdown>input {
+  /* display: table-cell; */
+}
+
+#sidebar .dropdown>a {
+  display: inline;
+}
+
+#sidebar .dropdown>a>span:first-child {
+  padding: 0px 5px;
+}
+
+#sidebar li a.dropdown-toggle>span:last-child {
+  margin-right: 4px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+#sidebar .dropdown .dropdown-menu {
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+  width: 158px !important;
+  top: auto !important;
+}
+
+.search-results div.dataTables_length label {
+  font-size: 1.4em;
+}
+
+.search-results div.dt-buttons {
+  float: right !important;
+}
+
+.search-results button.dt-button {
+  padding: 2px !important;
+}
+
+.search-results {
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.search-results .dt-button-collection {
+  left: auto !important;
+  right: 0;
+}
+
+.search-results #example {
+  border-top: 2px solid #ccc;
+}
+
+.search-results .dataTables_length, .search-results .dt-buttons {
+  margin-bottom: 1em;
+}
+
+.search-results .dataTables_paginate, .search-results .compare-button {
+  margin-top: 1em;
+}
+
+#sidebarCollapse, #sidebarCollapse:focus, #sidebarCollapse:hover {
+  background-color: #0073cc;
+}
+
+.search-results .welcome-div {
+  margin-top: 10%;
+  margin-bottom: 10%;
+}
+
+.search-results .welcome-div h1 {
+  display: inline;
+  background-color: #ddd;
+  color: #014268;
+  font-weight: bolder;
+  padding: 20px 15px;
+}
+
+.landing-wrapper {
+  margin-top: 1px;
+}
+
+.form-check-input {
+  vertical-align: text-bottom;
+}
+
+.search-results .dataTable td a:hover {
+  color: #23527c !important;
+  text-decoration: underline !important;
+}
+
+/* SEARCH RESULTS CSS END */
+
+/* CREATE CM & UPDATE CM CSS START */
+
+.create-cm {
+  margin: 2% 13%;
+}
+
+.create-cm form {
+  border: 1px solid #ddd;
+  padding: 2%;
+  font-size: 18px;
+}
+
+.create-cm form label {
+  font-weight: bold;
+}
+
+.create-cm form .input-lg, .create-cm .input-group-lg {
+  border-radius: 4px;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+.create-cm form .form-group:first-child .input-lg {
+  border-right: none;
+}
+
+.create-cm .input-group-lg span:last-child button {
+  background-color: #fff;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+}
+
+.create-cm .input-group-lg span:first-child button {
+  background-color: #c6dae5;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+}
+
+.create-cm .btn-lg, .search-results .btn-lg {
+  padding: 10px 35px;
+  margin: auto 10px;
+}
+
+/* CREATE CM & UPDATE CM CSS END */
+
+/* PRODUCT OVERVIEW CSS START */
+
+.product-overview-container {
+  margin: 1.5% 0%;
+}
+
+.icon-background-repeat {
+  color: #c6dae5;
+}
+
+.product-overview-container .dataTables_scrollHead table {
+  margin-top: 2%;
+}
+
+.product-overview-container table img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.product-overview-container .table>tbody>tr>td {
+  vertical-align: middle;
+  font-weight: bold;
+  background-color: #fff;
+}
+
+.product-overview-container table th {
+  font-size: 22px;
+  color: #014268;
+}
+
+.product-overview-container .brand-img {
+  padding: 6%;
+  height: 150px;
+}
+
+/* PRODUCT OVERVIEW CSS END */
+
+/* METRICS CSS START */
+
+.metrics-container .form-group>.control-label {
+  text-align: left;
+}
+
+.metrics-container .panel-heading {
+  font-size: 20px;
+  color: #fff;
+  background-color: #0073cc;
+}
+
+.metrics-container .label-div {
+  margin-bottom: 5px;
+}
+
+.metrics-container .label-div .col-sm-2 {
+  padding: 0 5px;
+}
+
+.metrics-boxes>div:last-child {
+  margin-top: 2.5%;
+  margin-bottom: 2.5%;
+}
+
+.metrics-wrapper #sidebar .components {
+  padding-top: 5px;
+  height: 100%;
+}
+
+.metrics-wrapper #sidebar .dropdown {
+  padding-left: 8%;
+  padding-right: 8%;
+}
+
+.metrics-wrapper .datetimepicker-div {
+  display: inline-block;
+  width: 100%;
+}
+
+.metrics-wrapper .bootstrap-datetimepicker-widget {
+  max-width: 100%;
+}
+
+.metrics-wrapper #sidebar ul ul a {
+  padding: 2% !important;
+  font-size: 11px !important;
+}
+
+.datetimepicker-div>div {
+  z-index: 2000;
+}
+
+.metrics-wrapper #sidebar .dropdown .input-lg {
+  border-radius: 4px;
+}
+
+.metrics-wrapper #sidebar .dropdown .datetimepicker-div .input-lg {
+  border-bottom-right-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+/* METRICS CSS END */
+
+/* SERVICE REVIEW CSS START */
+
+.servicereview-container {
+  margin-bottom: 2%;
+  margin-top: 20px;
+}
+
+.servicereview-container .tab-content {
+  background: #e7f0f5;
+}
+
+.servicereview-container form {
+  padding-bottom: 10px;
+}
+
+.servicereview-container .nav-tabs>li>a {
+  font-size: 20px;
+  border-radius: 0px;
+  border-bottom: 1px solid #0073cc;
+  margin-right: 0px;
+}
+
+.servicereview-container li {
+  text-align: center;
+  width: 20%;
+}
+
+.servicereview-container .nav-tabs>li.active>a, .servicereview-container .nav-tabs>li.active>a:focus, .servicereview-container .nav-tabs>li.active>a:hover {
+  background-color: #0073cc;
+  border-color: #0073cc;
+  color: #fff;
+  box-shadow: 2px 2px 15px -2px #999;
+}
+
+.servicereview-container .nav-tabs {
+  border-color: #0073cc;
+  background: #f2f2f2;
+  border-bottom: 4px solid #0073cc;
+  /* border-top: 1px solid #0073cc; */
+}
+
+.servicereview-container .form-group {
+  display: flex;
+}
+
+.servicereview-container .form-group>div {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.servicereview-container .form-group>.control-label {
+  text-align: left;
+  margin-top: auto;
+  margin-bottom: auto;
+  font-size: 16px;
+}
+
+#submitservicereview[disabled]:hover, #submitservicereview[disabled]:focus, #saveservicereview[disabled]:hover, #saveservicereview[disabled]:focus {
+  background-color: #0073cc;
+}
+
+div.smileys input[type=radio][disabled]:hover {
+  cursor: not-allowed;
+}
+
+div.smileys input[type=radio][disabled]:hover:not(:checked) {
+  -webkit-filter: contrast(0);
+  filter: contrast(0);
+}
+
+.tab-content textarea.error {
+	border-color: red;
+}
+
+/* SERVICE REVIEW CSS END */
+
+/* EXTERNAL USER CSS START */
+
+.external-user-boxes .form-group .control-label {
+  text-align: left;
+  font-size: 16px;
+}
+
+.external-user-container {
+  margin: 2% 10px;
+}
+
+.external-user-boxes .control-label p {
+  margin: 0px;
+}
+
+.external-user-boxes .control-label a {
+  text-decoration: underline;
+}
+
+.external-user-boxes .panel-group:last-child .panel-heading {
+  padding: 9px;
+  width: 100%;
+}
+
+.external-user-container .row-centered img {
+  margin: auto;
+}
+
+.external-user-container .row-centered p {
+  font-size: 18px;
+  color: #0073cc;
+  margin: 20px;
+}
+
+.external-user-boxes #myCarousel .carousel-control.left, .external-user-boxes #myCarousel .carousel-control.right {
+  background: none;
+  opacity: 1;
+  text-shadow: none;
+  color: #0073cc;
+}
+
+.external-user-container.external-links p {
+  font-size: 13px;
+  margin: 10px 0px 0px 0px;
+}
+
+.external-links:last-child .col-sm-3 {
+  vertical-align: top;
+}
+
+.external-links a {
+  height: 70px;
+  display: block;
+}
+
+.external-user-boxes .panel-default {
+  background: transparent;
+}
+
+.external-user-boxes .col-centered a {
+  display: block;
+  margin: auto;
+  width: 60%;
+}
+
+.external-user-boxes .panel-group .form-horizontal {
+  margin-bottom: 0px;
+}
+
+.external-user-boxes .panel-group .form-horizontal .form-group:last-child {
+  margin-bottom: 0px;
+}
+
+/* EXTERNAL USER CSS END */
+
+/* JANRAIN LOGIN CSS START */
+
+.primary-navigation {
+  background-color: transparent;
+  border-bottom: 0px;
+  border-top: 14px solid transparent;
+}
+
+.primary-navigation-inner>.branding {
+  align-items: center;
+}
+
+.branding .png-logo {
+  height: auto !important;
+}
+
+.janrain-capture-ui .capture_primary, .janrain-capture-ui a.capture_primary, .janrain-capture-ui button.capture_primary, .janrain-capture-ui input.capture_primary {
+  background: #014268;
+}
+
+#janrainModal {
+  min-height: auto;
+  padding: 0%;
+}
+
+.select-cm p {
+  color: #0073cc;
+}
+
+.cm-submit {
+  background-color: #0073cc;
+  border-color: #0073cc;
+}
+
+.ui-autocomplete {
+  max-height: 200px;
+  max-width: 450px !important;
+  width: 450px !important;
+  overflow-y: auto;
+  /* prevent horizontal scrollbar */
+  overflow-x: auto;
+  /* add padding to account for vertical scrollbar */
+  padding-right: 20px;
+}
+
+.ui-helper-hidden-accessible {
+  display: none;
+}
+
+.janrain-footer {
+  padding-right: 3.5%;
+  padding-left: 3.5%;
+}
+.cursorpointer {
+  cursor: pointer !important;
+}
+
+/* JANRAIN LOGIN CSS END */
+
+@media (min-width: 768px) {
+  header .navbar .navbar-nav {
+    display: inline-block;
+    float: none;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  header .navbar-nav>li {
+    float: none;
+    /* width: 30%; */
+  }
+  header .navbar .navbar-collapse {
+    text-align: center;
+  }
+  header .nav>li {
+    display: inline-block;
+  }
+  header .navbar {
+    border-radius: 0px;
+  }
+  .metrics-container .form-group>.control-label {
+    padding-right: 0px;
+    padding-left: 10px;
+  }
+  .external-user-container .col-sm-3 {
+    width: 20%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cm-overview-boxes .col-md-2 {
+    width: 20%;
+  }
+  .cm-overview-boxes .panel-default, .metrics-boxes .panel-default, .external-user-boxes .panel-default {
+    border: 0px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+  .cm-overview-boxes .panel-group {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+  .metrics-boxes .panel-group {
+    margin: 10px;
+  }
+  .cm-overview-boxes .panel-group, .metrics-boxes .panel-group, .external-user-boxes .panel-group {
+    border: 1px solid #ddd;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .cm-overview-boxes>div:first-child, .metrics-boxes>div:first-child, .external-user-boxes>div:first-child {
+    display: flex;
+    display: -webkit-flex;
+  }
+  .admin-manage-cm {
+    padding-left: 17%;
+    padding-right: 17%;
+  }
+  .cm-overview-boxes {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+  .search-results #example_wrapper {
+    margin: 0% 4%;
+  }
+  .create-cm form .col-sm-3 {
+    width: 27%;
+  }
+  .create-cm form .col-sm-offset-3 {
+    margin-left: 27%;
+  }
+  .create-cm form .col-sm-9 {
+    width: 72%;
+  }
+  .create-cm form .form-group {
+    display: flex;
+  }
+  .create-cm form .control-label {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+  #sidebarCollapse {
+    display: none;
+  }
+  .search-results {
+    margin-top: 50px;
+  }
+  .metrics-boxes .form-group small {
+    font-size: 80%;
+  }
+  .external-user-boxes .panel-group {
+    margin-left: 25px;
+    margin-right: 25px;
+  }
+  .external-user-boxes .panel-body {
+    padding: 15px;
+  }
+  .external-user-boxes .col-md-6:last-child .panel-body {
+    margin: 4% 0px;
+  }
+  .admin-manage-product {
+    padding-left: 16%;
+    padding-right: 16%;
+  }
+  .external-user-boxes .panel-group {
+    background: linear-gradient(#fff, #e7f0f5);
+  }
+  .janrain-capture-ui.janrain-capture-ui-mobile .capture_form_item {
+    padding: 0px !important;
+  }
+}
+
+@media (max-width: 1090px) {
+  .right-navbar {
+    display: table;
+    margin: auto;
+  }
+  .username .pull-left {
+    float: none !important;
+    text-align: center;
+  }
+  .servicereview-container .nav-tabs>li>a {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .cm-overview-boxes .col-md-2 {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .arrow-left {
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid #e7f0f5;
+  }
+  .go-back-arrow a {
+    font-size: 12px;
+  }
+  .create-cm {
+    margin: 2% 0%;
+  }
+  .product-overview-container table th {
+    font-size: 18px;
+  }
+  .product-overview-container {
+    overflow: auto;
+  }
+  .metrics-container .panel-group {
+    padding: 10px;
+  }
+  .search-results .welcome-div h1 {
+    font-size: 34px;
+  }
+  .external-user-boxes .panel-body {
+    background: linear-gradient(#fff, #e7f0f5);
+  }
+  body {
+    margin-bottom: 97px;
+  }
+  .right-navbar a {
+    padding: 10px 0px;
+    margin: 7px 5px;
+    height: 50px;
+    width: 50px;
+  }
+  .external-user-container .carousel-control .fa-2x {
+    font-size: 1em;
+  }
+  .cm-overview-container #myCarousel h3, .product-overview-container .brand-img h3 {
+    font-size: 18px;
+  }
+  .janrain-header {
+    margin: 20px 5px 0px 5px;
+  }
+  .janrain-header .panel-heading h3 {
+    margin: 0px;
+    font-size: 18px;
+  }
+  .janrain-content {
+    margin: 0px 5px 20px 5px;
+  }
+  .servicereview-container li {
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .mybreadcrumb .pull-right {
+    width: 100%;
+  }
+  body {
+    margin-bottom: 190px;
+  }
+  .mybreadcrumb .pull-right a {
+    padding: 6px 10px;
+  }
+  .compare-cm {
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  .admin-manage-cm table.dataTable td, .admin-manage-cm table.dataTable th, .compare-cm table.dataTable td, .compare-cm table.dataTable th {
+    padding: 5px;
+    font-size: 12px;
+  }
+  /* admin page */
+  .window-container {
+    display: flex;
+    flex-direction: column;
+    height: 220px;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid;
+    margin-bottom: 10px;
+  }
+  .login-boxes .col-sm-6 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .loginpage .logo {
+    width: 35%;
+  }
+  .loginpage .welcome-title h1 {
+    font-size: 32px;
+  }
+  footer .pull-right {
+    float: none !important;
+    text-align: center;
+  }
+  header .logorow {
+    display: block;
+  }
+  header .logo {
+    display: block;
+    text-align: center;
+    margin-top: 32px;
+  }
+  footer .pull-left p {
+    margin-bottom: 10px;
+  }
+  .service-reivew label{
+    color:#0073cc !important;
+  }
+  .create-cm .btn-lg, .search-results .btn-lg {
+    padding: 10px 30px;
+  }
+  .wrapper {
+    display: block;
+  }
+  #sidebarCollapse {
+    display: none;
+  }
+  #sidebar {
+    min-width: auto;
+    max-width: none;
+    width: 100%;
+  }
+  .search-results div.dataTables_length label {
+    float: left;
+  }
+  .search-results div.dataTables_paginate {
+    float: none !important;
+  }
+  .search-results .compare-button {
+    float: none !important;
+    text-align: center;
+  }
+  .search-results .welcome-div h1 {
+    font-size: 22px;
+    padding: 10px 5px;
+  }
+  .external-user-header .nav>li>a {
+    font-size: 20px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: center;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .external-user-container .col-centered {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+  .external-user-container .row-centered p {
+    font-size: 12px;
+    margin: 20px 5px;
+  }
+  .admin-header .pull-right {
+    float: none !important;
+    text-align: center;
+    margin: 0px;
+  }
+  .external-user-header .cm-logo {
+    display: block;
+  }
+  .external-user-header .cm-logo div {
+    margin: auto;
+    width: 250px;
+  }
+  #sidebar .dropdown .dropdown-menu {
+    width: 200px !important;
+  }
+  .janrain-container {
+    margin-bottom: 150px;
+  }
+}
+
+@media (max-width: 567px) {
+  .go-back-arrow a {
+    font-size: 8px;
+  }
+  .go-back-arrow {
+    padding: 0px;
+  }
+  .arrow-left {
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 5px solid #e7f0f5;
+  }
+  .product-overview-container table th {
+    font-size: 12px;
+  }
+  .product-overview-container table td {
+    font-size: 10px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  footer .privacy-statement {
+    float: left !important;
+  }
+}
+
+@media print {
+  header {
+    display: none;
+  }
+  #sidebar {
+    display: none;
+  }
+  a[href]:after {
+    content: none !important;
+  }
+  @page {
+    size: auto;
+  }
+  .cm-overview-container .panel-heading, .external-user-container .panel-heading {
+    color: #fff !important;
+    background-color: #0073cc !important;
+  }
+  .metrics-container .panel-heading {
+    font-size: 20px !important;
+    color: #fff !important;
+    background-color: #0073cc !important;
+  }
+  @page {
+    margin-top: 1in !important;
+  }
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .username {
+    padding-right: 25px !important;
+  }
+}
+
+@media (min-width: 2000px) {
+  .admin-manage-cm {
+    padding-left: 6%;
+    padding-right: 6%;
+  }
+}
+
+.cm-details-modifiedby {
+  color: #0073cc;
+  margin: 0.5% 2.8%;
+  margin-top: -1.5%;
+  font-weight: bold;
+  text-align: right;
+}
+
+.cm-details-modifiedby p {
+  margin: 0px;
+}
+
+.download-img {
+  float: right;
+}
+
+.download-img img {
+  height: 15px;
+}
+
+.loading {
+  background: url("/img/indicator.gif") no-repeat right center;
+  background-size: 15% 120%;
+  width: 16%;
+  height: 5%;
+  margin:-1% 0%;
+}

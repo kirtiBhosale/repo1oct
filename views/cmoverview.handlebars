@@ -1,0 +1,1893 @@
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link href="vendor/jquery-ui.css" rel="stylesheet" type="text/css" media="all" />
+<script src='https://cdnjs.cloudflare.com/ajax/libs/autosize.js/3.0.15/autosize.min.js'></script>
+<div class="container-fluid mybreadcrumb">
+    <div class="row">
+        <div class="btn-group btn-breadcrumb">
+            <a href="/search" class="btn btn-default">
+                <i class="fa fa-home"></i>
+            </a>
+            {{#if searchkeyword}}
+            <a href="/search?keywords={{searchkeyword}}" class="btn btn-default">
+                <i>Search results for {{searchkeyword}}</i>
+            </a>
+            {{/if}}
+
+            <a href="cmoverview?vendorid={{result.0.vendorid}}" class="btn btn-default">
+                <i>CM Overview</i>
+            </a>
+        </div>
+        <div class="pull-right">
+            <a href="cmoverview?vendorid={{result.0.vendorid}}" class="active">CM Overview</a> |
+            <a href="products?vendorid={{result.0.vendorid}}" class="">CM Product Overview</a>
+        </div>
+    </div>
+</div>
+<input id="pdf" type="hidden" value="{{pdfObj}}" />
+</header>
+
+<div class="container-fluid">
+    <div class="row cm-details cm-overview-container">
+        <div>
+            <div class="left-block">
+                <h3>
+                    <i>{{result.0.vendorname}}</i>
+                </h3>
+                <p>{{{result.0.vendoraddress}}}</p>
+                {{#if result.0.cityname}}
+                <p>
+                    {{{result.0.cityname}}}
+                </p>
+                {{/if}}
+                {{#if result.0.countryname}}
+                <p>{{{result.0.countryname}}} </p>
+                {{/if}}
+            </div>
+            <div class="right-block">
+                {{#if isMPorVN}}
+                {{#if isMP}}
+                <p>MP : {{{result.0.partnercode}}} <br />
+                    {{#if isreviewstatus}}
+                    <div class="rate-div-inline">Service Review :</div>
+                    <div class="rate-div rate-click rate-div-inline cursorpointer" data-rate-value="{{{checkscore reviewscore}}}"
+                        title="{{{checkscore reviewscore}}}"></div>
+                    {{/if}}
+                    {{else}}
+                    <p>VN : {{{result.0.partnercode}}}
+                        <br />
+                        {{#if isreviewstatus}}
+                        <div class="rate-div-inline">Service Review :</div>
+                        <div class="rate-div rate-click rate-div-inline cursorpointer" data-rate-value="{{{checkscore reviewscore}}}"
+                            title="{{{checkscore reviewscore}}}"></div>
+                        {{/if}}
+                        {{/if}}
+                        {{else}}
+                        <p>{{{result.0.partnercode}}}
+                            {{/if}}
+
+                            {{#if result.0.issysgeneratedvendorcode}}
+                            <a href="/updatecm?vendorid={{result.0.vendorid}}">
+                                <span class="fa-stack">
+                                    <i class="fa fa-circle fa-stack-2x icon-background-repeat"></i>
+                                    <i class="fa fa-circle-thin fa-stack-2x"></i>
+                                    <i class="fa fa-repeat fa-stack-1x"></i>
+                                </span>
+                            </a>
+                            <br />
+                            {{!-- <div class="rate-div-inline">Service Review :</div> <div class="rate-div rate-div-inline" data-rate-value="{{{reviewscore}}}" title="{{{reviewscore}}}"></div> --}}
+                            {{/if}}
+
+                        </p>
+                        {{#if result.0.issysgeneratedvendorcode}}
+                        <p>
+                            <small>This code is system generated and not from SAP</small>
+                        </p>
+                        {{/if}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row cm-overview-container cm-overview-boxes">
+        <div>
+            <div class="panel-group col-md-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><span>General</span>
+                        <span class="input-group-btn" data-toggle="tooltip" data-container=".panel-heading" title=""
+                            data-original-title="Keep relevant and to be maintained by JPT/Ops Leader">
+                            <button class="btn btn-secondary" type="button">
+                                <i class="fa fa-info"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="">CM Segmentation:<span class="mandatory-star">*</span>
+                                </label>
+                                <select class="form-control" id="cmsegmentation">
+                                    <option value="0">--Select--</option>
+                                    {{#each CmSeg}}
+                                    <option {{#this.Selected}}selected="selected" {{/this.Selected}} value="{{this.Id}}"
+                                        data-id="">{{this.Value}}</option>
+                                    {{/each}}
+
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Service Type: <span class="mandatory-star">*</span></label>
+                                <select class="form-control" id="servicetype">
+                                    <option value="0">--Select--</option>
+                                    {{#each ServiceType}}
+                                    <option {{#this.Selected}}selected="selected" {{/this.Selected}} value="{{this.Id}}"
+                                        data-id="">{{this.Value}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Vendor Type: <span class="mandatory-star">*</span></label>
+                                <select class="form-control" id="vendortype">
+                                    <option value="0">--Select--</option>
+                                    {{#each VendorType}}
+                                    <option {{#this.Selected}}selected="selected" {{/this.Selected}} value="{{this.Id}}"
+                                        data-id="">{{this.Value}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Hub Oversight: <span class="mandatory-star">*</span></label>
+                                <select class="form-control" id="huboversight">
+                                    <option value="0">--Select--</option>
+                                    {{#each HubOversight}}
+                                    <option {{#this.Selected}}selected="selected" {{/this.Selected}} value="{{this.Id}}"
+                                        data-id="">{{this.Value}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Operational Leader: <span class="mandatory-star">*</span></label>
+                                <div class="input-group" id="operationalleaderdiv">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-user"></i>
+                                    </span>
+                                    <!-- <textarea name="op" class="form-control" id="operationalleaderinput">{{{opleader}}}</textarea> -->
+                                    <input type="text" value="{{{opleader}}}" class="form-control"
+                                        id="operationalleaderinput" name="op" data-role="tagsinput">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="">JPT Leader: <span class="mandatory-star">*</span></label>
+                                <div class="input-group" id="jptleaderdiv">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-user"></i>
+                                    </span>
+                                    <!-- <textarea class="form-control" id="jptleaderinput">{{{jptleader}}}</textarea> -->
+                                    <input type="text" value="{{{jptleader}}}" class="form-control" id="jptleaderinput"
+                                        data-role="tagsinput" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="">Comments:</label>
+                                <textarea class="form-control" rows="3" id="generalcomments"
+                                    maxlength="500">{{{result.0.general_comments}}}</textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-group col-md-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><span>Procurement/Supply Chain</span>
+                        <span class="input-group-btn" data-toggle="tooltip" data-container=".panel-heading" title=""
+                            data-original-title="Update Partner Relationship Status">
+                            <button class="btn btn-secondary" type="button">
+                                <i class="fa fa-info"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="">Vendor Status:<span class="mandatory-star">*</span></label>
+                                <select class="form-control" id="vendorstatus">
+                                    <option value="0">--Select--</option>
+                                    {{#each VendorStatus}}
+                                    <option {{#this.Selected}}selected="selected" {{/this.Selected}} value="{{this.Id}}"
+                                        data-id="">{{this.Value}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Supply Scope:</label>
+                                <select class="form-control" id="supplyscope">
+                                    <option value="0">--Select--</option>
+                                    {{#each SupplyScope}}
+                                    <option {{#this.Selected}}selected="selected" {{/this.Selected}} value="{{this.Id}}"
+                                        data-id="">{{this.Value}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Contract-Not-In-Place:
+                                    {{#if result.0.supply_contractnotinplace}}
+                                    <input type="checkbox" class="contractcheck" checked>
+                                    {{else}}
+                                    <input type="checkbox" class="contractcheck">
+                                    {{/if}}
+                                </label>
+                            </div>
+                            {{#if result.0.supply_contractnotinplace}}
+                            <div style="display:none;" class="form-group contractexpiration">
+                                <label>Contract Expiration:<span class="mandatory-star">*</span></label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    <input value="{{{modifydate contractexpdate}}}" type='text' id="contractexpdate"
+                                        class="form-control" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            {{else}}
+                            <div class="form-group contractexpiration">
+                                <label>Contract Expiration:<span class="mandatory-star">*</span></label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    <input value="{{{modifydate contractexpdate}}}" type='text' id="contractexpdate"
+                                        class="form-control" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            {{/if}}
+                            <div class="form-group">
+                                <label for="">Volume Commitment:</label>
+                                <select class="form-control" id="volumecommitment">
+                                    {{#each SelVolumeCommitment}}
+                                    <option {{#this.Selected}}selected="selected" {{/this.Selected}} value="{{this.Id}}"
+                                        data-id="">{{this.Value}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="form-group volumecomments">
+                                <label for="">Comments:</label>
+                                <textarea class="form-control" rows="3" id="supplycomments"
+                                    maxlength="500">{{{result.0.supply_volumecommitmentcomments}}}</textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-group col-md-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><span>Quality</span>
+                        <span class="input-group-btn" data-toggle="tooltip" data-container=".panel-heading" title=""
+                            data-original-title="Update Partner Overall Quality Status">
+                            <button class="btn btn-secondary" type="button">
+                                <i class="fa fa-info"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="">Quality Risk:</label>
+                                {{#if isreviewstatus}}
+                                <a href="#" id="qRisk" title="Click here to download Quality Risk Report" class="download-img cursorpointer"><img src="/img/downloadicon.png"
+                                        alt="Download" /></a>
+                                        {{/if}}
+                                {{!-- <select {{#if enableRiskDropdown}} {{else}} disabled {{/if}} class="form-control" --}}
+                                <select class="form-control"
+                                    id="qualityrisk">
+                                    <option value="0">--Select--</option>
+                                    {{#each QualityRisk}}
+                                    <option {{#this.Selected}}selected="selected" {{/this.Selected}} value="{{this.Id}}"
+                                        data-id="">{{this.Value}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">QTA-Not-In-Place:
+                                    {{#if result.0.quality_qtanotinplace}}
+                                    <input type="checkbox" class="qtacheck" checked>
+                                    {{else}}
+                                    <input type="checkbox" class="qtacheck">
+                                    {{/if}}
+                                </label>
+                            </div>
+                            {{#if result.0.quality_qtanotinplace}}
+                            <div style="display:none;" class="form-group agreementdate">
+                                <label>Initial QTA Signature Date: </label>
+                                <div class='input-group date' id='datetimepicker3'>
+                                    <input value="{{{modifydate qtasigneddate}}}" type='text' id="qtasigneddate"
+                                        class="form-control" name="rd" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div style="display:none;" class="form-group agreementdate">
+                                <label>QTA Approval Date: <span class="mandatory-star">*</span></label>
+                                <div class='input-group date' id='datetimepicker2'>
+                                    <input value="{{{modifydate agreementapprovaldate}}}" type='text' id="approvaldate"
+                                        class="form-control" value='{{{result.0.quality_reviewdate}}}' />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div style="display:none;" class="form-group agreementdate">
+                                <label>QTA Review Date: <span class="mandatory-star">*</span></label>
+                                <div class='input-group date' id='datetimepicker3'>
+                                    <input value="{{{modifydate agreementreveiewdate}}}" type='text' id="reviewdate"
+                                        class="form-control" name="rd" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            {{else}}
+                            <div class="form-group agreementdate">
+                                <label>Initial QTA Signature Date: </label>
+                                <div class='input-group date' id='datetimepicker3'>
+                                    <input value="{{{modifydate qtasigneddate}}}" type='text' id="qtasigneddate"
+                                        class="form-control" name="rd" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group agreementdate">
+                                <label>QTA Approval Date: <span class="mandatory-star">*</span></label>
+                                <div class='input-group date' id='datetimepicker2'>
+                                    <input value="{{{modifydate agreementapprovaldate}}}" type='text' id="approvaldate"
+                                        class="form-control" value='{{{result.0.quality_reviewdate}}}' />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group agreementdate">
+                                <label>QTA Review Date: <span class="mandatory-star">*</span></label>
+                                <div class='input-group date' id='datetimepicker3'>
+                                    <input value="{{{modifydate agreementreveiewdate}}}" type='text' id="reviewdate"
+                                        class="form-control" name="rd" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            {{/if}}
+                            <div class="form-group">
+                                <label>Last GQA Audit:</label>
+                                <div class='input-group date' id='datetimepicker4'>
+                                    <input value="{{{modifydate gqaaudit}}}" type='text' id="audit-date"
+                                        class="form-control" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group multiselect" id="availablecertifications">
+                                <label for="">Available Certification:</label>
+                                <div class="input-group add-icon" data-target="multi-0">
+                                    <textarea rows="1" id="autosize-textarea" type="text"
+                                        class="form-control multiple-input-block" required readonly></textarea>
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                    </span>
+                                </div>
+                                <div class="container form-control">
+                                    {{#each AvailCerti}}
+                                    <option {{#this.Selected}}class="selected" {{/this.Selected}} value="{{this.Id}}"
+                                        data-id="{{this.Value}}">{{this.Value}}</option>
+                                    {{/each}}
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Quality Leader: <span class="mandatory-star">*</span></label>
+                                <div class="input-group" id="qualityleaderdiv">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-user"></i>
+                                    </span>
+                                    <!-- <textarea class="form-control" id="qualityleaderinput">{{{qleader}}}</textarea> -->
+                                    <input type="text" value="{{{qleader}}}" class="form-control"
+                                        id="qualityleaderinput" data-role="tagsinput">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Comments:</label>
+                                <textarea class="form-control" rows="3" id="qualitycomments"
+                                    maxlength="500">{{{result.0.quality_comments}}}</textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-group col-md-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><span>TS/MS</span>
+                        <span class="input-group-btn" data-toggle="tooltip" data-container=".panel-heading" title=""
+                            data-original-title="Update Partner Technology capability, Service(s) provided and risk">
+                            <button class="btn btn-secondary" type="button">
+                                <i class="fa fa-info"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="">Technical Risk:</label>
+                                {{#if isreviewstatus}}
+                                <a href="#" id="tRisk" title="Click here to download Technical Risk Report" class="download-img cursorpointer"><img src="/img/downloadicon.png"
+                                        alt="Download" /></a>
+                                        {{/if}}
+                                {{!-- <select {{#if enableRiskDropdown}} {{else}} disabled {{/if}} class="form-control" --}}
+                                    <select class="form-control"
+                                    id="technicalrisk">
+                                    <option value="0">--Select--</option>
+                                    {{#each TechnicalRisk}}
+                                    <option {{#this.Selected}}selected="selected" {{/this.Selected}} value="{{this.Id}}"
+                                        data-id="{{this.Value}}">{{this.Value}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="form-group multiselect" id="manufacturingtechnology">
+                                <label for="">Manufacturing Technology:<span class="mandatory-star">*</span></label>
+                                <div class="input-group add-icon" data-target="multi-0">
+                                    <textarea rows="1" id="autosize-textarea" type="text"
+                                        class="form-control multiple-input-block" required readonly></textarea>
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                    </span>
+                                </div>
+                                <div class="container form-control">
+                                    {{#each MfgTech}}
+                                    <option value="{{this.Id}}">{{this.Value}}</option>
+                                    {{/each}}
+                                </div>
+                            </div>
+                            <div class="form-group multiselect" id="additionalservices">
+                                <label for="">Additional Services:</label>
+                                <div class="input-group add-icon" data-target="multi-0">
+                                    <textarea rows="1" id="autosize-textarea" type="text"
+                                        class="form-control multiple-input-block" required readonly></textarea>
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                    </span>
+                                </div>
+                                <div class="container form-control">
+                                    {{#each AddServices}}
+                                    <option value="{{this.Id}}" data-id="{{this.Value}}">{{this.Value}}</option>
+                                    {{/each}}
+                                </div>
+                            </div>
+                            <div class="form-group multiselect" id="dosageforms">
+                                <label for="">Dosage Forms:</label>
+                                <div class="input-group add-icon" data-target="multi-0">
+                                    <textarea rows="1" id="autosize-textarea" type="text"
+                                        class="form-control multiple-input-block" required readonly></textarea>
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                    </span>
+                                </div>
+                                <div class="container form-control">
+                                    {{#each DosageForms}}
+                                    <option value="{{this.Id}}" data-id="">{{this.Value}}</option>
+                                    {{/each}}
+                                </div>
+                            </div>
+                            <div class="form-group multiselect" id="productionscope">
+                                <label for="">Production Scope:</label>
+                                <div class="input-group add-icon" data-target="multi-0">
+                                    <textarea rows="1" id="autosize-textarea" type="text"
+                                        class="form-control multiple-input-block" required readonly></textarea>
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                    </span>
+                                </div>
+                                <div class="container form-control">
+                                    {{#each ProductionScope}}
+                                    <option value="{{this.Id}}" data-id="">{{this.Value}}</option>
+                                    {{/each}}
+                                </div>
+                            </div>
+                            {{!-- v2:: for tsms leader - start --}}
+                            <div class="form-group">
+                                <label for="">TS/MS Leader:</label>
+                                <div class="input-group" id="tsmsleaderdiv">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-user"></i>
+                                    </span>
+                                    <input type="text" value="{{{tsleader}}}" class="form-control" id="tsmsleaderinput"
+                                        data-role="tagsinput" required>
+                                </div>
+                            </div>
+                            {{!--  v2:: for tsms leader - end --}}
+                            <div class="form-group">
+                                <label for="">Additional Comments on CM Production & Services:</label>
+                                <textarea class="form-control" rows="3" id="cmprodcomments"
+                                    maxlength="500">{{{result.0.ts_additionalcomments}}}</textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-group col-md-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><span>HSE</span>
+                        <span class="input-group-btn" data-toggle="tooltip" data-container=".panel-heading" title=""
+                            data-original-title="Update Partner HSE status and assessment information">
+                            <button class="btn btn-secondary" type="button">
+                                <i class="fa fa-info"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="">HSE Priority:<span class="mandatory-star">*</span></label>
+                                <select class="form-control" id="hserisk">
+                                    <option value="0">--Select--</option>
+                                    {{#each HSERisk}}
+                                    <option {{#this.Selected}}selected="selected" {{/this.Selected}} value="{{this.Id}}"
+                                        data-id="">{{this.Value}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">HSE Category:</label>
+                                <select class="form-control" id="hsecategory">
+                                    <option value="0">--Select--</option>
+                                    {{#each HSECategory}}
+                                    <option {{#this.Selected}}selected="selected" {{/this.Selected}} value="{{this.Id}}"
+                                        data-id="">{{this.Value}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Most Recent HSE Survey:</label>
+                                <div class='input-group date' id="hsesurveydateid">
+                                    <input value="{{{modifydate hsesurvey}}}" type='text' class="form-control"
+                                        id="hsesurveydate" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Most Recent HSE Assessment:</label>
+                                <div class='input-group date' id="hseassdateid">
+                                    <input value="{{{modifydate hserecentassesment}}}" type='text' class="form-control"
+                                        id="hseassdate" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Next Scheduled Assessment:</label>
+                                <div class='input-group date' id="nextassdateid">
+                                    <input value="{{{modifydate hsenextassesment}}}" type='text' class="form-control"
+                                        id="nextassdate" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group multiselect" id="hsecertification">
+                                <label for="">HSE Certification:</label>
+                                <div class="input-group add-icon" data-target="multi-0">
+                                    <textarea rows="1" id="autosize-textarea" type="text"
+                                        class="form-control multiple-input-block" required readonly></textarea>
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                    </span>
+                                </div>
+                                <div class="container form-control">
+                                    {{#each HSECerti}}
+                                    <option value="{{this.Id}}" data-id="">{{this.Value}}</option>
+                                    {{/each}}
+                                </div>
+                            </div>
+                            {{!-- v2:: for hse leader - start --}}
+                            <div class="form-group">
+                                <label for="">HSE Leader:</label>
+                                <div class="input-group" id="hseleaderdiv">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-user"></i>
+                                    </span>
+                                    <input type="text" value="{{{hsleader}}}" class="form-control" id="hseleaderinput"
+                                        data-role="tagsinput" required>
+                                </div>
+                            </div>
+                            {{!--  v2:: for hse leader - end --}}
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="vendorid" value="{{vendorid}}" id='vendorid'>
+        <input type="hidden" name="userid" value="{{userid}}" id='userid'>
+        <input type="hidden" name="modifieddate" value="{{result.0.modifieddate}}" id='modifieddate'>
+        {{!-- v2::start --}}
+        <input type="hidden" name="username" value="{{username}}" id='username'>
+        <input type="hidden" name="fullname" value="{{fullname}}" id='fullname'>
+        {{!-- v2::end --}}
+        <div class="text-center">
+            {{#if ismasterdatasteward}}
+            <button type="button" id="save" class="btn btn-lg btn-default">SAVE</button>
+            {{else if isdatasteward}}
+            <button type="button" id="save" class="btn btn-lg btn-default">SAVE</button>
+            {{/if}}
+        </div>
+    </div>
+
+    <div class="cm-overview-container">
+        <div class="panel-group">
+            <div class="panel panel-default brand-slider">
+                <div class="panel-heading">
+                    <h3>
+                        <b>
+                            <i>Brands</i>
+                        </b>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                        <!-- Carousel items -->
+                        <div class="carousel-inner">
+                            {{#each brand}}
+                            <div class="item {{#if @first}}active{{/if}}">
+                                <div class="row row-centered">
+                                    {{#each this}}
+                                    <div class="col-xs-4 col-sm-2 col-centered" style="text-align: center;">
+                                        <a
+                                            href="/products?brandname={{this.brandname}}&vid={{../../result.0.vendorid}}">
+                                            {{#if this.brandurl}}
+                                            <img alt="{{this.brandname}}" style="height:61px;" src="{{this.brandurl}}"
+                                                class="img-responsive">
+                                            {{else}}
+                                            <!--- <img src="/img/noimage.jpg" alt="logo" width="82" /> -->
+                                            <h3>{{this.brandname}}</h3>
+                                            {{/if}}
+
+                                        </a>
+                                    </div>
+                                    {{/each}}
+                                </div>
+                                <!--/row-->
+                            </div>
+                            <!--/item-->
+                            {{/each}}
+                        </div>
+                        <!--/carousel-inner-->
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators row">
+                            {{#each brand}}
+                            <li data-target="#myCarousel" data-slide-to="{{@index}}" {{#if @first}}class="active"
+                                {{/if}}></li>
+                            {{/each}}
+                        </ol>
+                        <input id="isupdateflag" type="hidden" value="{{{isupdate}}}" />
+                    </div>
+                    <!--/myCarousel-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row cm-details-modifiedby">
+        <div class="right-block">
+            {{#if result.0.modifieddate}}
+            <p>
+                <small class="modified-text-color">Last Updated By : {{{result.0.modifiedby}}}</small>
+            </p>
+            <p>
+                <small class="modified-text-color">Last Updated Date : {{{newdate}}}</small>
+            </p>
+            {{/if}}
+        </div>
+    </div>
+</div>
+</div>
+<!-- The Modal -->
+<!-- Modal -->
+<div class="modal fade servicereviewpopup" id="servicereviewpopup" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{result.0.vendorname}}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row mp-row">
+                    <div class="col-sm-6">
+                        {{#if isMPorVN}}
+                        {{#if isMP}}
+                        <p>MP : <b>{{{result.0.partnercode}}} </b></p>
+                        {{else}}
+                        <p>VN : <b>{{{result.0.partnercode}}} </b></p>
+                        {{/if}}
+                        {{else}}
+                        <p><b>{{{result.0.partnercode}}} </b></p>
+                        {{/if}}
+                    </div>
+                    <div class="col-sm-6 pull-right">
+                        <div class="pull-right">
+                            <p>Last Review Year : <b>{{{reviewyearsel}}}</b></p>
+                        </div>
+
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="tb-header">
+                            <th>EEM Function</th>
+                            <th>Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tb-body">
+                        <tr>
+                            <td>Procurement</td>
+                            <td>
+                                <div class="rate-div" data-rate-value="{{{procurementreviewscore}}}"
+                                    title="{{{procurementreviewscore}}}"></div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Supply Chain</td>
+                            <td>
+                                <div class="rate-div" data-rate-value="{{{supplychainreviewscore}}}"
+                                    title="{{{supplychainreviewscore}}}"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Quality</td>
+                            <td>
+                                <div class="rate-div" data-rate-value="{{{qualityreviewscore}}}"
+                                    title="{{{qualityreviewscore}}}"></div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>TSMS</td>
+                            <td>
+                                <div class="rate-div" data-rate-value="{{{tsmsreviewscore}}}"
+                                    title="{{{tsmsreviewscore}}}"></div>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>HSE</td>
+                            <td>
+                                <div class="rate-div" data-rate-value="{{{hsereviewscore}}}"
+                                    title="{{{hsereviewscore}}}"></div>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row text-center">
+                    <form>
+                        <div class="form-group form-inline text-center">
+                            <label class="col-sm-2"></label>
+                            <div class="col-sm-4">
+                                <label class="pull-right">Overall Rating:</label>
+                            </div>
+                            <div class="col-sm-2 pull-left">
+                                <div class="rate-div" data-rate-value="{{{reviewscore}}}" title="{{{reviewscore}}}">
+                                </div>
+                            </div>
+
+                            <label class="col-sm-2"></label>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="row">
+                    <div class="form-group pull-right" style="margin-right: 20px;">
+                        <a
+                            href="/servicereview?vendorid={{vendorid}}&reviewdate={{reviewyearsel}}&hubid={{selectedhubid}}"><button
+                                type="button" class="btn btn-primary">More Details</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $('[data-toggle="tooltip"]').tooltip();
+    function cleanArray(actual) {
+        var newArray = new Array();
+        for (var i = 0; i < actual.length; i++) {
+            if (actual[i]) {
+                newArray.push(actual[i]);
+            }
+        }
+        return newArray;
+    }
+    $(function () {
+        /* var general_operationalleader = '{{{result.0.general_operationalleader}}}';
+        var quality_leader = '{{{result.0.quality_leader}}}';
+        var general_jptleader = '{{{result.0.general_jptleader}}}';
+          $('#qualityleaderinput').tagsinput('add', quality_leader);
+         $('#operationalleaderinput').tagsinput('add', general_operationalleader);
+         $('#jptleaderinput').tagsinput('add', general_jptleader); */
+        $('#datetimepicker1, #datetimepicker2, #datetimepicker3, #datetimepicker4,#hseassdateid, #nextassdateid, #hsesurveydateid').datetimepicker({
+            format: 'DD-MMM-YYYY',
+
+        });
+        $('#vendortype').on('change', function () {
+            var vendortypevalue = $.trim($("#vendortype option:selected").text());
+            var status = "{{isreviewstatus}}";
+            if (vendortypevalue.toLowerCase() !== "cm" && vendortypevalue.toLowerCase() !== "cm and supplier" && vendortypevalue.toLowerCase() !== "api supplier" &&
+                vendortypevalue.toLowerCase() !== "api cm" && vendortypevalue.toLowerCase() !== "api cm and supplier" && status !== "true") {
+                $("#qualityrisk").removeAttr('disabled');
+                $("#technicalrisk").removeAttr('disabled');
+            }
+            else{
+                // To make quality risk dropdown editable
+               /* $("#qualityrisk").attr('disabled','disabled');
+                $("#technicalrisk").attr('disabled','disabled');*/
+            }
+        });
+        $('#vendorstatus').on('change', function () {
+            var vendorstatusvalue = $.trim($("#vendorstatus option:selected").text());
+            var status = "{{isreviewstatus}}";
+            if (vendorstatus.toLowerCase() !== "ongoing operations" && vendorstatus.toLowerCase() !== "in termination" && status !== "true") {
+                $("#qualityrisk").removeAttr('disabled');
+                $("#technicalrisk").removeAttr('disabled');
+            }
+            else{
+                /*$("#qualityrisk").attr('disabled','disabled');
+                $("#technicalrisk").attr('disabled','disabled');*/
+            }
+        });
+    });
+    var arr = [];
+
+    // button click functionm               
+    $("#save").click(function () {
+        //$('form').each(function() {
+        // $(this).valid();
+        //});
+        $("input:text, textarea, select").removeClass("error");
+        $('input[type="select"]').removeClass("error");
+        var vendorid = $.trim($("#vendorid").val());
+        var qualityrisk = $.trim($("#qualityrisk").val());
+        var contractexpdate = ($("#contractexpdate").val());
+        var vendorstatus = $.trim($("#vendorstatus").val());
+        var supplyscope = $.trim($("#supplyscope").val());
+        var supplycomments = $.trim($("#supplycomments").val());
+        var volumecommitment = $.trim($("#volumecommitment").val());
+        var approvaldate = $.trim($("#approvaldate").val());
+        var qtasigneddate = $.trim($("#qtasigneddate").val());
+        var reviewdate = $.trim($("#reviewdate").val());
+        var auditdate = $.trim($("#audit-date").val());
+        var qualityleader = $.trim($("#qualityleaderinput").val());
+        var technicalrisk = $.trim($("#technicalrisk").val());
+        var manufacturingtechnology = $.trim($("#manufacturingtechnology textarea").attr("title"));
+        var additionalservices = $.trim($("#additionalservices textarea").attr("title"));
+        var productionscope = $.trim($("#productionscope textarea").attr("title"));
+        var cmprodcomments = $.trim($("#cmprodcomments").val());
+        var hserisk = $.trim($("#hserisk").val());
+        var hsecategory = $.trim($("#hsecategory").val());
+        var hsesurveydate = $.trim($("#hsesurveydate").val());
+        var nextassdate = $.trim($("#nextassdate").val());
+        var hseassdate = $.trim($("#hseassdate").val());
+        var dosageforms = $.trim($("#dosageforms textarea").attr("title"));
+        var hsecertification = $.trim($("#hsecertification textarea").attr("title"));
+        var cmsegmentation = $.trim($("#cmsegmentation").val());
+        var servicetype = $.trim($("#servicetype").val());
+        var vendortype = $.trim($("#vendortype").val());
+        var vendortypevalue = $.trim($("#vendortype option:selected").text());
+        var operationalleader = $.trim($("#operationalleaderinput").val());
+        var operationalleaderemail = [];
+        var operationalleadername = [];
+        var qualityleaderemail = [];
+        var qualityleadername = [];
+        var jptleaderemail = [];
+        var jptleadername = [];
+        // v2:: start
+        var hseleaderemail = [];
+        var hseleadername = [];
+
+        var tsmsleaderemail = [];
+        var tsmsleadername = [];
+        // v2:: end
+        var jptleader = $.trim($("#jptleaderinput").val());
+        // v2::start
+        var hseleader = $.trim($("#hseleaderinput").val());
+        var tsmsleader = $.trim($("#tsmsleaderinput").val());
+        // v2::end
+        var huboversight = $.trim($("#huboversight").val());
+        var huboversightname = $("#huboversight option:selected").text();
+        var availablecertifications = $.trim($("#availablecertifications textarea").attr("title"));
+        var contractcheck = $('.contractcheck').is(":checked");
+        var qtacheck = $('.qtacheck').is(":checked");
+        var generalcomments = $.trim($("#generalcomments").val());
+        var qualitycomments = $.trim($("#qualitycomments").val());
+        var contractcheckflag = false;
+        var qtacheckflag = false;
+        var vendortypeflag = true;
+        var isupdateflag = $('#isupdateflag').val();
+        var userid = $('#userid').val();
+        // v2:: start
+        var username = $('#username').val();  
+        var fullname = $('#fullname').val();
+
+        // v2:: end
+        if (operationalleader != "" && operationalleader.length > 0) {
+            var splitinfo = cleanArray(operationalleader.split(","));
+            if (splitinfo.length > 0) {
+                for (var i = 0; i < splitinfo.length; i++) {
+                    operationalleadername.push(splitinfo[i].split('|')[0]);
+                    operationalleaderemail.push(splitinfo[i].split('|')[1]);
+                }
+            }
+        }
+        if (jptleader != "" && jptleader.length > 0) {
+            var splitinfo = cleanArray(jptleader.split(","));
+            if (splitinfo.length > 0) {
+                for (var i = 0; i < splitinfo.length; i++) {
+                    jptleadername.push(splitinfo[i].split('|')[0]);
+                    jptleaderemail.push(splitinfo[i].split('|')[1]);
+                }
+            }
+        }
+        if (qualityleader != "" && qualityleader.length > 0) {
+            var splitinfo = cleanArray(qualityleader.split(","));
+            if (splitinfo.length > 0) {
+                for (var i = 0; i < splitinfo.length; i++) {
+                    qualityleadername.push(splitinfo[i].split('|')[0]);
+                    qualityleaderemail.push(splitinfo[i].split('|')[1]);
+                }
+            }
+        }
+        // v2:: start
+        if (hseleader != "" && hseleader.length > 0) {
+            console.log("inside hseleader cmoverview");
+            var splitinfo = cleanArray(hseleader.split(","));
+            if (splitinfo.length > 0) {
+                for (var i = 0; i < splitinfo.length; i++) {
+                    hseleadername.push(splitinfo[i].split('|')[0]);
+                    hseleaderemail.push(splitinfo[i].split('|')[1]);
+                }
+            }
+            console.log("hseleadername", hseleadername);
+            console.log("hseleaderemail", hseleaderemail);
+        }
+
+        if (tsmsleader != "" && tsmsleader.length > 0) {
+            console.log("inside tsmsleader cmoverview");
+            var splitinfo = cleanArray(tsmsleader.split(","));
+            if (splitinfo.length > 0) {
+                for (var i = 0; i < splitinfo.length; i++) {
+                    tsmsleadername.push(splitinfo[i].split('|')[0]);
+                    tsmsleaderemail.push(splitinfo[i].split('|')[1]);
+                }
+            }
+            console.log("tsmsleadername", tsmsleadername);
+            console.log("tsmsleaderemail", tsmsleaderemail);
+        }
+        // v2:: end
+        if (vendortypevalue.toLowerCase() !== "cm" && vendortypevalue.toLowerCase() !== "cm and supplier" && vendortypevalue.toLowerCase() !== "api supplier" &&
+            vendortypevalue.toLowerCase() !== "api cm" && vendortypevalue.toLowerCase() !== "api cm and supplier") {
+            // if value of vendor type is not cm below fileds will become non mandatory
+            $("#operationalleaderdiv").removeClass("error");
+            $("#jptleaderdiv").removeClass("error");
+            // $("#technicalrisk").removeClass("error");
+            $("#hserisk").removeClass("error");
+            $("#contractexpdate").removeClass("error");
+            vendortypeflag = true;
+        }
+        else {
+            if (operationalleader === "") {
+                $("#operationalleaderdiv").addClass("error");
+                vendortypeflag = false;
+            }
+
+            if (jptleader === "") {
+                $("#jptleaderdiv").addClass("error");
+                vendortypeflag = false;
+            }
+            // v2:: start
+
+            // v2:: end
+            /*if (technicalrisk === "0") {
+                $("#technicalrisk").addClass("error");
+                vendortypeflag = false;
+            }*/
+
+            if (hserisk === "0") {
+                $("#hserisk").addClass("error");
+                vendortypeflag = false;
+            }
+
+        }
+        /*if(productionscope==="") 
+        {
+               $("#productionscope textarea").addClass("error");
+        }*/
+        if (contractcheck) {
+            contractcheckflag = true;
+            $("#contractexpdate").removeClass("error");
+        }
+        else {
+            if (contractexpdate === "" && vendortypevalue.toLowerCase() === "cm") {
+                contractcheckflag = false;
+                $("#contractexpdate").addClass("error");
+            }
+            else {
+                contractcheckflag = true;
+                $("#contractexpdate").removeClass("error");
+            }
+        }
+        /* if(dosageforms==="") 
+         {
+                $("#dosageforms textarea").addClass("error");
+         }*/
+        if (vendortype === "0") {
+            $("#vendortype").addClass("error");
+        }
+        if (vendorstatus === "0") {
+            $("#vendorstatus").addClass("error");
+        }
+        if (qtacheck) {
+            qtacheckflag = true;
+            $("#approvaldate").removeClass("error");
+            $("#reviewdate").removeClass("error");
+            $("#qtasigneddate").removeClass("error");
+        }
+        else {
+            if (approvaldate === "") {
+                qtacheckflag = false;
+                $("#approvaldate").addClass("error");
+            }
+            else {
+                qtacheckflag = true;
+                $("#approvaldate").removeClass("error");
+            }
+            if (reviewdate === "") {
+                qtacheckflag = false;
+                $("#reviewdate").addClass("error");
+            }
+            else {
+                qtacheckflag = true;
+                $("#reviewdate").removeClass("error");
+            }
+            /*if (qtasigneddate === "") {
+                qtacheckflag = false;
+                $("#qtasigneddate").addClass("error");
+            }
+            else {
+                qtacheckflag = true;
+                $("#qtasigneddate").removeClass("error");
+            }*/
+        }
+
+        if (qualityleader === "") {
+            $("#qualityleaderdiv").addClass("error");
+        }
+        // v2:: start
+        if (hseleader === "") {
+            //$("#hseleaderdiv").addClass("error");
+        }
+
+        if (tsmsleader === "") {
+            // $("#tsmsleaderdiv").addClass("error");
+        }
+        // v2:: end
+        if (huboversight === "0") {
+            $("#huboversight").addClass("error");
+        }
+        if (servicetype === "0") {
+            $("#servicetype").addClass("error");
+        }
+        if (cmsegmentation === "0") {
+            $("#cmsegmentation").addClass("error");
+        }
+        /*if (qualityrisk === "0") {
+            $("#qualityrisk").addClass("error");
+        }*/
+        if (manufacturingtechnology === "") {
+            $("#manufacturingtechnology textarea").addClass("error");
+        }
+        /*
+        if (additionalservices==="")
+        {
+            $("#additionalservices textarea").addClass("error");
+        }*/
+
+        /*if(hsecertification==="") 
+        {
+               $("#hsecertification textarea").addClass("error");
+        }
+        if(availablecertifications==="") 
+        {
+               $("#availablecertifications textarea").addClass("error");
+        }*/
+        // && && hserisk!==""  vendorstatus!==""manufacturingtechnology !== "" &&  
+        //if( manufacturingtechnology !== "" && availablecertifications !== "" && additionalservices !== "" && hsecertification !== "" && vendorstatus!=="" && servicetype!=="" && vendortypeflag == true && cmsegmentation!=="" && qtacheckflag == true && qualityleader!==""  && vendortype !=="" && huboversight!=="" && contractcheckflag == true  && dosageforms!=="" && productionscope!=="" )
+        if (vendorstatus !== "0" && servicetype !== "0" && manufacturingtechnology !== "" && vendortypeflag == true && cmsegmentation !== "0" && qtacheckflag == true && qualityleader !== "" && vendortype !== "0" && huboversight !== "0" && contractcheckflag == true) {
+            console.log('success pass validations');
+            console.log(volumecommitment);
+            console.log("full name**************");
+            console.log("on save click", fullname);
+            var obj = {
+                vendorstatus: vendorstatus,
+                approvaldate: approvaldate,
+                reviewdate: reviewdate,
+                qtasigneddate: qtasigneddate,
+                supplyscope: supplyscope,
+                auditdate: auditdate,
+                qualityrisk: qualityrisk,
+                technicalrisk: technicalrisk,
+                volumecommitment: volumecommitment,
+                contractexpdate: contractexpdate,
+                supplycomments: supplycomments,
+                qualityleadername: qualityleadername.join(','),
+                qualityleaderemail: qualityleaderemail.join(','),
+                manufacturingtechnology: manufacturingtechnology,
+                additionalservices: additionalservices,
+                productionscope: productionscope,
+                cmprodcomments: cmprodcomments,
+                hserisk: hserisk,
+                hsecategory: hsecategory,
+                hsesurveydate: hsesurveydate,
+                nextassdate: nextassdate,
+                hseassdate: hseassdate,
+                dosageforms: dosageforms,
+                hsecertification: hsecertification,
+                cmsegmentation: cmsegmentation,
+                servicetype: servicetype,
+                vendortype: vendortype,
+                operationalleadername: operationalleadername.join(','),
+                operationalleaderemail: operationalleaderemail.join(','),
+                jptleadername: jptleadername.join(','),
+                jptleaderemail: jptleaderemail.join(','),
+                // v2:: start
+                hseleadername: hseleadername.join(','),
+                hseleaderemail: hseleaderemail.join(','),
+
+                tsmsleadername: tsmsleadername.join(','),
+                tsmsleaderemail: tsmsleaderemail.join(','),
+                // v2:: end
+                huboversight: huboversight,
+                generalcomments: generalcomments,
+                qualitycomments: qualitycomments,
+                availablecertifications: availablecertifications,
+                qtacheck: qtacheck,
+                contractcheck: contractcheck,
+                vendorid: vendorid,
+                huboversightname: huboversightname,
+                vendorname: '{{{result.0.vendorname}}}',
+                partnercode: '{{{result.0.partnercode}}}',
+                userid: userid,
+                username: fullname,
+                isupdateflag: isupdateflag,
+            };
+            arr.push(obj);
+            // v2:: end
+            $.ajax({
+                // url :"/updateoverviewstatus",
+                url: "/savecmoverview?vendorid=" + {{ vendorid }},
+        method: "POST",
+            data: { jsonData: arr },
+        success: function(response) {
+            // location.reload(true);
+            alert('Your record is successfully submitted');
+            window.location.href = window.location.href.split('#')[0];
+        },
+        error: function(e) {
+            console.log('Error in call updatea overview status');
+            console.log(e);
+        }
+    });
+        }
+             });
+
+    // Created by @conmarap.
+    Array.prototype.search = function (elem) {
+        for (var i = 0; i < this.length; i++) {
+            if (this[i] == elem) return i;
+        }
+        return -1;
+    };
+    var Multiselect = function (selector) {
+        if (!$(selector)) {
+            console.error("ERROR: Element %s does not exist.", selector);
+            return;
+        }
+        this.selector = selector;
+        this.selections = [];
+        this.selectionsid = [];
+        (function (that) {
+            that.events();
+        })(this);
+    };
+    Multiselect.prototype = {
+        open: function (that) {
+            $(".multiselect").removeClass("active");
+            var target = $(that).parent().attr("data-target");
+            // If we are not keeping track of this one's entries, then
+            // start doing so.
+            if (!this.selections) {
+                this.selections = [];
+            }
+            if (!this.selectionsid) {
+                this.selectionsid = [];
+            }
+            $(this.selector + ".multiselect").toggleClass("active");
+        },
+        close: function () {
+            $(this.selector + ".multiselect").removeClass("active");
+        },
+        events: function () {
+            var that = this;
+            $(document).on("click", that.selector + ".multiselect .add-icon", function (e) {
+                if (e.target.className.indexOf("close-icon") < 0) {
+                    e.stopPropagation();
+                    that.open();
+                }
+            });
+            $(document).on("click", that.selector + ".multiselect option", function (e) {
+                var selection = $(this).text();
+                var selectionid = $(this).val();
+                console.log($(this).text());
+                var target = $(this).parent().parent().attr("data-target");
+                var io = that.selections.search(selection);
+                var ioid = that.selectionsid.search(selectionid);
+                if (io < 0) that.selections.push(selection);
+                else that.selections.splice(io, 1);
+                if (ioid < 0) that.selectionsid.push(selectionid);
+                else that.selectionsid.splice(ioid, 1);
+                console.log('selections id');
+                console.log(that.selectionsid);
+                that.selectionStatus();
+                that.setSelectionsString();
+                that.setSelectionsidString();
+            });
+            $(document).on("click", that.selector + ".multiselect > .title > .close-icon", function (e) {
+                that.clearSelections();
+            });
+            $(document).click(function (e) {
+                if (e.target.className.indexOf("title") < 0) {
+                    if (e.target.className.indexOf("text") < 0) {
+                        if (e.target.className.indexOf("-icon") < 0) {
+                            if (e.target.className.indexOf("selected") < 0 ||
+                                e.target.localName != "option") {
+                                that.close();
+                            }
+                        }
+                    }
+                }
+            });
+        },
+        selectionStatus: function () {
+            var obj = $(this.selector + ".multiselect");
+            if (this.selections.length) obj.addClass("selection");
+            else obj.removeClass("selection");
+        },
+        clearSelections: function () {
+            this.selections = [];
+            this.selectionStatus();
+            this.setSelectionsString();
+        },
+        getSelections: function () {
+            return this.selections;
+        },
+        getSelectionsid: function () {
+            return this.selectionsid;
+        },
+        setSelectionsString: function () {
+            var selects = this.getSelectionsString().split(", ");
+            var opts = $(this.selector + ".multiselect option");
+            $(this.selector + ".multiselect .multiple-input-block")
+                .val(selects);
+            var drp = $(this.selector + ".multiselect .multiple-input-block");
+            console.log(drp.scrollHeight + "px");
+            drp.css("height", drp.scrollHeight + "px");
+            //this.style.height = (this.scrollHeight)+'px';
+            for (var i = 0; i < opts.length; i++) {
+                $(opts[i]).removeClass("selected");
+            }
+            for (var j = 0; j < selects.length; j++) {
+                var select = selects[j];
+                for (var i = 0; i < opts.length; i++) {
+                    if ($(opts[i]).text() == select) {
+                        $(opts[i]).addClass("selected");
+                        break;
+                    }
+                }
+            }
+        },
+        setSelectionsidString: function () {
+            var selectsid = this.getSelectionsidString().split(", ");
+            $(this.selector + ".multiselect .multiple-input-block").attr("title", selectsid);
+        },
+        getSelectionsString: function () {
+            if (this.selections.length > 0)
+                return this.selections.join(", ");
+            else return "";
+        },
+        getSelectionsidString: function () {
+            if (this.selectionsid.length > 0)
+                return this.selectionsid.join(", ");
+            else return "";
+        },
+        setSelections: function (arr) {
+            if (!arr[0]) {
+                error("ERROR: This does not look like an array.");
+                return;
+            }
+            this.selections = arr;
+            this.selectionStatus();
+            this.setSelectionsString();
+        },
+        setSelectionsid: function (arr) {
+            if (!arr[0]) {
+                error("ERROR: This does not look like an array.");
+                return;
+            }
+            this.selectionsid = arr;
+            this.setSelectionsidString();
+        },
+    };
+
+    $(document).ready(function () {
+        function split(val) {
+            return val.split(/,\s*/);
+        }
+        function extractLast(term) {
+            return split(term).pop();
+        }
+        var multiavailcerti = new Multiselect("#availablecertifications");
+        var multimfgtech = new Multiselect("#manufacturingtechnology");
+        var multiadditionalservices = new Multiselect("#additionalservices");
+        var multidosageform = new Multiselect("#dosageforms");
+        var multiproductionscope = new Multiselect("#productionscope");
+        var multihsecerti = new Multiselect("#hsecertification");
+        var strmultiavailcerti = $.trim('{{result.0.quality_availablecertifications}}');
+        var strmultimfgtech = $.trim('{{result.0.ts_mfgtech}}');
+        var strmultiadditionalservices = $.trim('{{result.0.ts_additionalservices}}');
+        var strmultidosageform = $.trim('{{result.0.ts_dosageforms}}');
+        var strmultiproductionscope = $.trim('{{result.0.ts_productionscope}}');
+        var strmultihsecerti = $.trim('{{result.0.hse_certifications}}');
+        var strmultiavailcertiid = $.trim('{{result.0.quality_availablecertificationsid}}');
+        var strmultimfgtechid = $.trim('{{result.0.ts_mfgtechid}}');
+        var strmultiadditionalservicesid = $.trim('{{result.0.ts_additionalservicesid}}');
+        var strmultidosageformid = $.trim('{{result.0.ts_dosageformsid}}');
+        var strmultiproductionscopeid = $.trim('{{result.0.ts_productionscopeid}}');
+        var strmultihsecertiid = $.trim('{{result.0.hse_certificationsid}}');
+        if (strmultiavailcerti !== "") {
+            multiavailcerti.setSelections(strmultiavailcerti.split(","));
+            multiavailcerti.setSelectionsid(strmultiavailcertiid.split(","));
+        }
+        if (strmultimfgtech !== "") {
+            multimfgtech.setSelections(strmultimfgtech.split(","));
+            multimfgtech.setSelectionsid(strmultimfgtechid.split(","));
+        }
+        if (strmultiadditionalservices !== "") {
+            multiadditionalservices.setSelections(strmultiadditionalservices.split(","));
+            multiadditionalservices.setSelectionsid(strmultiadditionalservicesid.split(","));
+        }
+        if (strmultidosageform !== "") {
+            multidosageform.setSelections(strmultidosageform.split(","));
+            multidosageform.setSelectionsid(strmultidosageformid.split(","));
+        }
+        if (strmultiproductionscope !== "") {
+            multiproductionscope.setSelections(strmultiproductionscope.split(","));
+            multiproductionscope.setSelectionsid(strmultiproductionscopeid.split(","));
+        }
+        if (strmultihsecerti !== "") {
+            multihsecerti.setSelections(strmultihsecerti.split(","));
+            multihsecerti.setSelectionsid(strmultihsecertiid.split(","));
+        }
+
+        $('#jptleaderdiv .bootstrap-tagsinput input').attr('id', 'jptleader');
+        $('#jptleaderdiv .bootstrap-tagsinput input').attr('required', 'required');
+        $('#operationalleaderdiv .bootstrap-tagsinput input').attr('id', 'operationalleader');
+        $('#qualityleaderdiv .bootstrap-tagsinput input').attr('id', 'qualityleader');
+        // v2:: start
+        $('#hseleaderdiv .bootstrap-tagsinput input').attr('id', 'hseleader');
+        $('#tsmsleaderdiv .bootstrap-tagsinput input').attr('id', 'tsmsleader');
+        // v2:: end
+        //multimfgtech.setSelections(str.split(","));
+        //multimfgtech.setSelectionsid(['us', 'fr']);
+        console.log('adgrpmemlist');
+        console.log({{{ adgrpmemlist }}});
+    $("#operationalleader").autocomplete({
+        minLength: 3,
+        source: function (request, response) {
+            var searchdata = request.term.toLowerCase();
+            if (xhr != null) {
+                xhr.abort();
+                xhr = null;
+            }
+            xhr = $.ajax({
+                url: "/searchlillyuserfromad",
+                type: "POST",
+                data: { userdetails: searchdata },
+                success: function (res) {
+                    if (res.length >= 1) {
+                        var resultdata = res.filter(function (itm, i, res) {
+                            return i == res.indexOf(itm);
+                        });
+                        console.log(res);
+                        response($.ui.autocomplete.filter(
+                            resultdata, extractLast(request.term)));
+                    }
+                    else {
+                        //  $(this).removeClass('loading');		
+                        var result = [
+                            {
+                                label: 'No matches found',
+                                value: request.term
+                            }
+                        ];
+                        response($.ui.autocomplete.filter(result, 'No matches found'));
+
+                    }
+                },
+                error: function (e) {
+                    console.log('Error in call updateactivestatus');
+                    console.log(e);
+                }
+            });
+        },
+        focus: function () {
+            // prevent value inserted on focus
+            return false;
+        },
+        select: function (event, ui) {
+            console.log('Selected');
+            console.log(this);
+            var terms = split(this.value);
+            console.log(terms);
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            console.log(ui.item.value)
+            terms.push(ui.item.value);
+            console.log(terms);
+            // add placeholder to get the comma-and-space at the end
+            //terms.push("");
+            console.log(terms);
+            this.value = '';
+            $('#operationalleaderinput').tagsinput('add', terms.join(","))
+            $('#operationalleaderinput').tagsinput('refresh');
+            return false;
+        },
+        change: function (event, ui) {
+            console.log(ui.item);
+            $(this).val((ui.item ? ui.item.label : ""));
+        }
+    });
+    $("#jptleader").autocomplete({
+        minLength: 3,
+        source: function (request, response) {
+            var searchdata = request.term.toLowerCase();
+            if (xhr != null) {
+                xhr.abort();
+                xhr = null;
+            }
+            xhr = $.ajax({
+                url: "/searchlillyuserfromad",
+                type: "POST",
+                data: { userdetails: searchdata },
+                success: function (res) {
+                    if (res.length >= 1) {
+                        var resultdata = res.filter(function (itm, i, res) {
+                            return i == res.indexOf(itm);
+                        });
+                        console.log(res);
+                        response($.ui.autocomplete.filter(
+                            resultdata, extractLast(request.term)));
+                        //response(resultdata, extractLast(request.term));
+                    }
+                    else {
+                        // $(this).removeClass('loading');		
+                        var result = [
+                            {
+                                label: 'No matches found',
+                                value: request.term
+                            }
+                        ];
+                        response($.ui.autocomplete.filter(result, 'No matches found'));
+
+                    }
+                },
+                error: function (e) {
+                    console.log('Error in call updateactivestatus');
+                    console.log(e);
+                }
+            });
+        },
+        focus: function () {
+            // prevent value inserted on focus
+            return false;
+        },
+        select: function (event, ui) {
+            console.log('Selected');
+            console.log(this);
+            var terms = split(this.value);
+            console.log(terms);
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            console.log(ui.item.value)
+            terms.push(ui.item.value);
+            console.log(terms);
+            // add placeholder to get the comma-and-space at the end
+            //terms.push("");
+            console.log(terms);
+            this.value = '';
+            $('#jptleaderinput').tagsinput('add', terms.join(","))
+            $('#jptleaderinput').tagsinput('refresh');
+            return false;
+        },
+        change: function (event, ui) {
+            console.log(ui.item);
+            $(this).val((ui.item ? ui.item.label : ""));
+        }
+    });
+    var xhr = null;
+    $("#qualityleader").autocomplete({
+        minLength: 3,
+        //search: function(){$(this).addClass('loading');},
+        //open: function(){$(this).removeClass('loading');},
+        source: function (request, response) {
+            var searchdata = request.term.toLowerCase();
+            if (xhr != null) {
+                xhr.abort();
+                xhr = null;
+            }
+            xhr = $.ajax({
+                url: "/searchlillyuserfromad",
+                type: "POST",
+                data: { userdetails: searchdata },
+                success: function (res) {
+                    if (res.length >= 1) {
+                        var resultdata = res.filter(function (itm, i, res) {
+                            return i == res.indexOf(itm);
+                        });
+                        //console.log(res);
+                        console.log(resultdata);
+                        response($.ui.autocomplete.filter(
+                            resultdata, extractLast(request.term)));
+                        //    $(this).removeClass('loading');		
+                    }
+                    else {
+                        //  $(this).removeClass('loading');		
+                        var result = [
+                            {
+                                label: 'No matches found',
+                                value: request.term
+                            }
+                        ];
+                        response($.ui.autocomplete.filter(result, 'No matches found'));
+
+                    }
+                },
+                error: function (e) {
+                    console.log('Error in call updateactivestatus');
+                    console.log(e);
+                    // $(this).removeClass('loading');					
+                }
+            });
+        },
+        focus: function () {
+            // prevent value inserted on focus
+            return false;
+        },
+        select: function (event, ui) {
+            console.log('Selected');
+            console.log(this);
+            var terms = split(this.value);
+            console.log(terms);
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            console.log(ui.item.value)
+            terms.push(ui.item.value);
+            console.log(terms);
+            // add placeholder to get the comma-and-space at the end
+            //terms.push("");
+            console.log(terms);
+            this.value = '';
+            $('#qualityleaderinput').tagsinput('add', terms.join(","))
+            $('#qualityleaderinput').tagsinput('refresh');
+            return false;
+        },
+        change: function (event, ui) {
+            console.log(ui.item);
+            $(this).val((ui.item ? ui.item.label : ""));
+        }
+    });
+    // v2:: hse leader - start
+    $("#hseleader").autocomplete({
+        minLength: 3,
+        //search: function(){$(this).addClass('loading');},
+        //open: function(){$(this).removeClass('loading');},
+        source: function (request, response) {
+            var searchdata = request.term.toLowerCase();
+            if (xhr != null) {
+                xhr.abort();
+                xhr = null;
+            }
+            xhr = $.ajax({
+                url: "/searchlillyuserfromad",
+                type: "POST",
+                data: { userdetails: searchdata },
+                success: function (res) {
+                    if (res.length >= 1) {
+                        var resultdata = res.filter(function (itm, i, res) {
+                            return i == res.indexOf(itm);
+                        });
+                        //console.log(res);
+                        console.log(resultdata);
+                        response($.ui.autocomplete.filter(
+                            resultdata, extractLast(request.term)));
+                        //    $(this).removeClass('loading');		
+                    }
+                    else {
+                        //  $(this).removeClass('loading');		
+                        var result = [
+                            {
+                                label: 'No matches found',
+                                value: request.term
+                            }
+                        ];
+                        response($.ui.autocomplete.filter(result, 'No matches found'));
+
+                    }
+                },
+                error: function (e) {
+                    console.log('Error in call updateactivestatus');
+                    console.log(e);
+                    // $(this).removeClass('loading');					
+                }
+            });
+        },
+        focus: function () {
+            // prevent value inserted on focus
+            return false;
+        },
+        select: function (event, ui) {
+            console.log('Selected');
+            console.log(this);
+            var terms = split(this.value);
+            console.log(terms);
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            console.log(ui.item.value)
+            terms.push(ui.item.value);
+            console.log(terms);
+            // add placeholder to get the comma-and-space at the end
+            //terms.push("");
+            console.log(terms);
+            this.value = '';
+            $('#hseleaderinput').tagsinput('add', terms.join(","))
+            $('#hseleaderinput').tagsinput('refresh');
+            return false;
+        },
+        change: function (event, ui) {
+            console.log(ui.item);
+            $(this).val((ui.item ? ui.item.label : ""));
+        }
+    });
+    // v2:: hse leader - end  
+
+    // v2:: tsms leader - start
+    $("#tsmsleader").autocomplete({
+        minLength: 3,
+        //search: function(){$(this).addClass('loading');},
+        //open: function(){$(this).removeClass('loading');},
+        source: function (request, response) {
+            var searchdata = request.term.toLowerCase();
+            if (xhr != null) {
+                xhr.abort();
+                xhr = null;
+            }
+            xhr = $.ajax({
+                url: "/searchlillyuserfromad",
+                type: "POST",
+                data: { userdetails: searchdata },
+                success: function (res) {
+                    if (res.length >= 1) {
+                        var resultdata = res.filter(function (itm, i, res) {
+                            return i == res.indexOf(itm);
+                        });
+                        //console.log(res);
+                        console.log(resultdata);
+                        response($.ui.autocomplete.filter(
+                            resultdata, extractLast(request.term)));
+                        //    $(this).removeClass('loading');		
+                    }
+                    else {
+                        //  $(this).removeClass('loading');		
+                        var result = [
+                            {
+                                label: 'No matches found',
+                                value: request.term
+                            }
+                        ];
+                        response($.ui.autocomplete.filter(result, 'No matches found'));
+
+                    }
+                },
+                error: function (e) {
+                    console.log('Error in call updateactivestatus');
+                    console.log(e);
+                    // $(this).removeClass('loading');					
+                }
+            });
+        },
+        focus: function () {
+            // prevent value inserted on focus
+            return false;
+        },
+        select: function (event, ui) {
+            console.log('Selected');
+            console.log(this);
+            var terms = split(this.value);
+            console.log(terms);
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            console.log(ui.item.value)
+            terms.push(ui.item.value);
+            console.log(terms);
+            // add placeholder to get the comma-and-space at the end
+            //terms.push("");
+            console.log(terms);
+            this.value = '';
+            $('#tsmsleaderinput').tagsinput('add', terms.join(","))
+            $('#tsmsleaderinput').tagsinput('refresh');
+            return false;
+        },
+        change: function (event, ui) {
+            console.log(ui.item);
+            $(this).val((ui.item ? ui.item.label : ""));
+        }
+    });
+    // v2:: tsms leader - end    
+    $('.contractcheck').change(function () {
+        if (this.checked) {
+            $('.contractexpiration').hide();
+            // $('#contractexpdate').val('');
+        }
+        else {
+            $('.contractexpiration').show();
+        }
+    });
+    $('.qtacheck').change(function () {
+        if (this.checked) {
+            $('.agreementdate').hide();
+            // $('#reviewdate').val('');
+        }
+        else {
+            $('.agreementdate').show();
+        }
+    });
+    $("#volumecommitment").change(function () {
+        var optionValue = $(this).val();
+        if (optionValue == "38") {
+            $(".volumecomments").show();
+        }
+        else {
+            $(".volumecomments").hide();
+        }
+    });
+        });
+    $('#jptleaderinput, #operationalleaderinput, #qualityleaderinput, #hseleaderinput, #tsmsleaderinput').tagsinput({
+        itemText: function (item) {
+            console.log('item');
+            console.log(item);
+            return item.split("|").shift();
+        },
+        addOnBlur: false,
+        confirmKeys: []
+    });
+
+    $(function () {
+        $("textarea").each(function () {
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+        $('#jptleaderinput, #operationalleaderinput, #qualityleaderinput, #hseleaderinput, #tsmsleaderinput').on('keypress', function (e) {
+            if (e.keyCode == 13) {
+                // e.keyCode = 188;
+                e.preventDefault();
+            };
+        });
+    });
+    $(".exportinfo").click(function () {
+        //$(".buttons-excel").click();
+        var d = new Date();
+        window.location.href = "/exporttoexcel?vendorid=" + {{ result.0.vendorid }}
+     + "&t=" + d.getTime();
+		//$('#example').buttons('.buttons-excel').trigger();  		
+});
+    $(".pdfinfo").click(function () {
+        //$(".exportinfo").click();
+        $('#example').buttons('.buttons-pdf').trigger();
+    });
+
+    $("#qRisk").click(function () {
+        var pdfString = $("#pdf").val();
+        var pdfJson = JSON.parse(pdfString);
+        console.log(pdfJson);
+        $.ajax({
+            url: "/fetchqualityrisk",
+            type: "POST",
+            data: { vendor: pdfJson },
+            success: function (res) {
+                console.log(res.length, res);
+                var elem = window.document.createElement('a');
+                elem.href = window.location.origin + "/document/QualityRisk.pdf";
+                elem.download = 'QualityRisk.pdf';
+                document.body.appendChild(elem);
+                elem.click();
+                document.body.removeChild(elem);
+                console.log('response from test', res);
+            },
+            error: function (e) {
+                console.log('Error in call quality risk');
+                console.log(e);
+            }
+        });
+    })
+    $("#tRisk").click(function () {
+        var pdfString = $("#pdf").val();
+        var pdfJson = JSON.parse(pdfString);
+        console.log(pdfJson);
+        $.ajax({
+            url: "/fetchtechrisk",
+            type: "POST",
+            data: { vendor: pdfJson },
+            success: function (res) {
+                console.log(res.length, res);
+                var elem = window.document.createElement('a');
+                elem.href = window.location.origin + "/document/TechnicalRisk.pdf";
+                elem.download = 'TechnicalRisk.pdf';
+                document.body.appendChild(elem);
+                elem.click();
+                document.body.removeChild(elem);
+                console.log('response from techrisk', res);
+            },
+            error: function (e) {
+                console.log('Error in call tech risk');
+                console.log(e);
+            }
+        });
+    })
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var options = {
+            max_value: 5,
+            step_size: 0.1,
+            selected_symbol_type: 'fontawesome_star',
+        }
+        $(".rate-div").rate(options);
+    });
+    $(".rate-click").click(function () {
+        $('#servicereviewpopup').modal('show')
+    });
+</script>
+<style>
+    .buttons-excel,
+    .buttons-pdf {
+        display: none !important;
+    }
+</style>

@@ -1,0 +1,50 @@
+   <style>
+      .form-group input{
+         margin-left :20px;
+         float: left;
+      }
+   </style>
+   <div class="form-group">
+      <input type="file" name="sampleFile" value="" accept=".csv"   style="width:200px">
+      <button id="csv_submit"  >Upload</button>
+   </div>
+   <div class="loading loader">
+   
+   </div>
+   <div class="success_msg">
+        <p>File uploaded</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+   <script>
+     var socket = io({transports: ['websocket']});
+      $(".loading").hide()
+      $(".success_msg").hide()
+      socket.on('connect', function(){
+       $("#csv_submit").click(function (){
+         $(".loading").show()
+         var  file =$("input[name='sampleFile']").prop('files')[0];
+         var randomnumner = Math.floor(Math.random() * 90000) + 10000;           
+         socket.emit('connectfile', randomnumner);
+         socket.emit('sending',file,randomnumner);
+         socket.on('ping',function(){
+            console.log("ping ===================")
+         })
+         function sendHeartbeat(){
+            if(socket.connected){
+               socket.emit('ping');
+               setTimeout(sendHeartbeat, 18000);
+            }
+         }
+         sendHeartbeat()
+         socket.on('disconnect',function(){
+            $(".loading").hide();
+            $(".success_msg").show();
+            socket.close();
+            console.log("disconnect ===================")
+         })
+            
+
+    });
+     })
+</script>

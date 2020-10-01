@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ElancoRegister: Create Account</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="robots" content="noarchive, noodp">
+    <meta name="googlebot" content="noarchive">
+    <meta name="robots" content="nocache">
+    <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+  	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!-- <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,minimal-ui"> -->
+	<!-- Meta Tags -->
+	<meta charset="UTF-8">
+	
+	<!-- <meta http-equiv="X-UA-Compatible" content="IE=11"> -->
+	<link rel="apple-touch-icon-precomposed" href="/images/ios-desktop.png">
+	<link rel="icon" sizes="192x192" href="/images/android-desktop.png">
+	<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"> -->
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+	<!-- JS Files -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+	{{#if data}}
+    <script type="text/javascript" src="/vendor/janrain-prodinit.js"></script>
+    {{else}}
+    <script type="text/javascript" src="/vendor/janrain-init.js"></script>
+    {{/if}}
+	<script src="/vendor/janrain-utils.js"></script> 
+	<meta name="title" content="ElancoRegister: Create Account">
+	<meta name="description" content="Create an Elanco account for access to Elanco Services">
+	<title>Registration Page</title>
+
+<!-- CSS Files -->
+  	<!-- <link rel="stylesheet" href="/css/widgets.css" type="text/css"> -->
+  	<link rel="stylesheet" href="/css/janrain.css" type="text/css">
+    <link rel="stylesheet" href="/css/janrain-mobile.css">
+	<!-- <link href="/css/stylew.css" rel="stylesheet" type="text/css" media="all"> -->
+	
+
+
+	
+</head>
+	<body style="background-color: rgb(229, 240, 251) !important;">
+	
+			<div class="loader" style="display: none;"></div>
+		<div class="body-wrapper" id="body-wrapper">
+			<div class="responsive-slideout">
+				<div class="responsive-slideout-content">
+					<div class="responsive-search"></div>
+					<div class="responsive-menu">
+						
+					</div>
+					<div class="responsive-account-menu">
+						
+					</div>
+				</div>
+			</div>
+			<input type="hidden" id="hdnSelectedCountry"/>
+			<div class="inner-body-wrapper" id="inner-body-wrapper">
+
+			
+		<script type="text/javascript">
+		$(document).ready(function(){  
+		  //get url value
+		        var urlVal = window.location.pathname;
+		        //split the value
+		        var arr = urlVal.split('/'); 
+		        if(arr[3] == 'login' || arr[3] == 'registration'){
+		          var countryURL = arr[1];
+		          var langURL = arr[2];
+		
+		          $.ajax({
+		                cache: false,
+		                  url :"/bindHeaderDrp",
+		                  method:"GET",
+		                  data: {'countryURL': countryURL, 'langURL': langURL},
+		                  success:function(response)
+		                  {
+		                    $(".selectCountry").append(response.countryLang_HTML);
+		                    $(".selectLanguage").append(response.Lang_HTML);
+		
+		                  }
+		          });
+		        }
+		
+		});
+		
+		</script>
+		<link rel="canonical" href="https://www.elancoregister.com/registration" />
+
+<style>
+#janrainModal .janrain-capture-ui.capture-ui-content {
+    min-height: 200px !important;
+}
+</style>
+<script type="text/javascript">
+
+        // --- page-specific settings ------------------------------------------
+        janrain.settings.capture.flowName = 'elanco_myeem';
+        janrain.settings.capture.screenToRender = 'traditionalRegistration';
+
+        // --- define event handlers and start the janrain ui ------------------
+        function janrainCaptureWidgetOnLoad() {
+            // janrain.events.onCaptureLoginSuccess.addHandler(function (result) {
+            //     window.location = 'profile';
+            // });
+
+            janrain.events.onCaptureSessionFound.addHandler(function (result) {
+               var siteURL = getUrlParameter("return");
+               //for all sites
+               if (siteURL != null && siteURL != "") {
+                    var url = siteURL + "?z=" + result.accessToken;
+                    window.location = url;
+                }
+                else
+                {
+                 window.location = '/profile';
+                }
+            });
+            janrain.events.onCaptureRegistrationSuccess.addHandler(function (result) {
+                
+               // window.location = 'registration';
+            });
+            
+
+            janrain.events.onCaptureScreenShow.addHandler(function (result) {
+
+                // Swap out the default text for the terms and conditions label
+                // such that the links can be defined in the JTL/markup.
+                // if (result.screen == 'traditionalRegistration') {
+                  
+                //     var label = wrapper.firstChild;
+
+                //     if (optInText && wrapper && label) {
+                //         for (var i = 0; i < label.childNodes.length; i++) {
+                //             var child = label.childNodes[i]
+                //             if (child.nodeType === 3) {
+                //                 label.removeChild(child);
+                //             }
+                //         }
+                //         wrapper.appendChild(optInText);
+                //     }
+                // }
+            });
+
+            // register custom client-side valididators
+            janrain.capture.ui.registerFunction('passwordValidation', janrainCustomPasswordValidation);
+            janrain.capture.ui.registerFunction('postalCodeValidation', janrainCustomPostalCodeValidation);
+            
+          
+            // should be the last line in janrainCaptureWidgetOnLoad()
+            janrain.capture.ui.start();
+        }
+    </script>
+  <!-- Capture widget screens -->
+  <div class="page-center">
+    <div style="display:none;" id="registrationNewVerification">
+        <div class="capture_header">
+            <h1>Thank you for registering!</h1>
+        </div>
+        <p>You {* emailAddressData *} has been successfully added to the site. Please click on signin to access the site.</p>
+        <div class="capture_footer">
+            <a href="#" onclick="window.location.reload()" class="capture_btn capture_primary">Close</a>
+        </div>
+    </div>
+    <div style="display:none;" id="traditionalRegistration">
+            {* #registrationForm *}
+            <div class="row">
+                <div class="col-xs-12 col-sm-12  col-md-6  col-lg-6">
+                    {* personalData_firstName *}
+                </div>
+                <div class="col-xs-12 col-sm-12  col-md-6  col-lg-6">
+                {* personalData_lastName *}
+                </div>
+                <div class="col-xs-12 col-sm-12  col-md-6  col-lg-6">
+                {* registration_emailAddress *}
+                </div>
+                <div class="col-xs-12 col-sm-12  col-md-6  col-lg-6">
+                {* registration_emailAddressConfirm *}
+                </div>
+                <div class="col-xs-12 col-sm-12  col-md-6  col-lg-6">
+                {* registration_password *}
+                </div>
+                <div class="col-xs-12 col-sm-12  col-md-6  col-lg-6">
+                {* registration_passwordConfirm *}
+
+                </div>
+                <div class="col-xs-12 col-sm-12  col-md-6  col-lg-6">
+                    {* professionalData_jobRole_primary *}
+                </div>
+			   <div class="col-xs-12 col-sm-12  col-md-6  col-lg-6">
+			   Select CM : 
+               
+               <select>
+				  <option value="Select">Select</option>
+				  <option value="Abby">Abby</option>
+				  <option value="Nidhi">Nidhi</option>
+				  <option value="Darshan">Darshan</option>
+				  <option value="Harshita">Harshita</option>
+				</select>
+               </div>
+             
+        </div>
+        <div class="row">
+            <div class="capture_footer">
+          
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="capture_left">
+                    {* createAccountButton *}
+                </div>
+            </div>
+            </div>
+        </div>
+        {* /registrationForm *}
+          
+    </div>
+    <div style="display:none;" id="userStatusPostLogin">
+        Access denied. Your account has not been activated.
+    </div>
+    <div style="display:none;" id="countryPostLogin">
+        Access denied. Wrong country.
+    </div>
+    <div style="display:none;" id="professionalGroupPostLogin">
+        Access denied. Wrong professional group.
+    </div>
+
+<div id="spacer"></div>
+</div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".janrain_modal_closebutton").click(function(){
+            window.location.reload();
+        });
+    });
+</script>
+		</div> <!-- end page-inner-body -->
+	</div> <!-- end page-body -->
+	
+
+
+    <script>
+	$(document).ready(function(){
+	    $("#myBtn").click(function(){
+	        $("#myModal").modal();
+	    });
+	});
+	</script>
+
+
+
+	</body>
+</html>

@@ -1,0 +1,19 @@
+.rate-div .rate-base-layer {
+    color: #aaa;
+  }
+  .rate-div {
+    width: 70px !important;
+    font-size: 15px;
+  }
+  .rate-div .rate-hover-layer {
+    color: #fde16d;
+  }
+  .rate-div .rate-select-layer {
+    color: #fde16d;
+  }
+  .rate-div-center {
+    margin: 0 auto;
+  }
+  .rate-div-inline {
+    display: inline-block;
+  }

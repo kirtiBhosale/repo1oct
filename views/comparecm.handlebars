@@ -1,0 +1,309 @@
+<div class="container-fluid mybreadcrumb">
+  <div class="row">
+    <div class="btn-group btn-breadcrumb">
+      <a href="/search" class="btn btn-default">
+        <i class="fa fa-home"></i>
+      </a>
+      {{#if searchkeyword}}
+      <a href="/search?keywords={{searchkeyword}}" class="btn btn-default">
+        <i>Search results for {{searchkeyword}}</i>
+      </a>
+      {{else}}
+      <a href="/search?keywords=" class="btn btn-default">
+        <i>Search results for All</i>
+      </a>
+      {{/if}}
+      <a href="#" class="btn btn-default">Compare CM</a>
+    </div>
+  </div>
+</div>
+</header>
+<div class="container-fluid compare-cm">
+  <table id="example" class="display table-bordered" style="table-layout:fixed;" width="100%" cellspacing="0">
+    <thead>
+      <tr>
+        <th>
+          <div class="arrow-left"></div>
+          <div class="go-back-arrow">
+            {{#if searchkeyword}}
+            <a href="/search?keywords={{searchkeyword}}">Go Back</a>
+            {{else}}
+            <a href="/search?keywords=">Go Back</a>
+            {{/if}}
+          </div>
+        </th>
+        {{#each data}}
+        <th id="{{{this.vendorid}}}" vname="{{{this.vendorname}}}" class="text-center">
+          <b>
+            <i>
+              <u><a href="/cmoverview?vendorid={{this.vendorid}}">{{this.vendorname}}</a></u>
+            </i>
+          </b>
+          {{#if this.reviewstatus}}
+          <div class="rate-div rate-click rate-div-center cursorpointer" data-rate-value="{{{this.reviewscore}}}" title="{{{this.reviewscore}}}">
+          </div>
+          {{/if}}
+        </th>
+        {{/each}}
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>CM Segmentation</th>
+        {{#each data}}
+        <td class="text-center">{{this.general_cmsegmentation}}</td>
+        {{/each}}
+      </tr>
+
+      <tr>
+        <th>Service Type</th>
+        {{#each data}}
+        <td class="text-center">{{this.general_servicetype}}</td>
+        {{/each}}
+      </tr>
+      <tr>
+        <th>Manufacturing Technology</th>
+        {{#each data}}
+        <td class="text-center">{{this.ts_mfgtech}}</td>
+        {{/each}}
+      </tr>
+      <tr>
+        <th>Quality Risk</th>
+        {{#each data}}
+        <td class="text-center">{{this.quality_risk}}</td>
+        {{/each}}
+      </tr>
+      <tr>
+        <th>Technical Risk</th>
+        {{#each data}}
+        <td class="text-center">{{this.ts_technicalrisk}}</td>
+        {{/each}}
+      </tr>
+      <tr>
+        <th>HSE Risk</th>
+        {{#each data}}
+        <td class="text-center">{{this.hse_risk}}</td>
+        {{/each}}
+      </tr>
+      <tr>
+        <th>Vendor Type</th>
+        {{#each data}}
+        <td class="text-center">{{this.general_vendortype}}</td>
+        {{/each}}
+      </tr>
+      <tr>
+        <th>Volume Commitment</th>
+        {{#each data}}
+        <td class="text-center">{{this.supply_volumecommitment}}</td>
+        {{/each}}
+      </tr>
+      <tr>
+        <th>Contract Expiration</th>
+        {{#each data}}
+        {{#if this.supply_contractnotinplace}}
+        <td class="text-center">Contract Not In Place</td>
+        {{else}}
+        <td class="text-center">{{modifydate this.supply_contractexpiration }}</td>
+
+        {{/if}}
+
+        {{/each}}
+      </tr>
+    </tbody>
+  </table>
+  <input type="hidden" id="comparecmdata" value={{comparecmdata}} />
+</div>
+<!-- The Modal -->
+<!-- Modal -->
+<div class="modal fade servicereviewpopup" id="servicereviewpopup" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 id="vendorname" class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <div class="row mp-row">
+          <div class="col-sm-6">
+            <p><span id="vendortype"></span> : <b id="partnercode"> </b></p>
+          </div>
+          <div class="col-sm-6 pull-right">
+            <div class="pull-right">
+              <p>Last Review Year : <b id="reviewyear"></b></p>
+            </div>
+
+          </div>
+        </div>
+        <table class="table table-bordered">
+          <thead>
+            <tr class="tb-header">
+              <th>EEM Function</th>
+              <th>Rating</th>
+            </tr>
+          </thead>
+          <tbody class="tb-body">
+            <tr>
+              <td>Procurement</td>
+              <td>
+                <div disabled id="procurement_rate" class="rate-div" data-rate-value="0" title="0"></div>
+
+              </td>
+            </tr>
+            <tr>
+              <td>Supply Chain</td>
+              <td>
+                <div id="supplychain_rate" class="rate-div" data-rate-value="0" title="0"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>Quality</td>
+              <td>
+                <div id="quality_rate" class="rate-div" data-rate-value="0" title="0"></div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>TSMS</td>
+              <td>
+                <div id="tsms_rate" class="rate-div" data-rate-value="0" title="0"></div>
+
+              </td>
+            </tr>
+            <tr>
+              <td>HSE</td>
+              <td>
+                <div id="hse_rate" class="rate-div" data-rate-value="0" title="0"></div>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="row text-center">
+          <form>
+            <div class="form-group form-inline text-center">
+              <label class="col-sm-2"></label>
+              <div class="col-sm-4">
+                <label class="pull-right">Overall Rating:</label>
+              </div>
+              <div class="col-sm-2 pull-left">
+                <div id="overall_rating" class="rate-div" data-rate-value="0" title="0"></div>
+              </div>
+
+              <label class="col-sm-2"></label>
+            </div>
+          </form>
+
+        </div>
+        <div class="row">
+          <div class="form-group pull-right" style="margin-right: 20px;">
+            <a id="moredetail" href="#"><button type="button" class="btn btn-primary">More Details</button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    table = $('#example').DataTable({
+      "dom": 'Bfrtip',
+      paging: false,
+      searching: false,
+      info: false,
+      "ordering": false,
+      "scrollX": "100%",
+      buttons: [{
+        extend: 'excelHtml5',
+        exportOptions: {
+          orthogonal: 'export',
+          rows: { selected: true }
+        }
+      },
+      {
+        extend: 'pdfHtml5',
+        exportOptions: {
+          orthogonal: 'export',
+          rows: { selected: true }
+        }
+      }
+      ],
+    });
+  });
+  $(".exportinfo").click(function () {
+    $(".buttons-excel").click();
+  });
+  $(".pdfinfo").click(function () {
+    $(".buttons-pdf").click();
+  });
+</script>
+<script type="text/javascript">
+  $(document).ready(function () {   
+    var options = {
+      max_value: 5,
+      step_size: 0.1,
+      selected_symbol_type: 'fontawesome_star',
+    }
+    $(".rate-div").rate(options);
+  });
+  //WRITE THIS INSIDERATE-DIV EACH CLICK
+  $(".rate-click").each(function () {
+    $(this).click(function () {
+
+      var vendorid = $(this).closest('th').attr('id');
+      var vname = $(this).closest('th').attr('vname');
+      var data = JSON.parse($('#comparecmdata').val());
+      console.log(data);
+      var obj = null;
+      if (data !== undefined && data !== null && data.length > 0) {
+        for (var i = 0; i < data.length; i++) {
+          if (data[i].vendorid == vendorid) {
+            obj = data[i];
+          }
+        }
+        $('#vendorname').text(vname);
+        $('#reviewyear').text(obj.reviewyear);
+        if (obj.vendorsearchterm) {
+          $('#vendortype').text('MP');
+        } else {
+          $('#vendortype').text('VN');
+        }
+        $('#partnercode').text(obj.partnercode);
+        $('#procurement_rate').attr('data-rate-value', obj.procurementreviewscore);
+        $('#procurement_rate')[0].title = obj.procurementreviewscore;
+        $('#supplychain_rate').attr('data-rate-value', obj.supplychainreviewscore);
+        $('#supplychain_rate')[0].title = obj.supplychainreviewscore;
+        $('#quality_rate').attr('data-rate-value', obj.qualityreviewscore);
+        $('#quality_rate')[0].title = obj.qualityreviewscore;
+        $('#tsms_rate').attr('data-rate-value', obj.tsmsreviewscore);
+        $('#tsms_rate')[0].title = obj.tsmsreviewscore;
+        $('#hse_rate').attr('data-rate-value', obj.hsereviewscore);
+        $('#hse_rate')[0].title = obj.hsereviewscore;
+        $("#procurement_rate").rate("update");
+        $("#supplychain_rate").rate("update");
+        $("#quality_rate").rate("update");
+        $("#tsms_rate").rate("update");
+        $("#hse_rate").rate("update");
+        $('#overall_rating').attr('data-rate-value', obj.reviewscore);
+        $('#overall_rating')[0].title = obj.reviewscore;
+        $("#overall_rating").rate("update");
+        $('#moredetail').attr('href', 'servicereview?vendorid=' + vendorid + '&reviewdate=' + obj.reviewyear + '&hubid=' + obj.hubid);
+        $('#servicereviewpopup').modal('show');
+      } else {
+        $('#servicereviewpopup').modal('hide')
+
+      }
+    })
+
+  });
+
+
+
+</script>
+<style>
+  .dt-buttons {
+    display: none;
+  }
+</style>

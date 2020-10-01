@@ -1,0 +1,204 @@
+<div class="container admin-update-fields">
+    <form class="form-horizontal col-sm-6 col-sm-push-3">
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="dropdowncategory">Select Field:</label>
+            <div class="col-sm-7">
+                <select class="form-control" id="dropdowncategory">
+                    {{#each data}}
+                    <option value="{{this.dropdowncategory}}">{{this.dropdowncategory}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="pwd">Add New Value:</label>
+            <div class="col-xs-10 col-sm-6">
+                <input type="text" class="form-control" maxlength="100" id="dropdownvalue">
+            </div>
+            <div class="col-xs-1">
+                <button class="" type="button" id="itemaddbutton">
+                    <b>Add</b>
+                </button>
+            </div>
+        </div>
+        <br />
+    </form>
+    <br />
+    <br />
+    <table id="example" class="display table table-bordered table-condensed" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th hidden="hidden">ID</th>
+                <th>Sr No.</th>
+                <th>Items</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+          $(".navbar-nav li").removeClass('active');
+          $(".navbar-nav li:eq(0)").addClass('active');    
+          $(".navbar-nav li:eq(0) a").css("background-color","#0073cc");   
+
+        var table;
+
+        $("#example").on("mousedown", "td .fa.fa-trash-o", function (e) {
+            if (confirm('Are you sure you want to delete?')) {
+                var myurl = '/deletedropdownitem/' + $(this).closest("tr").find("td:eq(0)").text();
+                $.ajax({
+                    type: 'PUT',
+                    url: myurl,
+                    success: function (data) {
+                        if (data == "deleted") {
+                            alert("Item deleted successfully");
+                            $('#example').DataTable().ajax.url('/fetchdropdownitem?dropdowncategory=' + $("#dropdowncategory").val()).load();
+                        }
+                    },
+                    error: function (e) {
+                        alert("Error while deleting an item");
+                        $('#example').DataTable().ajax.url('/fetchdropdownitem?dropdowncategory=' + $("#dropdowncategory").val()).load();
+                    }
+                });
+            }
+        })
+
+        $("#example").on('mousedown.edit', "i.fa.fa-pencil-square-o", function (e) {
+            var $tbody = $(this).closest("tbody");
+            console.log("tbody********************",$tbody);
+            var $trs = $tbody.find("tr").off("mousedown");
+            console.log("trs********************",$trs);
+            var $td = $trs.find("input");
+            console.log("td********************",$td);
+            if ($td.val() == undefined) {
+                $(this).removeClass().addClass("fa fa-floppy-o");
+                var $row = $(this).closest("tr").off("mousedown");
+                var $tds = $row.find("td").eq('2');
+
+                $.each($tds, function (i, el) {
+                    var txt = $(this).text();
+                    $(this).html("").append("<input type='text' class=\"form-control\" value=\"" + txt + "\">");
+                });
+            }
+
+        });
+
+        $("#example").on('mousedown', "input", function (e) {
+            e.stopPropagation();
+        });
+
+        $("#example").on('mousedown.save', "i.fa.fa-floppy-o", function (e) {
+            if (isValid($(this).closest("tr").find("td").eq('2').find("input").val())) {
+                $(this).removeClass().addClass("fa fa-pencil-square-o");
+                var $row = $(this).closest("tr");
+                var $tds = $row.find("td").eq('2');
+
+                var data = {};
+                $.each($tds, function (i, el) {
+                    var txt = $(this).find("input").val().trim();
+                    data["dropdownvalue"] = txt;
+                    var myurl = '/editdropdownitem/' + $(this).closest("tr").find("td:eq(0)").text();
+                    $.ajax({
+                        type: 'PUT',
+                        url: myurl,
+                        data: data,
+                        success: function (data) {
+                            if (data == "updated") {
+                                alert("Item updated successfully");
+                                $('#example').DataTable().ajax.url('/fetchdropdownitem?dropdowncategory=' + $("#dropdowncategory").val()).load();
+                            }
+                        },
+                        error: function (e) {
+                            alert("Error while updating an item");
+                            $('#example').DataTable().ajax.url('/fetchdropdownitem?dropdowncategory=' + $("#dropdowncategory").val()).load();
+                        }
+                    });
+                });
+            } else {
+                alert("Please enter valid value");
+            }
+        });
+
+
+        $("#example").on('mousedown', "#selectbasic", function (e) {
+            e.stopPropagation();
+        });
+
+
+        var url = '/fetchdropdownitem?dropdowncategory=' + $("#dropdowncategory").val();
+        table = $('#example').DataTable({
+            dom: '',
+            paging:false,
+            ordering: false,
+            order: [[1, 'asc']],
+            ajax: {
+                url: url,
+                type: 'GET',
+            },
+            columns: [{
+                data: 'dropdownid',
+                searchable: false,
+                'createdCell': function (td, cellData, rowData, row, col) {
+                    $(td).attr('hidden', 'hidden');
+                }
+            }, {
+                data: null,
+                searchable: false,
+                orderable: false,
+                className: 'text-center'
+            }, {
+                data: 'dropdownvalue',
+                render: $.fn.dataTable.render.text()
+            }, {
+                data: 'action'
+            }]
+        });
+
+        table.on('order.dt search.dt', function () {
+            table.column(1, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+
+        $('#example').css('border-bottom', 'none');
+        $("#dropdowncategory").change(function () {
+            $('#example').DataTable().ajax.url('/fetchdropdownitem?dropdowncategory=' + $("#dropdowncategory").val()).load();
+        });
+        $("#itemaddbutton").click(function () {
+            if (isValid($("#dropdownvalue").val())) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/adddropdownitem',
+                    data: {
+                        "dropdowncategory": $("#dropdowncategory").val(),
+                        "dropdownvalue": $("#dropdownvalue").val().trim(),
+                    },
+                    success: function (data) {
+                        if (data == "added") {
+                            alert("Item added successfully");
+                            $("#dropdownvalue").val('');
+                            $('#example').DataTable().ajax.url('/fetchdropdownitem?dropdowncategory=' + $("#dropdowncategory").val()).load();
+                        }
+                    },
+                    error: function (e) {
+                        alert("Error while adding an item");
+                        $("#dropdownvalue").val('');
+                        $('#example').DataTable().ajax.url('/fetchdropdownitem?dropdowncategory=' + $("#dropdowncategory").val()).load();
+                    }
+                });
+            } else {
+                alert("Please enter valid value");
+            }
+        });
+    });
+    function isValid(val) {
+        if (val.trim() != '') {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+</script>

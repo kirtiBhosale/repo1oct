@@ -1,0 +1,112 @@
+<html>
+{{>adminopheader}}
+  <style>
+        .select-group{
+            width:300px;
+           
+        }
+        .adgroup-select{
+            float: left;
+            height: 30px;
+            width: 29%;
+        }
+    </style>
+<body>
+	<section class="header">
+		<div class="head">
+			<p>Hello, welcome to the web ops dashboard!</p>
+		</div>
+	</section>
+
+	<section class="content container-fluid">
+		{{>adminopmenu}}
+		
+		<div class="form-group adgroup-select">
+		<select name="Adoption" class="select-group form-control" id="eem">
+			 <option disabled value="select">---Select ------</option>
+            {{#each myEem }}
+			    <option  value="{{this}}" >{{this}}</option>
+            {{/each}}
+		</select>
+		</div>
+        <div class="form-group adgroup-select">
+            <select name="Tracker" class="select-group form-control" id="ChangeDev">
+                <option disabled value="select">---Select------</option>
+                {{#each changeDev }}
+                    <option  value="{{this}}" >{{this}}</option>
+                {{/each}}
+            </select>
+		</div>
+
+        <div class="loading">
+        
+        </div>
+
+		<table class="table" id="data">
+			<thead>
+				<tr>
+					<th>System Logon ID</th>
+					<th>First Name</th>
+					<th>Last Name </th>
+					<th>Email Address</th>					
+				</tr>
+			</thead>
+		</table>
+        	</div>
+        </div>
+	</section>
+
+</body>
+{{>adminopfooter}}
+
+<script src="/vendor/v2custom.js"></script>
+<script>
+ $('#data').hide()
+  $(".loading").hide();
+  $(".select-group").on("change",function(){
+        $('#data_wrapper').hide()
+        $(".loading").show();
+
+        $("tbody").empty()
+        if(this.id=="ChangeDev"){
+            $("#eem").val("select")
+        }
+        else if(this.id=="eem"){
+            $("#ChangeDev").val("select")
+        }
+   
+       $.ajax({
+                type: 'POST',
+                url: '/admin/manageadgroups',
+                data: {
+                 group:this.value,
+                },
+             success: function (response) {
+                     $(".loading").hide();
+                     $("#data").show()
+                     $('#data').dataTable( {
+                         pageLength: 10,
+                        "order": [[2, "desc"]],
+                        dom: 'Bfrtip',
+                        buttons: [{
+                            extend: 'csv',
+                            text: 'EXPORT TO CSV',
+                            title: 'Elanco Data'
+                        }],
+                        "bDestroy": true,
+                        "aaData": response,
+                        "columns": [
+                            { "data": "SystemLogonId" },
+                
+                            { "data": "FirstName" },
+                            { "data": "LastName" },
+                             { "data": "InternetEmailAddress" }
+                        ]
+                })
+                $(".menu").height($("body").height())
+            }
+  })
+  })
+</script>
+
+</html>

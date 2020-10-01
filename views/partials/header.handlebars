@@ -1,0 +1,107 @@
+<header>
+        <div class="container-fluid">
+            <div class="row logorow">
+                <div class="col-sm-3 logo">
+                    <a href="/search">
+                        <img alt="myEEM Logo" src="img/myEEM-login-logo.png">
+                    </a>
+                </div>
+                <div class="col-sm-9 username">
+                    <div class="row">
+                        <div class="pull-left">
+                            <h1>Welcome {{{fullname}}}!</h1>
+                        </div>
+                          <div class="right-navbar">
+                            <a href="/search" class="pull-right text-center">
+                                <div class="text-center">
+                                    <img alt="Home Page" src="img/home-icon.png" />
+                                </div>
+                                <p>Home</p>
+                            </a>
+                            <a href="Javascript:window.print();" class="printinfo pull-right text-center">
+                                <div class="text-center">
+                                    <img alt="Print" src="img/print-icon.png" />
+                                </div>
+                                <p>Print</p>
+                            </a>
+                            <a href="#" class="pull-right exportinfo text-center">
+                                <div class="text-center">
+                                    <img alt="Export" src="img/export-icon.png" />
+                                </div>
+                                <p>Export</p>
+                            </a>
+                            <a class="active pull-right text-center" href="/createcm">
+                                <div class="text-center">
+                                    <img alt="Add CM" src="img/add-cm-icon.png" />
+                                </div>
+                                <p>Add CM</p>
+                            </a>
+                            <a href="https://collab.lilly.com/sites/EEM/Shared%20Documents/myEEM_Calendar.xlsx" class="pull-right text-center">
+                                <div class="text-center">
+                                    <img alt="Calendar" src="img/calendar.png" />
+                                </div>
+                                <p>Calendar</p>
+                            </a>
+                        </div>
+                    </div>
+                     <form class="search-form" action="/search">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-btn" data-placement="left" data-toggle="tooltip" title="Search for Partners based on Vendor Name, City, Country, CM Segmentation, Manufacturing Technology, Operational Leader, JPT Leader, Quality Leader, Product SKU or Brand Name.">
+                                <button class="btn btn-secondary" type="button">
+                                    <i class="fa fa-info"></i>
+                                </button>
+                            </span>
+                            <input type="text" class="form-control" placeholder="Search" name="keywords">
+                            <span class="input-group-btn">
+                                <button class="btn btn-secondary" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                       
+                        {{#if ismasterdatasteward}}
+                        <li>
+                            <a href="/createcm">Create New CM</a>
+                        </li>
+                        {{!-- {{else if isdatasteward}}
+                        <li>
+                            <a href="/createcm">Create New CM</a>
+                        </li> --}}
+                        {{/if}}
+                        <li>
+                            <a href="/cmmetrics">Enter CM Metrics</a>
+                        </li>
+                        <li>
+                            <a href="https://ix1redwood01.am.lilly.com/#/site/ELANCO/views/EEMMetricSummary/MetricsSummary" target= "_blank">myEEM Metrics</a>
+                        </li>
+                        {{#if isreadonly}}{{else}}
+                        <li>
+                            <a href="/servicereview">Service Review</a>
+                        </li>  
+                        {{/if}}                      
+                        {{#if ismasterdatasteward}}
+                        <li>
+                            <a href="/adminupdatefields">Admin Panel</a>
+                        </li>
+                        {{/if}}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+      
+ 

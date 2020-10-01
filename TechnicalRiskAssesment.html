@@ -1,0 +1,100 @@
+<html>
+<body style="margin:0px 5%">
+	<div class="row" style="height:70px;padding:20px;padding-top:5px;padding-bottom:0px">
+		<div class="logo pull-left" style="float:left">
+			<img alt="Elanco Logo" src="https://elanco-elanco-mfg-dev.herokuapp.com/img/elanco-login-logo.png"
+				style="width:120px">
+		</div>
+		<div class="logo pull-right" style="float:right">
+			<img alt="myEEM Logo" src="https://elanco-elanco-mfg-dev.herokuapp.com/img/myEEM-login-logo.png"
+				style="width:170px">
+		</div>
+	</div>
+	<div style="height: auto;overflow: hidden;padding-top:30px;">
+		<div style="width:30%;float:left;">
+			<p style="font-size:16px; margin-bottom:-15px;">{{vendorName}}</p>
+			<p style="font-size:14px; margin-bottom:-15px;">{{vendorAddress}}</p>
+			<p style="font-size:14px; margin-bottom:-15px;">{{vendorCity}}</p>
+			<p style="font-size:14px;">{{vendorRegion}}</p>
+		</div>
+		<div style="width:40%;float:left;margin-top:-20px">
+			<h3 style="margin:0;">
+				<center> Risk Assessment Result</center>
+			</h3>
+			<h3 style="margin-top:2px;">
+				<center> Technical </center>
+			</h3>
+		</div>
+		<div class="name2" style="float:right;">
+			<p style="font-size:16px;margin-bottom:-15px;">{{partnerCode}}</p>
+			<p style="font-size:16px;margin-botton:-15px;">{{hubOversight}}</p>
+
+		</div>
+	</div>
+	</div>
+	<div style="float:right">
+		<p style="float: left; font-size:13px;margin:0"><b>Overall Technical Risk</b></p>
+		<div style="width:78px;border: 2px solid;float: left;margin-left: 10px;margin-top: -2px;height:15px;text-align: center;">
+			{{RiskColor}}</div>
+	</div>
+	<div style="margin-top: 35px;height: auto">
+		<p style="font-size:16px;margin:0"><b style="border-bottom:2px solid black;">CM Overview Results</b></p>
+		<table style="width:100%;">
+			<tr>
+				<td style="width:33%;">
+					<p style="padding-top:1.5em;font-size:12px;"><b>GMP</b></p>
+				</td>
+				<td style="width:33%;">
+					<p style="padding-top:1.5em;font-size:12px;"><b>Length of Relationship </b></p>
+				</td>
+				<td style="width:33%;">
+					<p style="padding-top:1.5em;font-size:12px;"><b>Region of Manufacture</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td style="width:33%;vertical-align: top;">
+					<p style="padding-top:0.5em;width: 100%;overflow: hidden;
+					word-break: break-all;font-size:11px;">{{GMP}}</p>
+				</td>
+				<td style="width:33%;vertical-align: top;">
+					<p style="padding-top:0.5em;width: 100%;overflow: hidden;
+					word-break: break-all;font-size:11px;">{{lenRelation}}</p>
+				</td>
+				<td style="width:33%;vertical-align: top;">
+					<p style="padding-top:0.5em;width: 100%;overflow: hidden;
+					word-break: break-all;font-size:11px;">{{regionMnf}}</p>
+				</td>
+			</tr>
+			<tr>
+				<td style="width:33%;">
+					<p style="padding-top:1.5em;font-size:12px;"><b>High Risk Product Type</b></p>
+				</td>
+				<td style="width:33%;">
+					<p style="padding-top:1.5em;font-size:12px;"><b>Number of Product Platforms</b></p>
+				</td>
+				<td style="width:33%;">
+					<p style="padding-top:1.5em;font-size:12px;"><b>Date Of Last EGQCA Audit</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td style="width:33%;vertical-align: top;">
+					<p style="padding-top:0.5em;width: 100%;overflow: hidden;
+					word-break: break-all;font-size:11px;">{{productType}}</p>
+				</td>
+				<td style="width:33%;vertical-align: top;">
+					<p style="padding-top:0.5em;width: 100%;overflow: hidden;
+					word-break: break-all;font-size:11px;">{{productPlatform}}</p>
+				</td>
+				<td style="width:33%;vertical-align: top;">
+					<p style="padding-top:0.5em;width: 100%;overflow: hidden;
+					word-break: break-all;font-size:11px;">{{EGQCA}}</p>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div style="margin-top:30px">
+		<p style="font-size:16px;">{{serviceReviewHeader}}</p>
+		<table style="width:100%;border-collapse:collapse" border="1">{{serviceQuestion}}</table>
+	</div>
+</body>
+</html>

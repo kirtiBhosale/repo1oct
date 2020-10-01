@@ -1,0 +1,125 @@
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+<div class="main-container">
+  <div class="role-heading main-header">
+  <div class="nav"> 
+      <ul>
+       <li>
+		      <a href="/adminuserdetail">Home</a>
+        </li>
+    <li>
+    <a href="/createrole"  class="active">Create Role</a>
+     </li>
+     <li>
+		    <a href="/assignrole">Assign Role</a>
+          </li>
+          </ul>
+    </div>
+
+    <div class="user-role-dtls"> 
+      <span>Welcome, {{userdetail.firstname}} {{userdetail.lastname}}</span>
+      <span style="margin-left: 13%;font-size: 16px;">
+		     <a href="/signout" id="captureSignOutLink" class="capture_end_session" style="color:#fff !important;"> 
+		      <img alt="Sign Out" src="//images.ctfassets.net/me3hbvrrlti0/58YFW9nkbeYkKIC22o2oe6/002b854d1b44935bcd4cc7decb2e7ae2/logout-icon.png"> <span style="color:#fff !important;margin-top: 3px;">Sign Out</span></a>
+		  </span><br>
+      <span>Role: {{userdetail.name}} </span>
+    </div>
+  </div>
+ <div style="padding-top: 20px;">
+<div class="role-content" style="margin-bottom: 10px;">
+	<p>
+	<label>Role Name : </label><input type="text" id="txtrole" name="txtrole" placeholder="Enter Role Name" / >
+</p>
+<p>
+	<label>Role Description : </label><textarea id="txtdescription" name="txtdescription"  style="width: 200px;height: 100px;">
+	</textarea>
+  </p>
+  <p>
+    <input type="checkbox" id="myCheck">
+    This will be default role.
+  </p>
+<p style="text-align: center;">
+	<input type="button" value="Create Role" onclick="createrole()" />
+</p>
+</div>
+  <div id="contain">
+          <table id="report" class="display table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                <th>Serial No.</th>
+                
+                <th>Name</th>
+                <th>Description</th>
+                <th>Is Default</th>
+                </tr>
+            </thead>
+          <tbody>
+             {{#each rolelist.result}}
+             <tr>
+                  <td>{{counter @index}}</td>
+             
+                  <td>{{this.name}}</td>
+                  <td>{{this.description}}</td>
+                  <td>{{this.isdefault}}</td>
+              </tr>
+              {{/each}}
+          </tbody>
+          
+      </table>
+    </div>
+</div>
+ </div>
+</div>
+<!-- script for Data table start -->
+ <script type="text/javascript">
+ 
+ function createrole()
+{
+    var rolename = $("#txtrole").val();	
+    var description = $("#txtdescription").val();
+    var isdefault = document.getElementById("myCheck").checked;
+    $.ajax({
+				type: 'POST',
+				url: '/createrole',
+				data: { rolename : rolename, description: description, isdefault: isdefault },
+				success: function (response) {
+          console.log(response);
+          console.log(response.data);
+					if(response.issuccess == true)
+					{
+            alert("Role Create Successfully.")
+						window.location = "/assignrole";
+					} else {
+						alert('Operation failed. Please, If the problem persists, contact with administrator.');
+					}
+				},
+				error: function (response) {
+					console.log(response)
+					alert('Operation failed. Please, If the problem persists, contact with administrator. The response is: ' + response.statusText);
+				}
+	});	
+}
+
+$(document).ready(function() {
+        $('#report').DataTable({
+           "paging":   true,
+           "ordering": false,
+           "info":     false
+        });
+
+    $('#captureSignOutLink').on('click', function (event) {
+            event.preventDefault();
+            $.ajax({
+                     type: 'POST',
+                      url: '/signout',
+                      // data: { data : 'use },
+                      success: function (response) {
+                        window.location = "/externallogin";
+                      },
+                      error: function (response) {
+                        console.log(response)
+                        alert('Operation failed. Please, If the problem persists, contact with administrator. The response is: ' + response.statusText);
+                      }
+                   });
+    });
+});
+</script>

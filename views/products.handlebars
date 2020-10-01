@@ -1,0 +1,348 @@
+<div class="container-fluid mybreadcrumb">
+    <div class="row">
+        <div class="btn-group btn-breadcrumb">
+            <a href="/search" class="btn btn-default">
+                <i class="fa fa-home"></i>
+            </a>
+            {{#if searchkeyword}}
+            <a href="/search?keywords={{searchkeyword}}" class="btn btn-default">
+                <i>Search results for {{searchkeyword}}</i>
+            </a>
+            {{else}}
+            <a href="/search?keywords=" class="btn btn-default">
+                <i>Search results for All</i>
+            </a>
+            {{/if}}
+            <a href="cmoverview?vendorid={{vendordetails}}" class="btn btn-default">
+                <i>CM Overview</i>
+            </a>
+            <a href="#" class="btn btn-default">
+                <i>Product Overview</i>
+            </a>
+        </div>
+        <div class="pull-right">
+            <a href="cmoverview?vendorid={{vendordetails}}">CM Overview</a> |
+            <a href="products?vendorid={{vendordetails}}" class="active">CM Product Overview</a>
+        </div>
+    </div>
+</div>
+</header>
+<div class="wrapper">
+
+    <nav id="sidebar">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header">
+            <h3>Search By</h3>
+        </div>
+
+        <!-- Sidebar Links -->
+        <ul class="list-unstyled components">
+            <li class="dropdown">
+                <input type="checkbox" class="mainbrandname form-check-input">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                    <span>Brand Name</span>
+                    <span class="fa fa-plus-square-o pull-right"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    {{#each bn}}
+                    <li>
+                        <a>
+                            <input type="checkbox" value="{{this}}" class="form-check-input brandname"> {{this}}</a>
+                    </li>
+                    {{/each}}
+                </ul>
+            </li>
+            <li class="dropdown">
+                <input type="checkbox" class="mainproductfamily form-check-input">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                    <span>Product Family</span>
+                    <span class="fa fa-plus-square-o pull-right"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    {{#each pf}}
+                    <li>
+                        <a>
+                            <input type="checkbox" value="{{this}}" class="form-check-input productfamily"> {{this}}</a>
+                    </li>
+                    {{/each}}
+                </ul>
+            </li>
+            <li class="dropdown">
+                <input type="checkbox" class="mainproducttype form-check-input">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span>Product Type</span>
+                    <span class="fa fa-plus-square-o pull-right"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    {{#each pt}}
+                    <li>
+                        <a>
+                            <input type="checkbox" value="{{this}}" class="form-check-input producttype"> {{this}}</a>
+                    </li>
+                    {{/each}}
+                </ul>
+            </li>
+            <li class="dropdown">
+                <input type="checkbox" class="mainproductcategory form-check-input">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span>Product Category</span>
+                    <span class="fa fa-plus-square-o pull-right"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    {{#each pc}}
+                    <li>
+                        <a>
+                            <input type="checkbox" value="{{this}}" class="form-check-input productcategory"> {{this}}</a>
+                    </li>
+                    {{/each}}
+                </ul>
+            </li>
+            <li class="dropdown">
+                <input type="checkbox" class="mainproductapiclassification form-check-input">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span>API Classification</span>
+                    <span class="fa fa-plus-square-o pull-right"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    {{#each ac}}
+                    <li>
+                        <a>
+                            <input type="checkbox" value="{{this}}" class="form-check-input productapiclassification"> {{this}}</a>
+                    </li>
+                    {{/each}}
+                </ul>
+            </li>
+        </ul>
+
+        {{!--
+        <div id="mCSB_1_scrollbar_vertical" class="mCSB_scrollTools mCSB_1_scrollbar mCS-minimal mCSB_scrollTools_vertical"
+            style="display: none;">
+            <div class="mCSB_draggerContainer">
+                <div id="mCSB_1_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 50px; height: 0px; top: 0px;">
+                    <div class="mCSB_dragger_bar" style="line-height: 50px;"></div>
+                </div>
+                <div class="mCSB_draggerRail"></div>
+            </div>
+        </div> --}}
+    </nav>
+
+    <div class="container" id="content">
+        <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+            <i class="glyphicon glyphicon-align-left"></i>
+
+        </button>
+
+        <div>
+            <div class="row cm-details product-overview-container">
+                <div>
+                    <div class="left-block">
+                        <h3>
+                            <i>{{{vendorname}}}</i>
+                        </h3>
+                    </div>
+                    <div class="right-block">
+                        <p>
+                            {{#if isMPorVN}}
+                                {{#if isMP}}                    
+                                    <p>MP : {{{vendorcode}}} 
+                                {{else}} 
+                                    <p>VN : {{{vendorcode}}} 
+                                {{/if}}                                    
+                            {{else}}
+                                <p>{{{vendorcode}}}
+                            {{/if}}
+                            {{#if systemgen}}
+                            <a href="/updatecm?vendorid={{vendordetails}}">
+                                <span class="fa-stack">
+                                    <i class="fa fa-circle fa-stack-2x icon-background-repeat"></i>
+                                    <i class="fa fa-circle-thin fa-stack-2x"></i>
+                                    <i class="fa fa-repeat fa-stack-1x"></i>
+                                </span>
+                            </a>
+                            {{/if}}
+                        </p>
+                        {{#if systemgen}}
+                        <p>
+                            <small>This code is system generated and not from SAP</small>
+                        </p>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+            <div class="row product-overview-container">
+                <tbody>
+                </tbody>
+                <table id="example" class="display table table-bordered table-condensed" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Profit Center - Brand Name</th>
+                            <th class="text-center" style="display:none;">Profit Center - Brand Name</th>
+                            <th class="text-center">API Classification</th>
+                            <th class="text-center" style="display:none;">Product Type</th>
+                            <th class="text-center">Product Families</th>
+                            <th class="text-center">Product Category</th>
+                            <th class="text-center">SKUs</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {{#each data}} {{#if this.issysgeneratedvendorcode}}
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                No Results found.
+                            </td>
+                        </tr>
+                        {{else}}
+                        <tr>
+                            <td>
+                                <div class="center-block brand-img text-center">
+                                    <input type="hidden" value="{{{this.brandname}}}" /> {{#if this.brandurl}}
+                                    <img alt="{{{this.brandname}}}" src="{{this.brandurl}}"> {{else}}
+                                    <h3>
+                                        <b>{{{this.brandname}}}</b>
+                                    </h3>
+                                    {{/if}}
+                                </div>
+                            </td>
+                            <td style="display:none">
+                                {{{this.brandname}}}
+                            </td>
+                            <td class="text-center">
+                                {{this.apiclassification}}
+                            </td>
+                            <td style="display:none">
+                                {{this.producttype}}
+                            </td>
+                            <td class="text-center">
+                                {{this.productfamily}}
+                            </td>
+                            <td class="text-center">
+                                {{this.productcategory}}
+                            </td>
+                            <td class="text-center">
+                                {{this.productsku}}
+                            </td>
+                        </tr>
+                        {{/if}} {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var vendorname = '{{{vendorname}}}';
+        table = $('#example').DataTable({
+            "dom": 'Bfrtip',
+            "ordering": false,
+            searching: true,
+            paging: false,
+            "scrollX": true,
+            rowsGroup: [0, 2, 4, 5, 6],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    //v2::excel border - start
+					customize: function (xlsx) {
+						var sheet = xlsx.xl.worksheets['sheet1.xml'];
+						$('row c', sheet).attr('s', '25');
+					},	
+					"createEmptyCells" : true,
+					//v2::excel border - end
+                    messageTop: 'Vendor Name - ' + vendorname,
+                    exportOptions: {
+                        orthogonal: 'export',
+                        columns: [1, 2, 3, 4, 5, 6],
+                        rows: { selected: true, filter: 'applied' }
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    messageTop: 'Vendor Name - ' + vendorname,
+                    exportOptions: {
+                        orthogonal: 'export',
+                        columns: [1, 2, 3, 4, 5, 6],
+                        rows: { selected: true, filter: 'applied' }
+                    }
+                }
+            ],
+        });
+    });
+    $("#sidebar").mCustomScrollbar({
+        theme: "minimal"
+    });
+
+    $('#sidebarCollapse').on('click', function () {
+        // open or close navbar
+        $('#sidebar').toggleClass('active');
+        // close dropdowns
+        $('.collapse.in').toggleClass('in');
+        // and also adjust aria-expanded attributes we use for the open/closed arrows
+        // in our CSS
+        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+    });
+    $(".mainbrandname").on('change', function () {
+        $('input:checkbox.brandname').not(this).prop('checked', this.checked);
+    });
+    $(".mainproductfamily").on('change', function () {
+        $('input:checkbox.productfamily').not(this).prop('checked', this.checked);
+    });
+    $(".mainproducttype").on('change', function () {
+        $('input:checkbox.producttype').not(this).prop('checked', this.checked);
+    });
+    $(".mainproductcategory").on('change', function () {
+        $('input:checkbox.productcategory').not(this).prop('checked', this.checked);
+    });
+    $(".mainproductapiclassification").on('change', function () {
+        $('input:checkbox.productapiclassification').not(this).prop('checked', this.checked);
+    });
+    var $filterCheckboxes = $('.brandname,.productfamily,.producttype,.productcategory,.productapiclassification,.mainbrandname,.mainproductfamily,.mainproducttype,.mainproductcategory,.mainproductapiclassification');
+    // var $rows = $('#example tr').not('thead tr');
+    $filterCheckboxes.on('change', function () {
+        var selectedFilters = {};
+        var filterBrandName = [];
+        var filterProductFamily = [];
+        var filterProductType = [];
+        var filterProductCategory = [];
+        var filterProductapiclassification = [];
+
+        // var quotations = [];
+        $filterCheckboxes.filter(':checked').each(function () {
+            if (!selectedFilters.hasOwnProperty(this.value)) {
+                if (($(this).hasClass('brandname'))) {
+                    filterBrandName.push($.fn.dataTable.util.escapeRegex(this.value));
+                } else if (($(this).hasClass('productfamily'))) {
+                    filterProductFamily.push($.fn.dataTable.util.escapeRegex(this.value));
+                } else if (($(this).hasClass('producttype'))) {
+                    filterProductType.push($.fn.dataTable.util.escapeRegex(this.value));
+                } else if (($(this).hasClass('productcategory'))) {
+                    filterProductCategory.push($.fn.dataTable.util.escapeRegex(this.value));
+                } else if (($(this).hasClass('productapiclassification'))) {
+                    filterProductapiclassification.push($.fn.dataTable.util.escapeRegex(this.value));
+                }
+            }
+        });
+        console.log(table.column(3));
+        console.log(filterProductFamily.join('|'));
+        table.column(1).search(filterBrandName.join('|'), true, false).draw();
+        table.column(4).search(filterProductFamily.join('|'), true, false).draw();
+        table.column(3).search(filterProductType.join('|'), true, false).draw();
+        table.column(5).search(filterProductCategory.join('|'), true, false).draw();
+        table.column(2).search(filterProductapiclassification.join('|'), true, false).draw();
+        $('#example').resize();
+    });
+    $(".exportinfo").click(function () {
+        $(".buttons-excel").click();
+    });
+    $(".pdfinfo").click(function () {
+        $(".buttons-pdf").click();
+    });
+</script>
+<style>
+    .dt-buttons,
+    .dataTables_info,
+    .dataTables_filter {
+        display: none;
+    }
+</style>
